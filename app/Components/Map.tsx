@@ -392,9 +392,6 @@ const Map = ({
     } else if (isitconclusion && !isitpregame) {
       const mapid = document.getElementById("map");
       if (mapid) {
-        mapid.style = `position:fixed;
-        width: 100%;
-        height: 70vh;`;
         setMapStyle({ position: "fixed", width: "%100", height: "70vh" });
       }
 
