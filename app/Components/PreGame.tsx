@@ -44,7 +44,7 @@ const PreGame = ({ isitpregame, onstartclick }: Props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/participants.csv");
+        const response = await fetch("/Participants.csv");
         const csvText = await response.text();
 
         Papa.parse<string[]>(csvText, {
@@ -116,7 +116,7 @@ const PreGame = ({ isitpregame, onstartclick }: Props) => {
               }
             ></span>
             <span className={styles.blinkmodeexplainer}>
-              Hello I explain Blink Mode
+              With Blink Mode image shows up for only 0.1 seconds
             </span>
           </button>
         </div>

@@ -243,7 +243,7 @@ const Map = ({
     return () => {
       window.removeEventListener("keydown", handleSpaceKey);
     };
-  }, [latlong, rndnum, isitresults, isitpregame, isitconclusion]);
+  }, [latlong, isitresults, isitpregame, isitconclusion]);
 
   useEffect(() => {
     function timer() {

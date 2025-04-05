@@ -438,7 +438,7 @@
 }
 .blinkmodeexplainer{
   transition: 1s;
-  color: black;
+  color: lightgray;
   display: none;
   top: 240%;
   left: 50%;
@@ -447,6 +447,7 @@
   background-color: rgba(107, 107, 107, 0.7);
   height: 10vh;
   width: 10vw;
+  border-radius: 2vh;
 }
 .blinkmodeoffcontainer:hover .blinkmodeexplainer{
   display: block;

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./Style.module.css";
 // import Image from "next/image";
 interface Props {
@@ -19,13 +19,24 @@ const CustomImage = ({
 }: Props) => {
   const [imagevisibility, setimagevisibility] = useState(styles.none);
   const [isitloaded, setisitloaded] = useState(false);
+  const isitblinked = useRef(false);
   useEffect(() => {
-    if (!isitconclusion && !isitpregame && !isitresults) {
+    if (isitresults || isitpregame) {
       setisitloaded(false);
+      isitblinked.current = false;
+    }
+    if (!isitconclusion && !isitpregame && !isitresults) {
+      // console.log("ingame and do not know if blinked", isitblinked.current);
+
+      if (!isitblinked.current) {
+        // console.log("ingame and not blinked", isitblinked.current);
+        blink();
+      }
       setimagevisibility(styles.image);
     } else {
       setimagevisibility(styles.none);
     }
+    console.log(isitblinked.current);
   }, [isitconclusion, isitresults, isitpregame]);
   useEffect(() => {
     // console.log("blink mode is", isitblinkmode);
@@ -55,9 +66,13 @@ const CustomImage = ({
       }
       a++;
     }, 50);
+    isitblinked.current = true;
   }
+  useEffect(() => {
+    console.log("rndnum in customimage is:", rndnum);
+  }, [rndnum]);
   function onLoad() {
-    if (!isitresults && isitblinkmode && !isitresults) {
+    if (!isitresults && isitblinkmode && !isitresults && !isitpregame) {
       blink();
     }
     setisitloaded(true);

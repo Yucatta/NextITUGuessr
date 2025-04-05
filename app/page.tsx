@@ -6,9 +6,7 @@ import CustomImage from "./Components/CustomImage"; // Import the renamed compon
 import Papa from "papaparse";
 import Conclusion from "./Components/Conclusion";
 import Pregame from "./Components/PreGame";
-const DynamicMap = dynamic(() => import("@/app/Components/Map"), {
-  ssr: false,
-});
+const DynamicMap = dynamic(() => import("@/app/Components/Map"));
 
 function rnd(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -62,10 +60,10 @@ function Home() {
     setScore(sc);
     setError(er);
     totalscore.current += sc;
+    rndnum.current = rnd(0, 5204);
     setIsItResults(true);
   }
   function handlenext() {
-    rndnum.current = rnd(0, 5204);
     numberofrounds.current++;
     setIsItResults(false);
     console.log(numberofrounds.current);
