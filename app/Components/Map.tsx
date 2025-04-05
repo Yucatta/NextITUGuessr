@@ -55,7 +55,7 @@ const Map = ({
   const imglat = useRef(0);
   const imglng = useRef(0);
   const youundidtheredotoredidtheredo = useRef(true);
-  const allguesses = useRef<Array<[]>>([]);
+  const allguesses = useRef<Array<[number, number]>>([]);
   const alllocations = useRef<Array<[number, number]>>([]);
   const ismarkeronmap = useRef<boolean>(false);
   const secondsleft = useRef<NodeJS.Timeout | null>(null);
@@ -86,6 +86,7 @@ const Map = ({
   const line3 = useRef(20);
   const helpertemp = useRef(385);
   const [strokeDasharray, setstrokeDasharray] = useState(helpertemp.current);
+  const buttonElement = document.getElementById("button");
 
   useEffect(() => {
     if (typeof window !== "undefined" && mapRef.current === null) {
@@ -126,7 +127,9 @@ const Map = ({
             }).addTo(map);
             position.current = [e.latlng.lat, e.latlng.lng];
             ismarkeronmap.current = true;
-            document.getElementById("button").innerText = "SUBMIT";
+            if (buttonElement) {
+              buttonElement.innerText = "SUBMIT";
+            }
             setSubmitClassName(styles.biggersubmit);
           }
         }
@@ -168,20 +171,22 @@ const Map = ({
 
       alllocations.current.push([imglat.current, imglng.current]);
       allguesses.current.push(latLngArr);
-      mapRef.current.eachLayer(function (layer) {
+      mapRef.current?.eachLayer(function (layer) {
         if (!(layer instanceof L.TileLayer)) {
-          mapRef.current.removeLayer(layer);
+          mapRef.current?.removeLayer(layer);
         }
         setMapCenter([41.10474805585872, 29.022884681711798]);
       });
-      L.marker(position.current, { icon: beemarker }).addTo(mapRef.current);
-      L.marker([imglat.current, imglng.current], {
-        icon: L.icon({
-          iconUrl: "/Icons/flag.png",
-          iconSize: [30, 30],
-          iconAnchor: [15, 15],
-        }),
-      }).addTo(mapRef.current);
+      if (mapRef.current) {
+        L.marker(position.current, { icon: beemarker }).addTo(mapRef.current);
+        L.marker([imglat.current, imglng.current], {
+          icon: L.icon({
+            iconUrl: "/Icons/flag.png",
+            iconSize: [30, 30],
+            iconAnchor: [15, 15],
+          }),
+        }).addTo(mapRef.current);
+      }
 
       isitsubmitted.current = true;
 
@@ -191,33 +196,35 @@ const Map = ({
             ((imglng.current - latLngArr[1]) * longtiduelengthmeter) ** 2
         )
       );
+      if (mapRef.current && secondsleft.current && timerborder.current) {
+        score =
+          Math.floor(
+            5000 *
+              Math.E **
+                ((-5 *
+                  Math.sqrt(
+                    (imglat.current - latLngArr[0]) ** 2 +
+                      (imglng.current - latLngArr[1]) ** 2
+                  )) /
+                  0.01947557727)
+          ) + 1;
+        setMapCenter([41.1058783968682, 29.04225723149176]);
+        setMapStyle({ position: "fixed", width: "100%", height: "85vh" });
 
-      score =
-        Math.floor(
-          5000 *
-            Math.E **
-              ((-5 *
-                Math.sqrt(
-                  (imglat.current - latLngArr[0]) ** 2 +
-                    (imglng.current - latLngArr[1]) ** 2
-                )) /
-                0.01947557727)
-        ) + 1;
-      setMapCenter([41.1058783968682, 29.04225723149176]);
-      setMapStyle({ position: "fixed", width: "100%", height: "85vh" });
+        L.polyline([[imglat.current, imglng.current], position.current], {
+          color: "black",
+          dashArray: "10, 10",
+          dashOffset: "10",
+        }).addTo(mapRef.current);
 
-      L.polyline([[imglat.current, imglng.current], position.current], {
-        color: "black",
-        dashArray: "10, 10",
-        dashOffset: "10",
-      }).addTo(mapRef.current);
+        setSubmitClassName(styles.none);
+        setinfovisibility(styles.none);
 
-      setSubmitClassName(styles.none);
-      setinfovisibility(styles.none);
+        onGuessSubmit(score, error);
+        clearInterval(secondsleft.current);
+        clearInterval(timerborder.current);
+      }
 
-      onGuessSubmit(score, error);
-      clearInterval(secondsleft.current);
-      clearInterval(timerborder.current);
       passedtime.current = 0;
       line1.current = 85;
       line2.current = 150;
@@ -242,7 +249,9 @@ const Map = ({
     function timer() {
       secondsleft.current = setInterval(() => {
         if (passedtime.current === 30) {
-          clearInterval(secondsleft.current);
+          if (secondsleft.current) {
+            clearInterval(secondsleft.current);
+          }
           timerunout();
         }
 
@@ -276,7 +285,9 @@ const Map = ({
         } else if (line3.current < 85) {
           line3.current += 0.5;
         } else {
-          clearInterval(timerborder.current);
+          if (timerborder.current) {
+            clearInterval(timerborder.current);
+          }
         }
         if (line1.current < 150) {
           setpath(`M 85 0 
@@ -317,20 +328,25 @@ const Map = ({
         });
         document.dispatchEvent(event);
       } else {
-        clearInterval(secondsleft.current);
-        clearInterval(timerborder.current);
+        if (secondsleft.current && timerborder.current) {
+          clearInterval(secondsleft.current);
+          clearInterval(timerborder.current);
+        }
         clearTimeout(timeforshrink);
-        allguesses.current.push([""]);
+        allguesses.current.push([0, 0]);
         alllocations.current.push([imglat.current, imglng.current]);
         setMapStyle({ position: "fixed", width: "100%", height: "85vh" });
         ismarkeronmap.current = true;
-        L.marker([imglat.current, imglng.current], {
-          icon: L.icon({
-            iconUrl: "/Icons/flag.png",
-            iconSize: [30, 30],
-            iconAnchor: [15, 15],
-          }),
-        }).addTo(mapRef.current);
+        if (mapRef.current) {
+          L.marker([imglat.current, imglng.current], {
+            icon: L.icon({
+              iconUrl: "/Icons/flag.png",
+              iconSize: [30, 30],
+              iconAnchor: [15, 15],
+            }),
+          }).addTo(mapRef.current);
+        }
+
         isitsubmitted.current = true;
         setSubmitClassName(styles.none);
         setMapCenter([41.1058783968682, 29.04225723149176]);
@@ -360,71 +376,82 @@ const Map = ({
 
       isitsubmitted.current = false;
       ismarkeronmap.current = false;
-      document.getElementById("button").innerText = "PLACE MARKER ON THE MAP";
-      mapRef.current.eachLayer(function (layer) {
-        if (!(layer instanceof L.TileLayer)) {
-          mapRef.current.removeLayer(layer);
-        }
-        setMapCenter([41.10474805585872, 29.022884681711798]);
-      });
+      if (buttonElement && mapRef.current) {
+        buttonElement.innerText = "PLACE MARKER ON THE MAP";
+        mapRef.current.eachLayer(function (layer) {
+          if (!(layer instanceof L.TileLayer) && mapRef.current) {
+            mapRef.current.removeLayer(layer);
+          }
+          setMapCenter([41.10474805585872, 29.022884681711798]);
+        });
+      }
+
       youundidtheredotoredidtheredo.current = true;
       timer();
       timerprogress();
     } else if (isitconclusion && !isitpregame) {
-      document.getElementById("map").style = `position:fixed;
-            width: 100%;
-            height: 70vh;`;
-      setMapStyle({ position: "fixed", width: "%100", height: "70vh" });
+      const mapid = document.getElementById("map");
+      if (mapid) {
+        mapid.style = `position:fixed;
+        width: 100%;
+        height: 70vh;`;
+        setMapStyle({ position: "fixed", width: "%100", height: "70vh" });
+      }
+
       setSubmitClassName(styles.none);
       setinfovisibility(styles.none);
-
-      mapRef.current.eachLayer(function (layer) {
-        if (!(layer instanceof L.TileLayer)) {
-          mapRef.current.removeLayer(layer);
+      if (mapRef.current) {
+        mapRef.current.eachLayer(function (layer) {
+          if (!(layer instanceof L.TileLayer) && mapRef.current) {
+            mapRef.current.removeLayer(layer);
+          }
+        });
+        const bounds = L.latLngBounds(
+          alllocations.current[0],
+          allguesses.current[0]
+        );
+        // console.log(alllocations);
+        for (let i = 0; i < 5; i++) {
+          // console.log(allguesses);
+          if (
+            allguesses.current[i][0] === 0 &&
+            allguesses.current[i][1] === 0
+          ) {
+            // console.log("empty guess");
+            L.marker(alllocations.current[i], {
+              icon: L.icon({
+                // "public\Icons\1.svg"
+                iconUrl: `Icons/${i + 1}.svg`,
+                iconSize: [30, 30],
+                iconAnchor: [15, 15],
+              }),
+            }).addTo(mapRef.current);
+          } else {
+            // console.log(i + 1);
+            L.marker(allguesses.current[i], { icon: beemarker }).addTo(
+              mapRef.current
+            );
+            L.marker(alllocations.current[i], {
+              icon: L.icon({
+                iconUrl: `Icons/${i + 1}.svg`,
+                iconSize: [30, 30],
+                iconAnchor: [15, 15],
+              }),
+            }).addTo(mapRef.current);
+            const conclusionline = L.polyline(
+              [alllocations.current[i], allguesses.current[i]],
+              {
+                color: "black",
+                weight: 3,
+                dashArray: "10, 10",
+                dashOffset: "10",
+              }
+            ).addTo(mapRef.current);
+            bounds.extend(conclusionline.getBounds());
+          }
         }
-      });
-      const bounds = L.latLngBounds(
-        alllocations.current[0],
-        allguesses.current[0]
-      );
-      // console.log(alllocations);
-      for (let i = 0; i < 5; i++) {
-        // console.log(allguesses);
-        if (!allguesses.current[i][0]) {
-          // console.log("empty guess");
-          L.marker(alllocations.current[i], {
-            icon: L.icon({
-              // "public\Icons\1.svg"
-              iconUrl: `Icons/${i + 1}.svg`,
-              iconSize: [30, 30],
-              iconAnchor: [15, 15],
-            }),
-          }).addTo(mapRef.current);
-        } else {
-          // console.log(i + 1);
-          L.marker(allguesses.current[i], { icon: beemarker }).addTo(
-            mapRef.current
-          );
-          L.marker(alllocations.current[i], {
-            icon: L.icon({
-              iconUrl: `Icons/${i + 1}.svg`,
-              iconSize: [30, 30],
-              iconAnchor: [15, 15],
-            }),
-          }).addTo(mapRef.current);
-          const conclusionline = L.polyline(
-            [alllocations.current[i], allguesses.current[i]],
-            {
-              color: "black",
-              weight: "3",
-              dashArray: "10, 10",
-              dashOffset: "10",
-            }
-          ).addTo(mapRef.current);
-          bounds.extend(conclusionline.getBounds());
-        }
+        mapRef.current.fitBounds(bounds);
       }
-      mapRef.current.fitBounds(bounds);
     } else if (isitpregame) {
       setMapStyle({
         position: "fixed",
@@ -440,7 +467,9 @@ const Map = ({
   function enlargenmapandsubmitbutton() {
     if (!isitresults && !isitconclusion && !isitpregame) {
       const mapcenter = mapRef.current?.getCenter();
-      setMapCenter([mapcenter.lat, mapcenter.lng]);
+      if (mapcenter) {
+        setMapCenter([mapcenter.lat, mapcenter.lng]);
+      }
       setMapStyle({
         position: "fixed",
         width: "60vw",
@@ -463,7 +492,9 @@ const Map = ({
     if (!isitresults && !isitconclusion && !isitpregame) {
       timeforshrink = setTimeout(() => {
         const mapcenter = mapRef.current?.getCenter();
-        setMapCenter([mapcenter.lat, mapcenter.lng]);
+        if (mapcenter) {
+          setMapCenter([mapcenter.lat, mapcenter.lng]);
+        }
         setMapStyle({
           position: "fixed",
           width: "20vw",

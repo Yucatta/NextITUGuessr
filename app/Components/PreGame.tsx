@@ -12,7 +12,7 @@ interface Props {
 const PreGame = ({ isitpregame, onstartclick }: Props) => {
   // const [leaderboard, setleaderboard] = useState<string[][]>();
   const participants = useRef([["a", "a"]]);
-  const [sortedParticipants, setSortedParticipants] = useState([]);
+  const [sortedParticipants, setSortedParticipants] = useState<string[][]>([]);
   const currentparticipant = useRef<HTMLInputElement>(null);
   const [isblinkmodeon, setisblinkmodeon] = useState(false);
 
@@ -35,7 +35,9 @@ const PreGame = ({ isitpregame, onstartclick }: Props) => {
   useEffect(() => {
     if (participants.current.length > 0) {
       // Sort participants by score (assuming higher score is better)
-      const sorted = [...participants.current].sort((a, b) => b[1] - a[1]);
+      const sorted = [...participants.current].sort(
+        (a, b) => Number(b[1]) - Number(a[1])
+      );
       setSortedParticipants(sorted.slice(1, 51));
     }
   }, [participants.current]);
