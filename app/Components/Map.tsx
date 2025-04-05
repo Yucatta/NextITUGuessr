@@ -80,7 +80,7 @@ const Map = ({
     A 20 20 0 0 0 150 0 
     L 85 0
     `);
-  const timerborder = useRef<NodeJS.Timeout>();
+  const timerborder = useRef<NodeJS.Timeout | null>(null);
   const line1 = useRef(85);
   const line2 = useRef(150);
   const line3 = useRef(20);
