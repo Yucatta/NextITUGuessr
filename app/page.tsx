@@ -1,15 +1,14 @@
 "use client";
-// import dynamic from "next/dynamic";
+import dynamic from "next/dynamic";
 import React, { useEffect, useState, useRef } from "react";
 import EndGameStats from "./Components/EndGameStats";
 import CustomImage from "./Components/CustomImage";
 import Papa from "papaparse";
 import Conclusion from "./Components/Conclusion";
 import Pregame from "./Components/PreGame";
-import Map from "./Components/Map";
-// const DynamicMap = dynamic(() => import("@/app/Components/Map"), {
-//   ssr: false,
-// });
+const DynamicMap = dynamic(() => import("@/app/Components/Map"), {
+  ssr: false,
+});
 
 function rnd(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -31,12 +30,13 @@ function Home() {
   const [isitconclusion, setisitconclusion] = useState(false);
   const [isitpregame, setisitpregame] = useState(true);
   const [isblinkmodeon, setisblinkmodeon] = useState(false);
-  const rndnum = useRef(rnd(0, 5204));
+  const rndnum = useRef(1);
   const numberofrounds = useRef(0);
   const [latlong, setLatLong] = useState<
     Array<[string, number, number, number]>
   >([]);
   const totalscore = useRef(0);
+  const whenhellfreezees = 0;
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -57,8 +57,14 @@ function Home() {
 
     fetchData();
   }, []);
-
+  useEffect(() => {
+    rndnum.current = rnd(0, 5204);
+  }, [whenhellfreezees]);
   function handleSubmit(sc: number, er: number) {
+    if (rndnum.current === null) {
+      return;
+    } else {
+    }
     console.log(rndnum.current);
     setScore(sc);
     setError(er);
@@ -87,6 +93,7 @@ function Home() {
   function handleReport() {
     console.log("a");
   }
+
   return (
     <div>
       <CustomImage
@@ -96,7 +103,7 @@ function Home() {
         isitpregame={isitpregame}
         isitblinkmode={isblinkmodeon}
       />
-      <Map
+      <DynamicMap
         Rounds={numberofrounds.current}
         isitconclusion={isitconclusion}
         isitpregame={isitpregame}
