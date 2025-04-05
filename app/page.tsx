@@ -6,7 +6,9 @@ import CustomImage from "./Components/CustomImage"; // Import the renamed compon
 import Papa from "papaparse";
 import Conclusion from "./Components/Conclusion";
 import Pregame from "./Components/PreGame";
-const DynamicMap = dynamic(() => import("@/app/Components/Map"));
+const DynamicMap = dynamic(() => import("@/app/Components/Map"), {
+  ssr: false,
+});
 
 function rnd(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -82,8 +84,6 @@ function Home() {
     totalscore.current = 0;
   }
   function handleReport() {
-    // window.open("https://www.youtube.com/watch?v=al1BNB8bKaE", "_blank");
-    // window.open("http://localhost:3000/report", "_blank");
     console.log("a");
   }
   return (
