@@ -1,16 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Jost:wght@450&display=swap');
-:global(body) {
-  background-color: #1a1a1a;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  color : #e3e3e3;
-  font-family: "Jost",Arial, Helvetica, sans-serif;
-  --points:rgb(159, 167, 49);
-  --score:rgb(167, 94, 26);
-  --error:rgb(7, 75, 147);
-  /* font-family: "Jost",Arial, Helvetica, sans-serif; */
-}
 
 .image {
   display: flex;
