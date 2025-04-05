@@ -32,6 +32,7 @@ const PreGame = ({ isitpregame, onstartclick }: Props) => {
       onstartclick(isblinkmodeon);
     }
   }
+
   useEffect(() => {
     if (participants.current.length > 0) {
       // Sort participants by score (assuming higher score is better)

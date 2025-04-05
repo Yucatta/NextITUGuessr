@@ -6,7 +6,9 @@ import CustomImage from "./Components/CustomImage"; // Import the renamed compon
 import Papa from "papaparse";
 import Conclusion from "./Components/Conclusion";
 import Pregame from "./Components/PreGame";
-const DynamicMap = dynamic(() => import("@/app/Components/Map"));
+const DynamicMap = dynamic(() => import("@/app/Components/Map"), {
+  ssr: false,
+});
 
 function rnd(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
