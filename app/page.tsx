@@ -1,14 +1,15 @@
 "use client";
-import dynamic from "next/dynamic";
+// import dynamic from "next/dynamic";
 import React, { useEffect, useState, useRef } from "react";
 import EndGameStats from "./Components/EndGameStats";
-import CustomImage from "./Components/CustomImage"; // Import the renamed component
+import CustomImage from "./Components/CustomImage";
 import Papa from "papaparse";
 import Conclusion from "./Components/Conclusion";
 import Pregame from "./Components/PreGame";
-const DynamicMap = dynamic(() => import("@/app/Components/Map"), {
-  ssr: false,
-});
+import Map from "./Components/Map";
+// const DynamicMap = dynamic(() => import("@/app/Components/Map"), {
+//   ssr: false,
+// });
 
 function rnd(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -95,7 +96,7 @@ function Home() {
         isitpregame={isitpregame}
         isitblinkmode={isblinkmodeon}
       />
-      <DynamicMap
+      <Map
         Rounds={numberofrounds.current}
         isitconclusion={isitconclusion}
         isitpregame={isitpregame}

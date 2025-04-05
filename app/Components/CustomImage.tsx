@@ -28,7 +28,7 @@ const CustomImage = ({
     if (!isitconclusion && !isitpregame && !isitresults) {
       // console.log("ingame and do not know if blinked", isitblinked.current);
 
-      if (!isitblinked.current) {
+      if (!isitblinked.current && isitblinkmode) {
         // console.log("ingame and not blinked", isitblinked.current);
         blink();
       }

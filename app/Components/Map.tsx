@@ -407,24 +407,20 @@ const Map = ({
           alllocations.current[0],
           allguesses.current[0]
         );
-        // console.log(alllocations);
+
         for (let i = 0; i < 5; i++) {
-          // console.log(allguesses);
           if (
             allguesses.current[i][0] === 0 &&
             allguesses.current[i][1] === 0
           ) {
-            // console.log("empty guess");
             L.marker(alllocations.current[i], {
               icon: L.icon({
-                // "public\Icons\1.svg"
                 iconUrl: `Icons/${i + 1}.svg`,
                 iconSize: [30, 30],
                 iconAnchor: [15, 15],
               }),
             }).addTo(mapRef.current);
           } else {
-            // console.log(i + 1);
             L.marker(allguesses.current[i], { icon: beemarker }).addTo(
               mapRef.current
             );
@@ -459,6 +455,8 @@ const Map = ({
         marginRight: "2vw",
         marginBottom: "5vh",
       });
+      allguesses.current = [];
+      alllocations.current = [];
     }
   }, [isitresults, isitpregame, isitconclusion]);
   function enlargenmapandsubmitbutton() {
