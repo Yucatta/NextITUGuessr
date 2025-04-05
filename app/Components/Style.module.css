@@ -1,0 +1,492 @@
+@import url('https://fonts.googleapis.com/css2?family=Jost:wght@450&display=swap');
+body {
+  background-color: #1a1a1a;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  color : #e3e3e3;
+  font-family: "Jost",Arial, Helvetica, sans-serif;
+  --points:rgb(159, 167, 49);
+  --score:rgb(167, 94, 26);
+  --error:rgb(7, 75, 147);
+  /* font-family: "Jost",Arial, Helvetica, sans-serif; */
+}
+
+.image {
+  display: flex;
+  width: calc(100vh * 4 / 3);
+  height: 99.5vh;
+  justify-content: center;
+  align-items: center;
+  position: absolute; /* Change to absolute */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: -6;
+}
+.none {
+  display:none;
+}
+
+.afterleaflet {position: absolute;
+  width: 100%;
+  height: 85vh;
+}
+
+.score {
+  top: 93%;
+  left: 60%;
+  transform: translate(-50%, -50%);
+  position: fixed;
+  font-size: 3vw;
+  color:white;
+  text-shadow: 
+  0 0 .5vh var(--score),
+   0 0 0.5vh var(--score), 
+   0 0 1.5vh var(--score),
+    0 0 1vh var(--score),
+     0 0 2vh var(--score);
+  filter:brightness(1.7);
+}
+.scoreinfo{
+  font-size :1.8vh;
+  top: 97%;
+  left: 60%;
+  transform: translate(-50%, -50%);
+  position: fixed;
+  color:hsl(0, 0%, 45%)
+}
+.error {
+  top: 93%;
+  left: 40%;
+  transform: translate(-50%, -50%);
+  position: fixed;
+  font-size: 3vw;
+  color:white;
+  text-shadow: 
+  0 0 .5vh var(--error),
+   0 0 0.5vh var(--error), 
+   0 0 1.5vh var(--error),
+    0 0 1vh var(--error),
+     0 0 2vh var(--error);
+  filter:brightness(1.7);
+}
+.errorinfo{
+  font-size :1.8vh;
+  top: 97%;
+  left: 40%;
+  position: fixed;
+  transform: translate(-50%, -50%);
+  color:hsl(0, 0%, 45%)
+}
+
+.nextimg {
+  position: fixed;
+  font-size: 20px;
+  top: 93%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10vw;
+  height: 8vh;
+  background-color: rgb(1, 45, 1);
+  border-radius: 4vh;
+  border:  2px solid rgb(1, 24, 1) ;
+  cursor: pointer;
+
+}
+.report{
+  position: fixed;
+  font-size: 5vh;
+  top: 94%;
+  left: 3%;
+  transform: translate(-50%, -50%);
+  width: 5vh;
+  height: 5vh;
+  border-radius: 2.5vh;
+  background-color: rgb(23, 23, 23);
+  border: 2px solid rgb(52, 52, 52)  ;
+  cursor: pointer;
+}
+
+
+
+
+.placemarker {
+  position: fixed;
+  width:20.1vw;
+  height: 4vh;
+  margin-left:77.99vw;
+  margin-top: 95vh;
+  background-color: rgb(47, 47, 47,0.5);
+  border-radius: 2vh;
+  color : #e3e3e3;
+  cursor: pointer;
+
+}
+.biggerplacemarker{
+  position: fixed;
+  width:60.1vw;
+  height: 7vh;
+  margin-left:37.99vw;
+  margin-top: 92vh;
+  font-size:2.5vh;
+  background-color: rgb(47, 47, 47,0.5);
+  pointer-events: auto;
+  border-radius: 3.5vh;
+  color : #e3e3e3;
+  cursor: pointer;
+
+}
+.submit {
+  position: fixed;
+  width:20.1vw;
+  cursor: pointer;
+  height: 4vh;
+  margin-left:77.99vw;
+  margin-top: 95vh;
+  background-color: rgb(0, 95, 0);
+  border-radius: 2vh;
+  color : #e3e3e3;
+}
+.biggersubmit {
+  position: fixed;
+  width:60.1vw;
+  height: 7vh;
+  margin-left:37.99vw;
+  margin-top: 92vh;
+  font-size:3vh;
+  background-color: rgb(0, 95, 0) ;
+  pointer-events: auto;
+  border-radius: 3.5vh;
+  color : #e3e3e3;
+  cursor: pointer;
+
+}
+
+
+.progressbar {
+  position: fixed;
+  margin-left: 30vw;
+  width: 40vw;
+  height: 6vh;
+  background-color: #333; /* Background color of the progress bar container */
+  margin-top: 79vh;
+  border-radius: 3vh; /* Rounds the whole bar */
+  overflow: hidden;
+}
+
+/* WebKit (Chrome, Safari) - Empty background */
+.progressbar::-webkit-progress-bar {
+  background-color: #ddd;
+  border-radius: 15px; /* Keep background rounded */
+}
+
+/* WebKit (Chrome, Safari) - Filled bar (only left side rounded) */
+.progressbar::-webkit-progress-value {
+  background-color: #d49c04; /* Green fill */
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  transition: width 0.4s ease-in-out;
+}
+
+/* Firefox */
+.progressbar::-moz-progress-bar {
+  background-color: #d49c04;
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.points{
+  position: fixed;
+  top: 75%;
+  left: 55%;
+  transform: translate(-50%, -50%);
+  width: 16vw;
+  font: 50vw;
+  font-size: 5vh;
+  color:white;
+  text-shadow: 0 0 .5vh var(--points), 0 0 .5vh var(--points), 0 0 .5vh var(--points), 0 0 .5vh var(--points), 0 0 1vh var(--points);
+  filter:brightness(1);
+}
+.menu {
+  position:fixed;
+  margin-left:43vw;
+  margin-top:88vh;
+  font-size: 3vh;
+  width: 25vh;
+  height: 8vh;
+  background-color: rgb(38, 165, 38);
+  border-radius: 4vh;
+  font-family: "Jost", sans-serif;
+  cursor: pointer;
+
+  color: #e3e3e3;
+}
+.inputinfo {
+    font-size:1.5vw;
+    margin-top:45vh;
+    position:fixed;
+    margin-left:40vw;
+}
+.inputname {
+  width:15vw;
+  height:5vh;    
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute; /* Change to absolute */
+  top: 50%;
+  left: 47%;
+  transform: translate(-50%, -50%);
+  border:1px solid rgb(166, 162, 162);
+
+}
+.start {
+  font-size: 3vh;
+  width: 3vw;
+  height: 5vh;
+  background-color: rgb(9, 106, 9);
+  color: #e3e3e3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute; 
+  top: 50%;
+  left: 57%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+
+}
+.participantsList {
+  background-color: rgb(36, 36, 36,0.8);
+  width: 30vw;
+  height:100vh;
+  font-size: 1.1em;
+  position: fixed;
+  margin-left: 70vw;
+  list-style-type: none;
+  padding: 0;
+  overflow:hidden;
+  overflow-y:scroll;
+  border:1px solid #ccc;
+  margin-top: 6.4vh;
+  padding-bottom:6vh;
+}
+.participantsList li {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+  border-bottom: 1px solid #ccc;
+
+}
+.listscore{
+  position: absolute;
+  margin-left: 20vw;
+  font-size: 1.2vw;
+}
+.listparticipant{
+  margin-left:0.5vw;
+  font-size: 1.2vw;
+}
+.loadinggif{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute; 
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 25vh;
+  height: auto;
+}
+.background {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  size: cover;  
+  background-image: url(/background.jpg);
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: -100;
+}
+.leaderboardinfopart{
+  position: fixed;
+  margin-top: 1vh;
+  margin-left: 1vw;
+}
+.leaderboardinfoscor{
+  position: fixed;
+  margin-left: 20vw;
+  margin-top: 1vh;
+}
+.leaderboardinfo{
+  background-color: rgb(36, 36, 36,0.8);
+  width: 30vw;
+  height: 6.4vh;
+  margin-left:70vw;
+  font-size: 2vw;
+  border: 1px solid #ccc;
+}
+.timer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute; 
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 3vh;
+}
+
+.ingamedetails { 
+  position: fixed;
+  width: 15vw;
+  height:10vh;
+  background-color:rgb(15, 15, 15 ,0.8);
+  margin-top:10vh;
+  margin-left: 88vw;
+  font-size: 1.3rem;
+}
+.totalscore {
+  margin-left:7vw;
+  margin-top:5vh;
+  position:fixed;
+}
+
+.tournumber { 
+  position: fixed;
+  margin-left:2.5vw;
+  margin-top: 5vh;
+  
+}
+.totalscoreinfo {
+  position:fixed;
+  margin-left:7vw;
+  margin-top:1vh
+}
+.tournumberinfo { 
+  position:fixed;
+  margin-left:0.8vw;
+  margin-top: 1vh;
+}
+.logoimage {
+  width: 5vw;
+  position: absolute; /* Change to absolute */
+  top: 38%;
+  left: 43.5%;
+  transform: translate(-50%, -50%)
+}
+.logoname{
+  font-size: 2.3vw;
+  position: absolute; /* Change to absolute */
+  top: 38%;
+  left: 52%;
+  transform: translate(-50%, -50%);
+  font-family: "Jost", sans-serif;
+
+}
+.timerprogress   {
+  position: fixed;
+  width: 10vw;
+  height:4vw;
+  z-index: -4;
+  position: absolute; /* Change to absolute */
+  top: 10%;
+  left: 52%;
+  transform: translate(-50%, -50%);
+}
+
+.timerdiv   {
+  position: fixed;
+  width: 9.55vw;
+  height:2.2vw;
+  background-color:rgba(25, 25, 25, 0.7);
+  border-radius: 2.5vh;
+  top: 10%;
+  left: 52%;
+  transform: translate(-50%, -50%);
+  z-index: -5;
+}
+.blinkmodeoffcontainer{
+  width: 10vh;
+  height: 4vh;
+  position: fixed;
+  top: 70%;
+  left: 47%;
+  transform: translate(-50%, -50%);
+  background-color:#1f1f1f;  
+  cursor: pointer;
+  border-radius: 5vh;
+  border: 1px solid#5c5b5b;
+
+
+}
+.blinkmodeoffbutton{
+  position: fixed;
+  width: 3.4vh;
+  height: 3.4vh;
+  border-radius: 5vh;
+  top: 50%;
+  left: 22%;
+  transform: translate(-50%, -50%);
+  background-color: #333;
+  cursor: pointer;
+  transition: 0.35s;
+}
+.ReportImg{
+  
+    width: auto;
+    height: 2.8vh;  
+    transform: translate(5%, -50%);
+    filter: invert(100%);
+  
+}
+.blinkmodeexplainer{
+  transition: 1s;
+  color: black;
+  display: none;
+  top: 240%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: fixed;
+  background-color: rgba(107, 107, 107, 0.7);
+  height: 10vh;
+  width: 10vw;
+}
+.blinkmodeoffcontainer:hover .blinkmodeexplainer{
+  display: block;
+  transition: 1s;
+}
+.blinkmodeonbutton{
+  position: fixed;
+  width: 3.4vh;
+  height: 3.4vh;
+  border-radius: 5vh;
+  top: 50%;
+  left: 78%;
+  transform: translate(-50%, -50%);
+  background-color: #333;
+  cursor: pointer;
+  transition: 0.35s;
+}
+
+.blinkmodeoncontainer{
+  width: 10vh;
+  height: 4vh;
+  position: fixed;
+  top: 20%;
+  left: 30%;
+  transform: translate(-50%, -50%);
+  background-color:#1a1a1a;  
+  cursor: pointer;
+  border-radius: 5vh;
+  border: 1px solid#5c5b5b;
+  
+}
