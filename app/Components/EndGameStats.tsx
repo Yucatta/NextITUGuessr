@@ -4,8 +4,6 @@ interface Props {
   isitresults: boolean;
   score: number;
   error: number;
-  isitconclusion: boolean;
-  isitpregame: boolean;
   onNextClick: () => void;
   onReport: () => void;
 }
@@ -15,8 +13,6 @@ const EndGameStats = ({
   score,
   onNextClick: onNextClick,
   error,
-  isitconclusion,
-  isitpregame,
   onReport,
 }: Props) => {
   const displayStyle: React.CSSProperties = isitresults

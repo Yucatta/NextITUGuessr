@@ -1,7 +1,7 @@
+"use client";
 import React, { useEffect, useState, useRef } from "react";
 import styles from "./Style.module.css";
 import Papa from "papaparse";
-import { abort } from "process";
 
 interface Props {
   isitpregame: boolean;
@@ -52,7 +52,7 @@ const pregame = ({ isitpregame, onstartclick }: Props) => {
             participants.current = result.data;
           },
         });
-      } catch (error) {}
+      } catch (isblinkmodeon) {}
     };
 
     fetchData();

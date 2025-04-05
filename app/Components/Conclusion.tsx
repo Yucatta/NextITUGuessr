@@ -1,5 +1,4 @@
-"use client";
-import React, { useEffect } from "react";
+import React from "react";
 interface Props {
   isitconclusion: boolean;
   totalscore: number;

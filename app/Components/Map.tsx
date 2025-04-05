@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import styles from "./Style.module.css";
-import { userAgent } from "next/server";
 
 interface Props {
   rndnum: number;
@@ -20,12 +19,12 @@ interface Props {
 const latlengthmeter = 111.32 * 1000;
 const longtiduelengthmeter = (40075 * 1000 * 0.75346369194) / 360; // 0.75346369194 is cosine of latitude
 
-const sizeofitü = Math.floor(
-  Math.sqrt(
-    (0.00944033377 * latlengthmeter) ** 2 +
-      (0.01506450233 ** longtiduelengthmeter) ** 2
-  )
-);
+// const sizeofitü = Math.floor(
+//   Math.sqrt(
+//     (0.00944033377 * latlengthmeter) ** 2 +
+//       (0.01506450233 ** longtiduelengthmeter) ** 2
+//   )
+// );
 let score = 0;
 const beemarker = L.icon({
   iconUrl: "/Icons/Bee-Marker.png",
@@ -186,7 +185,7 @@ const Map = ({
 
       isitsubmitted.current = true;
 
-      let error = Math.floor(
+      const error = Math.floor(
         Math.sqrt(
           ((imglat.current - latLngArr[0]) * latlengthmeter) ** 2 +
             ((imglng.current - latLngArr[1]) * longtiduelengthmeter) ** 2
@@ -250,6 +249,9 @@ const Map = ({
         passedtime.current++;
         setupdater(passedtime.current);
       }, 1000);
+      if (passedtime.current > 500) {
+        console.log(updater);
+      }
     }
     function timerprogress() {
       timerborder.current = setInterval(() => {
@@ -381,7 +383,7 @@ const Map = ({
           mapRef.current.removeLayer(layer);
         }
       });
-      let bounds = L.latLngBounds(
+      const bounds = L.latLngBounds(
         alllocations.current[0],
         allguesses.current[0]
       );
@@ -410,7 +412,7 @@ const Map = ({
               iconAnchor: [15, 15],
             }),
           }).addTo(mapRef.current);
-          let conclusionline = L.polyline(
+          const conclusionline = L.polyline(
             [alllocations.current[i], allguesses.current[i]],
             {
               color: "black",

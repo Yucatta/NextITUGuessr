@@ -2,7 +2,7 @@
 import dynamic from "next/dynamic";
 import React, { useEffect, useState, useRef } from "react";
 import EndGameStats from "./Components/EndGameStats";
-import Image from "./Components/Image";
+import CustomImage from "./Components/CustomImage"; // Import the renamed component
 import Papa from "papaparse";
 import Conclusion from "./Components/Conclusion";
 import Pregame from "./Components/pregame";
@@ -83,11 +83,12 @@ function Home() {
   }
   function handleReport() {
     // window.open("https://www.youtube.com/watch?v=al1BNB8bKaE", "_blank");
-    window.open("http://localhost:3000/report", "_blank");
+    // window.open("http://localhost:3000/report", "_blank");
+    console.log("a");
   }
   return (
     <div>
-      <Image
+      <CustomImage
         rndnum={rndnum.current}
         isitresults={isitresults}
         isitconclusion={isitconclusion}
@@ -111,8 +112,6 @@ function Home() {
         onReport={handleReport}
         score={score}
         error={error}
-        isitconclusion={isitconclusion}
-        isitpregame={isitpregame}
       />
       <Conclusion
         isitconclusion={isitconclusion}

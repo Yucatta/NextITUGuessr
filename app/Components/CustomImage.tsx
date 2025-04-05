@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import styles from "./Style.module.css";
+// import Image from "next/image";
 interface Props {
   rndnum: number | null;
   isitresults: boolean;
@@ -9,7 +10,7 @@ interface Props {
   isitblinkmode: boolean;
 }
 
-const Image = ({
+const CustomImage = ({
   rndnum,
   isitresults,
   isitconclusion,
@@ -66,6 +67,15 @@ const Image = ({
     <>
       <div className={styles.background}></div>
       <div className={imagevisibility === styles.none ? imagevisibility : ""}>
+        {/* <Image
+          id="currentimage"
+          src={`https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/${rndnum}.jpg`}
+          alt="Current image"
+          layout="fill" // Use layout="fill" for responsive images
+          objectFit="contain"
+          className={imagevisibility}
+          onLoadingComplete={() => setisitloaded(true)} // Handle when the image is fully loaded
+        /> */}
         <img
           id="currentimage"
           src={`https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/${rndnum}.jpg`}
@@ -79,4 +89,4 @@ const Image = ({
   );
 };
 
-export default Image;
+export default CustomImage;
