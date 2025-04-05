@@ -9,7 +9,7 @@ interface Props {
   onstartclick: (blinkmode: boolean) => void;
 }
 
-const pregame = ({ isitpregame, onstartclick }: Props) => {
+const PreGame = ({ isitpregame, onstartclick }: Props) => {
   // const [leaderboard, setleaderboard] = useState<string[][]>();
   const participants = useRef([["a", "a"]]);
   const [sortedParticipants, setSortedParticipants] = useState([]);
@@ -121,4 +121,4 @@ const pregame = ({ isitpregame, onstartclick }: Props) => {
   );
 };
 
-export default pregame;
+export default PreGame;

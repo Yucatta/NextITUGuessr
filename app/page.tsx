@@ -5,7 +5,7 @@ import EndGameStats from "./Components/EndGameStats";
 import CustomImage from "./Components/CustomImage"; // Import the renamed component
 import Papa from "papaparse";
 import Conclusion from "./Components/Conclusion";
-import Pregame from "./Components/pregame";
+import Pregame from "./Components/PreGame";
 const DynamicMap = dynamic(() => import("@/app/Components/Map"));
 
 function rnd(min: number, max: number) {

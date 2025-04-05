@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import styles from "./Style.module.css";
 interface Props {
   isitresults: boolean;
