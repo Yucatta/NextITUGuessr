@@ -52,7 +52,9 @@ const PreGame = ({ isitpregame, onstartclick }: Props) => {
             participants.current = result.data;
           },
         });
-      } catch (isblinkmodeon) {}
+      } catch (a) {
+        console.log(a);
+      }
     };
 
     fetchData();

@@ -31,7 +31,7 @@ const beemarker = L.icon({
   iconSize: [20, 30],
   iconAnchor: [10, 30],
 });
-let timeforshrink: any;
+let timeforshrink: NodeJS.Timeout;
 
 const Map = ({
   isitresults,
