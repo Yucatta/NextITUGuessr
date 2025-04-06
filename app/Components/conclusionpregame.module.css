@@ -20,7 +20,7 @@
   border:1px solid rgb(166, 162, 162);
 }
 .start {
-  font-size: 1.5vw;
+  font-size: clamp(15px,1.5vw,3vw);;
   --width: clamp(5vh,3vw,3vw);
   width: var(--width);
   right: 0;
@@ -119,13 +119,18 @@
 }
 .leaderboardinfopart{
   position: fixed;
-  margin-top: 1vh;
+  margin-top: 0.8vh;
   margin-left: 1vw;
+}
+.mobileleaderboardinfopart{
+  position: fixed;
+  margin-top: 0.8vh;
+  left: clamp(20px,2vw,3vw);
 }
 .leaderboardinfoscor{
   position: fixed;
-  margin-left: 20vw;
-  margin-top: 1vh;
+  right: clamp(60px,5.4vw,10vw);
+  margin-top: 0.8vh;
 }
 .leaderboardinfo{
   background-color: rgb(36, 36, 36,0.8);
@@ -141,14 +146,14 @@
   height: 6.4vh;
   margin-top: clamp(53.7vh,40vw,90vh) ;
   position: fixed;
-  font-size: 2vw;
+  font-size: clamp(24px,2vw,3vw);
   border: 1px solid #ccc;
 }
 .blinkmodeoffcontainer{
   width: 10vh;
   height: 4vh;
   position: fixed;
-  margin-top: clamp(40vh,32vw,90vh) ;
+  margin-top: clamp(46vh,32vw,90vh) ;
   left: 47%;
   transform: translatex( -50%);
   background-color:#1f1f1f;  
@@ -170,14 +175,7 @@
   cursor: pointer;
   transition: 0.35s;
 }
-.ReportImg{
-  
-    width: auto;
-    height: 2.8vh;  
-    transform: translate(5%, -50%);
-    filter: invert(100%);
-  
-}
+
 .blinkmodeexplainer{
   transition: 1s;
   color: lightgray;
@@ -222,5 +220,18 @@
   
 }
 .none {
-    display:none;
-  }
+  display:none;
+}
+
+.loadinggif{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute; 
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 25vh;
+  height: auto;
+}
+  

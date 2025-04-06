@@ -19,9 +19,12 @@ const CustomImage = ({
 }: Props) => {
   const [imagevisibility, setimagevisibility] = useState(styles.none);
   const [isitloaded, setisitloaded] = useState(false);
+  const [imageSrc, setImageSrc] = useState(
+    `https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/${rndnum}.jpg`
+  );
   const isitblinked = useRef(false);
   useEffect(() => {
-    if (isitresults || isitpregame) {
+    if (isitresults) {
       setisitloaded(false);
       isitblinked.current = false;
     }
@@ -33,12 +36,12 @@ const CustomImage = ({
     } else {
       setimagevisibility(styles.none);
     }
-    console.log(isitblinked.current);
+    // console.log(isitblinked.current);
   }, [isitconclusion, isitresults, isitpregame]);
   useEffect(() => {
-    if (!isitresults && !isitpregame) {
-      setisitloaded(true);
-    }
+    // if (!isitresults && !isitpregame) {
+    //   setisitloaded(true);
+    // }
     if (!isitresults && isitblinkmode && !isitresults) {
       let a = 0;
       const blinkmodeinterval = setInterval(() => {
@@ -46,7 +49,7 @@ const CustomImage = ({
           setimagevisibility(styles.none);
           clearInterval(blinkmodeinterval);
         } else {
-          console.log("a", a);
+          // console.log("a", a);
         }
         a++;
       }, 50);
@@ -65,7 +68,9 @@ const CustomImage = ({
     isitblinked.current = true;
   }
   useEffect(() => {
-    console.log("rndnum in customimage is:", rndnum);
+    setImageSrc(
+      `https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/${rndnum}.jpg`
+    );
   }, [rndnum]);
   function onLoad() {
     if (!isitresults && isitblinkmode && !isitresults && !isitpregame) {
@@ -73,7 +78,14 @@ const CustomImage = ({
     }
     setisitloaded(true);
   }
-
+  function handleImageError() {
+    console.error("image couldnt reload retry");
+    setImageSrc("a");
+    setImageSrc(
+      `https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/${rndnum}.jpg`
+    );
+  }
+  // console.log(isitloaded);
   return (
     <>
       <div className={styles.background}></div>
@@ -89,12 +101,19 @@ const CustomImage = ({
         /> */}
         <img
           id="currentimage"
+          src={imageSrc}
           // src={`https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/${rndnum}.jpg`}
-          src={`compressed-images/${rndnum}.jpg`}
+          // src={`https://images.pexels.com/photos/1525041/pexels-photo-1525041.jpeg?cs=srgb&dl=pexels-francesco-ungaro-1525041.jpg&fm=jpg`}
+          // src={`compressed-images/${rndnum}.jpg`}
           className={imagevisibility}
+          onError={handleImageError}
           style={isitloaded ? { display: "block" } : { display: "none" }}
           onLoad={onLoad}
           alt="Current image"
+        ></img>
+        <img
+          src="Gray_circles_rotate.gif"
+          className={isitloaded ? styles.none : styles.loadinggif}
         ></img>
       </div>
     </>

@@ -56,18 +56,16 @@ const PreGame = ({ isitpregame, onstartclick }: Props) => {
         });
       } catch (a) {
         console.log(a);
+        console.log(updater);
       }
     };
-    let a = 1;
     fetchData();
+    let a = 1;
     setInterval(() => {
       a++;
       setupdater(a);
-    }, 50);
+    }, 250);
   }, []);
-  useEffect(() => {
-    console.log(aspectRatio);
-  }, [aspectRatio]);
   return (
     <>
       <div className={isitpregame ? "" : styles.none}>
@@ -134,7 +132,16 @@ const PreGame = ({ isitpregame, onstartclick }: Props) => {
             }
           >
             <strong>
-              <span className={styles.leaderboardinfopart}> Participant</span>
+              <span
+                className={
+                  aspectRatio <= 0.85
+                    ? styles.mobileleaderboardinfopart
+                    : styles.leaderboardinfopart
+                }
+              >
+                {" "}
+                Participant
+              </span>
               <span className={styles.leaderboardinfoscor}>Score</span>
             </strong>
           </div>
@@ -151,7 +158,11 @@ const PreGame = ({ isitpregame, onstartclick }: Props) => {
                   : styles.blinkmodeoffbutton
               }
             ></span>
-            <span className={styles.blinkmodeexplainer}>
+            <span
+              className={
+                aspectRatio <= 0.85 ? styles.none : styles.blinkmodeexplainer
+              }
+            >
               With Blink Mode image shows up for only 0.1 seconds
             </span>
           </button>

@@ -65,7 +65,7 @@ function Home() {
       return;
     } else {
     }
-    console.log(rndnum.current);
+    // console.log(rndnum.current);
     setScore(sc);
     setError(er);
     totalscore.current += sc;
@@ -75,7 +75,7 @@ function Home() {
   function handlenext() {
     numberofrounds.current++;
     setIsItResults(false);
-    console.log(numberofrounds.current);
+    // console.log(numberofrounds.current);
     if (numberofrounds.current === 5) {
       numberofrounds.current = 0;
       setisitconclusion(true);
@@ -91,7 +91,7 @@ function Home() {
     totalscore.current = 0;
   }
   function handleReport() {
-    console.log("a");
+    // console.log("a");
   }
 
   return (

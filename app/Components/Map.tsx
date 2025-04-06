@@ -254,7 +254,7 @@ const Map = ({
   useEffect(() => {
     function timer() {
       secondsleft.current = setInterval(() => {
-        if (passedtime.current === 500) {
+        if (passedtime.current === 30) {
           if (secondsleft.current) {
             clearInterval(secondsleft.current);
           }
@@ -496,7 +496,7 @@ const Map = ({
     }
   }, [isitresults, isitpregame, isitconclusion]);
   useEffect(() => {
-    console.log("aspect ratio is:", aspectRatio);
+    // console.log("aspect ratio is:", aspectRatio);
     if (aspectRatio < 0.85 && !isitmobile.current) {
       isitmobile.current = true;
       setMapStyle({
