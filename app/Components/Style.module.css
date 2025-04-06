@@ -8,18 +8,37 @@
   left: 50%;
   transform: translateX(-50%);
   z-index: -6;
-  top: 50%; /* Default: Vertically centered */
-  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+  top: 50%;
+  transform: translate(-50%, -50%); 
 }
-
+.fullscreen{
+  display: none;
+}
 @media (max-aspect-ratio: 0.85) {
   .image {
-    top: 0; /* Move to the top for aspect ratios <= 0.85 */
-    transform: translateX(-50%); /* Only center horizontally */
+    top: 0;
+    transform: translateX(-50%); 
+  }
+  .fullscreen{
+    margin-top: calc(64vw - 5vh);
+    width: 5vh;
+    border-radius: 5vh;
+    height: 5Vh;
+    display: block;
+    background-color: rgba(0, 0, 0, 0.6);
+    border: 2px solid rgb(52, 52, 52, 0,5);
+    position: fixed;
+    right: 0;
+    margin-right: 2vh;
   }
 }
 .none {
   display:none;
+}
+.expand {
+  width: auto;
+  height: 2.8vh;  
+  filter: invert(100%);
 }
 
 .afterleaflet {
@@ -27,11 +46,32 @@
   width: 100%;
   height: 85vh;
 }
+.collapse {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+.fullscreenimage {
+  width: auto;
+  height: 100vw;
+  position: fixed;
+  top: 20vh;
+  left: -16.5%;
+  transform: translateX(-50%);
+  
+  transform: rotate(90deg);
+
+  z-index: 11;
+}
+  
 
 .score {
-  top: 93%;
-  left: 68%;
-  transform: translate(-50%, -50%);
+  left:0 ;
+  margin-left : clamp(7vh,65vw,80vw);
+  top: 90%;
+  transform: translatey( -50%);
   position: fixed;
   font-size: clamp(30px,3vw,3vw);
   color:white;
@@ -45,16 +85,19 @@
 }
 .scoreinfo{
   font-size: clamp(10px,1vw,1vw);
-  top: 97%;
-  left: 68%;
-  transform: translate(-50%, -50%);
+  left:0 ;
+  margin-left : clamp(7vh,63vw,80vw);
+  top: 94%;
+  transform: translatey( -50%);
   position: fixed;
   color:hsl(0, 0%, 45%)
 }
 .error {
-  top: 93%;
-  left: 32%;
-  transform: translate(-50%, -50%);
+  
+  right:0 ;
+  margin-right : clamp(7vh,65vw,80vw);
+  top: 90%;
+  transform: translatey(-50%);
   position: fixed;
   font-size: clamp(30px,3vw,3vw);
   color:white;
@@ -68,17 +111,17 @@
 }
 .errorinfo{
   font-size: clamp(10px,1vw,1vw);
-
-  top: 97%;
-  left: 32%;
+  right:0 ;
+  margin-right : clamp(7vh,64vw,80vw);
+  top: 94%;
+  transform: translatey(-50%);
   position: fixed;
-  transform: translate(-50%, -50%);
   color:hsl(0, 0%, 45%)
 }
 
 .nextimg {
   position: fixed;
-  top: 93%;
+  top: 90%;
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 2.3vw;
@@ -92,10 +135,10 @@
 }
 .report{
   position: fixed;
-  font-size: 5vh;
-  top: 94%;
-  left: 5%;
-  transform: translate(-50%, -50%);
+  top: 90%;
+  transform: translatey(-50%);
+  left: 0;
+  margin-left: clamp(1vh,1vw,1vw);
   width: 5vh;
   height: 5vh;
   border-radius: 2.5vh;
@@ -104,23 +147,25 @@
   cursor: pointer;
 }
 .ReportImg{
-  
   width: auto;
+  top: 50%;
+  transform: translatey(15%);
   height: 2.8vh;  
-  transform: translate(5%, -50%);
   filter: invert(100%);
 
 }
 
 
+  
 
 .placemarker {
   position: fixed;
   --width :clamp(200px,20.1vw,20.1vw);
   width:var(--width);
-  height: 4vh;
   margin-left:calc(98vw - var(--width));
-  margin-top: 95vh;
+  height: 4vh;
+  bottom: 0;
+  margin-bottom: 0.5vh ;
   background-color: rgb(47, 47, 47,0.5);
   border-radius: 2vh;
   color : #e3e3e3;
@@ -130,10 +175,11 @@
 .biggerplacemarker{
   position: fixed;
   --width:clamp(70vh,50vw,50vw);
-  width:var(--width);
+  width:var(--width);;
+  margin-left:calc(98vw - var(--width));
   height: 7vh;
-  margin-left:calc(98vw - var(--width));;
-  margin-top: 92vh;
+  bottom: 0;
+  margin-bottom: 0.5vh ;
   font-size:2.5vh;
   background-color: rgb(47, 47, 47,0.5);
   pointer-events: auto;
@@ -162,8 +208,9 @@
   cursor: pointer;
   height: 4vh;
   margin-left:77.99vw;
-  margin-top: 95vh;
-  background-color: rgb(0, 95, 0,0.);
+  bottom: 0;
+  margin-bottom: 0.5vh ;
+  background-color: rgb(0, 95, 0,0.5) ;
   border-radius: 2vh;
   color : #e3e3e3;
 }
@@ -173,7 +220,8 @@
   width:var(--width);
   height: 7vh;
   margin-left:calc(98vw - var(--width));
-  margin-top: 92vh;
+  bottom: 0;
+  margin-bottom: 0.5vh ;
   font-size:3vh;
   background-color: rgb(0, 95, 0,0.5) ;
   pointer-events: auto;
@@ -261,7 +309,7 @@
   color: #e3e3e3;
 }
 
-/* .loadinggif{
+.loadinggif{
   display: flex;
   justify-content: center;
   align-items: center;
@@ -271,7 +319,7 @@
   transform: translate(-50%, -50%);
   width: 25vh;
   height: auto;
-} */
+}
 .background {
   position: fixed;
   top: 50%;
@@ -309,28 +357,28 @@
 
 }
 .totalscore {
-  left: 96%;
+  left: 80%;
   transform: translatex( -50%);
-  margin-top:5vh;
-  position:fixed;
+  bottom: 1vh;
+  position:absolute;
 }
 
 .tournumber { 
-  position: fixed;
-  left: 88%;
+  position: absolute;
+  left: 20%;
   transform: translatex( -50%);
-  margin-top: 5vh;
+  bottom: 1vh;
   
 }
 .totalscoreinfo {
-  position:fixed;
-  left: 96%;
+  position:absolute;
+  left: 80%;
   transform: translatex( -50%);
   margin-top:1vh;
 }
 .tournumberinfo { 
-  position:fixed;
-  left: 88%;
+  position:absolute;
+  left: 20%;
   transform: translatex( -50%);;
   margin-top: 1vh;
 }
@@ -341,7 +389,7 @@
   height:clamp(20vh,4vw,200px);
   z-index: -4;
   position: absolute;
-  top: 10%;
+  top: 7%;
   left: 52%;
   transform: translate(-50%, -50%);
 }
@@ -353,7 +401,7 @@
   height:clamp(3vh,2.2vw,200px);
   background-color:rgba(25, 25, 25, 0.7);
   border-radius: 2.5vh;
-  top: 10%;
+  top: 7%;
   left: 52%;
   transform: translate(-50%, -50%);
   z-index: -5;

@@ -19,10 +19,9 @@ const CustomImage = ({
 }: Props) => {
   const [imagevisibility, setimagevisibility] = useState(styles.none);
   const [isitloaded, setisitloaded] = useState(false);
-  const [imageSrc, setImageSrc] = useState(
-    `https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/${rndnum}.jpg`
-  );
+  const [imageSrc, setImageSrc] = useState(false);
   const isitblinked = useRef(false);
+  const [mobilefullscreen, setmobilefullscreen] = useState(false);
   useEffect(() => {
     if (isitresults) {
       setisitloaded(false);
@@ -67,11 +66,6 @@ const CustomImage = ({
     }, 50);
     isitblinked.current = true;
   }
-  useEffect(() => {
-    setImageSrc(
-      `https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/${rndnum}.jpg`
-    );
-  }, [rndnum]);
   function onLoad() {
     if (!isitresults && isitblinkmode && !isitresults && !isitpregame) {
       blink();
@@ -79,16 +73,43 @@ const CustomImage = ({
     setisitloaded(true);
   }
   function handleImageError() {
-    console.error("image couldnt reload retry");
-    setImageSrc("a");
-    setImageSrc(
-      `https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/${rndnum}.jpg`
-    );
+    console.error("Image");
+    setImageSrc(true);
+    setImageSrc(false);
   }
-  // console.log(isitloaded);
+  function handleExpand() {
+    setmobilefullscreen(true);
+  }
   return (
     <>
       <div className={styles.background}></div>
+      <div
+        className={
+          isitloaded &&
+          !isitblinked.current &&
+          !isitresults &&
+          !isitresults &&
+          !isitpregame
+            ? ""
+            : styles.none
+        }
+      >
+        <button
+          onClick={() => {
+            setmobilefullscreen(!mobilefullscreen);
+          }}
+          className={mobilefullscreen ? styles.collapse : styles.noe}
+        ></button>
+        <button onClick={handleExpand} className={styles.fullscreen}>
+          <img src={"Icons/fullscreen.webp"} className={styles.expand}></img>
+        </button>
+        <img
+          src={`https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/${rndnum}.jpg`}
+          // src={`compressed-images/${rndnum}.jpg`}
+          loading="lazy"
+          className={mobilefullscreen ? styles.fullscreenimage : styles.none}
+        ></img>
+      </div>
       <div className={imagevisibility === styles.none ? imagevisibility : ""}>
         {/* <Image
           id="currentimage"
@@ -101,8 +122,12 @@ const CustomImage = ({
         /> */}
         <img
           id="currentimage"
-          src={imageSrc}
-          // src={`https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/${rndnum}.jpg`}
+          // src={imageSrc}
+          src={
+            imageSrc
+              ? `https://images.pexels.com/photos/1525041/pexels-photo-1525041.jpeg?cs=srgb&dl=pexels-francesco-ungaro-1525041.jpg&fm=jpg`
+              : `https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/${rndnum}.jpg`
+          }
           // src={`https://images.pexels.com/photos/1525041/pexels-photo-1525041.jpeg?cs=srgb&dl=pexels-francesco-ungaro-1525041.jpg&fm=jpg`}
           // src={`compressed-images/${rndnum}.jpg`}
           className={imagevisibility}

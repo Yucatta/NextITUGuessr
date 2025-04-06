@@ -230,7 +230,12 @@ const Map = ({
                   0.01947557727)
           ) + 1;
         setMapCenter([41.1058783968682, 29.04225723149176]);
-        setMapStyle({ position: "fixed", width: "100%", height: "85vh" });
+        setMapStyle({
+          position: "fixed",
+          width: "100%",
+          height: "80vh",
+          top: "0",
+        });
 
         L.polyline([[imglat.current, imglng.current], position.current], {
           color: "black",
@@ -431,7 +436,12 @@ const Map = ({
       //!conclusion
       const mapid = document.getElementById("map");
       if (mapid) {
-        setMapStyle({ position: "fixed", width: "%100", height: "70vh" });
+        setMapStyle({
+          position: "fixed",
+          width: "%100",
+          height: "70vh",
+          marginTop: "0",
+        });
       }
 
       setSubmitClassName(styles.none);

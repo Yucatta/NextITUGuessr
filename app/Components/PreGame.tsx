@@ -154,7 +154,7 @@ const PreGame = ({ isitpregame, onstartclick }: Props) => {
             </strong>
           </div>
         </div>
-        <div>
+        <div className={aspectRatio.current <= 0.85 ? styles.none : ""}>
           <button
             className={styles.blinkmodeoffcontainer}
             onClick={() => setisblinkmodeon(!isblinkmodeon)}

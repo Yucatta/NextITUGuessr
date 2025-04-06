@@ -13,7 +13,7 @@ body {
   --points:rgb(159, 167, 49);
   --score:rgb(167, 94, 26);
   --error:rgb(7, 75, 147);
-  --inputnamewidth: clamp(22vh,20vw,20vw) ;
+  --inputnamewidth: clamp(19vh,20vw,20vw) ;
 
 }
 
