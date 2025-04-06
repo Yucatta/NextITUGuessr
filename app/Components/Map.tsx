@@ -440,7 +440,7 @@ const Map = ({
           position: "fixed",
           width: "%100",
           height: "70vh",
-          marginTop: "0",
+          top: "0",
         });
       }
 
