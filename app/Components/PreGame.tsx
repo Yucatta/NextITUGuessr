@@ -14,11 +14,22 @@ const PreGame = ({ isitpregame, onstartclick }: Props) => {
   const [sortedParticipants, setSortedParticipants] = useState<string[][]>([]);
   const currentparticipant = useRef<HTMLInputElement>(null);
   const [isblinkmodeon, setisblinkmodeon] = useState(false);
-  const [updater, setupdater] = useState(1);
   const aspectRatio = useRef(1);
-  if (typeof window !== "undefined") {
-    aspectRatio.current = window.innerWidth / window.innerHeight;
-  }
+
+  useEffect(() => {
+    const updateAspectRatio = () => {
+      if (typeof window !== "undefined") {
+        aspectRatio.current = window.innerWidth / window.innerHeight;
+      }
+    };
+
+    updateAspectRatio();
+    window.addEventListener("resize", updateAspectRatio);
+
+    return () => {
+      window.removeEventListener("resize", updateAspectRatio);
+    };
+  }, []);
 
   function addparticipant() {
     let goodornah = true;
@@ -59,15 +70,9 @@ const PreGame = ({ isitpregame, onstartclick }: Props) => {
         });
       } catch (a) {
         console.log(a);
-        console.log(updater);
       }
     };
     fetchData();
-    let a = 1;
-    setInterval(() => {
-      a++;
-      setupdater(a);
-    }, 250);
   }, []);
   return (
     <>

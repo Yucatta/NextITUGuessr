@@ -88,9 +88,21 @@ const Map = ({
   const [strokeDasharray, setstrokeDasharray] = useState(helpertemp.current);
   const isitmobile = useRef(false);
   const aspectRatio = useRef(1);
-  if (typeof window !== "undefined") {
-    aspectRatio.current = window.innerWidth / window.innerHeight;
-  }
+
+  useEffect(() => {
+    const updateAspectRatio = () => {
+      if (typeof window !== "undefined") {
+        aspectRatio.current = window.innerWidth / window.innerHeight;
+      }
+    };
+
+    updateAspectRatio();
+    window.addEventListener("resize", updateAspectRatio);
+
+    return () => {
+      window.removeEventListener("resize", updateAspectRatio);
+    };
+  }, []);
   useEffect(() => {
     if (typeof window !== "undefined" && mapRef.current === null) {
       const map = L.map("map", {
