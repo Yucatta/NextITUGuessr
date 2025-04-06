@@ -15,7 +15,10 @@ const PreGame = ({ isitpregame, onstartclick }: Props) => {
   const currentparticipant = useRef<HTMLInputElement>(null);
   const [isblinkmodeon, setisblinkmodeon] = useState(false);
   const [updater, setupdater] = useState(1);
-  const aspectRatio = window.innerWidth / window.innerHeight;
+  const aspectRatio = useRef(1);
+  if (typeof window !== "undefined") {
+    aspectRatio.current = window.innerWidth / window.innerHeight;
+  }
 
   function addparticipant() {
     let goodornah = true;
@@ -93,7 +96,7 @@ const PreGame = ({ isitpregame, onstartclick }: Props) => {
           <div className={styles.participantsListContainer}>
             <ol
               className={
-                aspectRatio <= 0.85
+                aspectRatio.current <= 0.85
                   ? styles.mobileparticipantlist
                   : styles.participantsList
               }
@@ -104,7 +107,7 @@ const PreGame = ({ isitpregame, onstartclick }: Props) => {
                   {/* Use participant[0] if it's unique, fallback to index */}
                   <span
                     className={
-                      aspectRatio <= 0.85
+                      aspectRatio.current <= 0.85
                         ? styles.mobilelistparticipant
                         : styles.listparticipant
                     }
@@ -113,7 +116,7 @@ const PreGame = ({ isitpregame, onstartclick }: Props) => {
                   </span>
                   <span
                     className={
-                      aspectRatio <= 0.85
+                      aspectRatio.current <= 0.85
                         ? styles.mobilelistscore
                         : styles.listscore
                     }
@@ -126,7 +129,7 @@ const PreGame = ({ isitpregame, onstartclick }: Props) => {
           </div>
           <div
             className={
-              aspectRatio <= 0.85
+              aspectRatio.current <= 0.85
                 ? styles.mobileleaderboardinfo
                 : styles.leaderboardinfo
             }
@@ -134,7 +137,7 @@ const PreGame = ({ isitpregame, onstartclick }: Props) => {
             <strong>
               <span
                 className={
-                  aspectRatio <= 0.85
+                  aspectRatio.current <= 0.85
                     ? styles.mobileleaderboardinfopart
                     : styles.leaderboardinfopart
                 }
@@ -160,7 +163,9 @@ const PreGame = ({ isitpregame, onstartclick }: Props) => {
             ></span>
             <span
               className={
-                aspectRatio <= 0.85 ? styles.none : styles.blinkmodeexplainer
+                aspectRatio.current <= 0.85
+                  ? styles.none
+                  : styles.blinkmodeexplainer
               }
             >
               With Blink Mode image shows up for only 0.1 seconds

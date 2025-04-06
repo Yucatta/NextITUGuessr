@@ -87,7 +87,10 @@ const Map = ({
   const helpertemp = useRef(400);
   const [strokeDasharray, setstrokeDasharray] = useState(helpertemp.current);
   const isitmobile = useRef(false);
-  const aspectRatio = window.innerWidth / window.innerHeight;
+  const aspectRatio = useRef(1);
+  if (typeof window !== "undefined") {
+    aspectRatio.current = window.innerWidth / window.innerHeight;
+  }
   useEffect(() => {
     if (typeof window !== "undefined" && mapRef.current === null) {
       const map = L.map("map", {
@@ -132,7 +135,7 @@ const Map = ({
             if (buttonElement) {
               buttonElement.innerText = "SUBMIT";
             }
-            if (aspectRatio > 0.85) {
+            if (aspectRatio.current > 0.85) {
               setSubmitClassName(styles.biggersubmit);
             } else {
               setSubmitClassName(styles.mobilesubmit);
@@ -368,7 +371,7 @@ const Map = ({
     }
     //! this is supposed to be next but idk nextim
     if (!isitresults && !isitconclusion && !isitpregame) {
-      if (aspectRatio > 0.85) {
+      if (aspectRatio.current > 0.85) {
         setMapStyle({
           position: "fixed",
           width: "clamp(200px,20vw,20vw)",
@@ -387,7 +390,7 @@ const Map = ({
           right: "0",
         });
       }
-      if (aspectRatio > 0.85) {
+      if (aspectRatio.current > 0.85) {
         setSubmitClassName(styles.placemarker);
       } else {
         setSubmitClassName(styles.mobileplacemarker);
@@ -471,7 +474,7 @@ const Map = ({
       }
     } else if (isitpregame) {
       //! pregame
-      if (aspectRatio > 0.85) {
+      if (aspectRatio.current > 0.85) {
         setMapStyle({
           position: "fixed",
           width: "clamp(200px,20vw,20vw)",
@@ -497,7 +500,7 @@ const Map = ({
   }, [isitresults, isitpregame, isitconclusion]);
   useEffect(() => {
     // console.log("aspect ratio is:", aspectRatio);
-    if (aspectRatio < 0.85 && !isitmobile.current) {
+    if (aspectRatio.current < 0.85 && !isitmobile.current) {
       isitmobile.current = true;
       setMapStyle({
         position: "fixed",
@@ -512,7 +515,7 @@ const Map = ({
       } else {
         setSubmitClassName(styles.mobileplacemarker);
       }
-    } else if (isitmobile && aspectRatio > 0.85) {
+    } else if (isitmobile && aspectRatio.current > 0.85) {
       const mapcenter = mapRef.current?.getCenter();
       if (mapcenter) {
         setMapCenter([mapcenter.lat, mapcenter.lng]);
@@ -533,9 +536,14 @@ const Map = ({
       }
       isitmobile.current = false;
     }
-  }, [aspectRatio]);
+  }, [aspectRatio.current]);
   function enlargenmapandsubmitbutton() {
-    if (!isitresults && !isitconclusion && !isitpregame && aspectRatio > 0.85) {
+    if (
+      !isitresults &&
+      !isitconclusion &&
+      !isitpregame &&
+      aspectRatio.current > 0.85
+    ) {
       const mapcenter = mapRef.current?.getCenter();
       if (mapcenter) {
         setMapCenter([mapcenter.lat, mapcenter.lng]);
@@ -559,7 +567,12 @@ const Map = ({
     }
   }
   function shrinksubmitandmap() {
-    if (!isitresults && !isitconclusion && !isitpregame && aspectRatio > 0.85) {
+    if (
+      !isitresults &&
+      !isitconclusion &&
+      !isitpregame &&
+      aspectRatio.current > 0.85
+    ) {
       timeforshrink = setTimeout(() => {
         const mapcenter = mapRef.current?.getCenter();
         if (mapcenter) {
