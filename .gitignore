@@ -17,6 +17,7 @@
 /.next/
 /out/
 /Legacy
+/public/compressed-images
 # production
 /build
 

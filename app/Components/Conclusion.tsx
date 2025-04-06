@@ -16,7 +16,7 @@ const Conclusion = ({ totalscore, isitconclusion, onmenuclick }: Props) => {
       ></progress>
       <p className={styles.points}>{totalscore}</p>
       <button onClick={onmenuclick} className={styles.menu}>
-        RETURN TO MENU
+        MENU
       </button>
     </div>
   );

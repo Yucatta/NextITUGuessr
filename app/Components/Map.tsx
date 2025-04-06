@@ -84,10 +84,10 @@ const Map = ({
   const line1 = useRef(85);
   const line2 = useRef(150);
   const line3 = useRef(20);
-  const helpertemp = useRef(385);
+  const helpertemp = useRef(400);
   const [strokeDasharray, setstrokeDasharray] = useState(helpertemp.current);
-  const buttonElement = document.getElementById("button");
-
+  const isitmobile = useRef(false);
+  const aspectRatio = window.innerWidth / window.innerHeight;
   useEffect(() => {
     if (typeof window !== "undefined" && mapRef.current === null) {
       const map = L.map("map", {
@@ -127,10 +127,16 @@ const Map = ({
             }).addTo(map);
             position.current = [e.latlng.lat, e.latlng.lng];
             ismarkeronmap.current = true;
+            const buttonElement = document.getElementById("button");
+
             if (buttonElement) {
               buttonElement.innerText = "SUBMIT";
             }
-            setSubmitClassName(styles.biggersubmit);
+            if (aspectRatio > 0.85) {
+              setSubmitClassName(styles.biggersubmit);
+            } else {
+              setSubmitClassName(styles.mobilesubmit);
+            }
           }
         }
       });
@@ -229,7 +235,7 @@ const Map = ({
       line1.current = 85;
       line2.current = 150;
       line3.current = 20;
-      helpertemp.current = 385;
+      helpertemp.current = 400;
       setstrokeDasharray(helpertemp.current);
     }
     function controlclick() {
@@ -248,7 +254,7 @@ const Map = ({
   useEffect(() => {
     function timer() {
       secondsleft.current = setInterval(() => {
-        if (passedtime.current === 30) {
+        if (passedtime.current === 500) {
           if (secondsleft.current) {
             clearInterval(secondsleft.current);
           }
@@ -267,7 +273,7 @@ const Map = ({
         if (line1.current < 150) {
           line1.current += 0.5;
         } else if (helpertemp.current > 257) {
-          if (helpertemp.current === 385) {
+          if (helpertemp.current === 400) {
             helpertemp.current = 320;
             setstrokeDasharray(helpertemp.current);
           }
@@ -354,28 +360,44 @@ const Map = ({
         line1.current = 85;
         line2.current = 150;
         line3.current = 20;
-        helpertemp.current = 385;
+        helpertemp.current = 400;
         setstrokeDasharray(helpertemp.current);
         setinfovisibility(styles.none);
         onGuessSubmit(0, 0);
       }
     }
-    //this is supposed to be next but idk nextim
+    //! this is supposed to be next but idk nextim
     if (!isitresults && !isitconclusion && !isitpregame) {
-      setMapStyle({
-        position: "fixed",
-        width: "20vw",
-        height: "25vh",
-        bottom: "0",
-        right: "0",
-        marginRight: "2vw",
-        marginBottom: "5vh",
-      });
-      setSubmitClassName(styles.placemarker);
+      if (aspectRatio > 0.85) {
+        setMapStyle({
+          position: "fixed",
+          width: "clamp(200px,20vw,20vw)",
+          height: "25vh", //clamp(120px,12vw,25vh)
+          bottom: "0",
+          right: "0",
+          marginRight: "2vw",
+          marginBottom: "5vh",
+        });
+      } else {
+        setMapStyle({
+          position: "fixed",
+          width: "100vw",
+          height: "calc(100vh - 100vw/4*3)",
+          bottom: "0",
+          right: "0",
+        });
+      }
+      if (aspectRatio > 0.85) {
+        setSubmitClassName(styles.placemarker);
+      } else {
+        setSubmitClassName(styles.mobileplacemarker);
+      }
       setinfovisibility("");
 
       isitsubmitted.current = false;
       ismarkeronmap.current = false;
+      const buttonElement = document.getElementById("button");
+
       if (buttonElement && mapRef.current) {
         buttonElement.innerText = "PLACE MARKER ON THE MAP";
         mapRef.current.eachLayer(function (layer) {
@@ -389,7 +411,9 @@ const Map = ({
       youundidtheredotoredidtheredo.current = true;
       timer();
       timerprogress();
+      //! timers
     } else if (isitconclusion && !isitpregame) {
+      //!conclusion
       const mapid = document.getElementById("map");
       if (mapid) {
         setMapStyle({ position: "fixed", width: "%100", height: "70vh" });
@@ -446,29 +470,80 @@ const Map = ({
         mapRef.current.fitBounds(bounds);
       }
     } else if (isitpregame) {
-      setMapStyle({
-        position: "fixed",
-        width: "20vw",
-        height: "25vh",
-        bottom: "0",
-        right: "0",
-        marginRight: "2vw",
-        marginBottom: "5vh",
-      });
+      //! pregame
+      if (aspectRatio > 0.85) {
+        setMapStyle({
+          position: "fixed",
+          width: "clamp(200px,20vw,20vw)",
+          height: "25vh", //clamp(120px,12vw,25vh)
+          bottom: "0",
+          right: "0",
+          marginRight: "2vw",
+          marginBottom: "5vh",
+        });
+      } else {
+        setMapStyle({
+          position: "fixed",
+          width: "100vw",
+          height: "calc(100vh - 100vw/4*3)",
+          bottom: "0",
+          right: "0",
+        });
+      }
+
       allguesses.current = [];
       alllocations.current = [];
     }
   }, [isitresults, isitpregame, isitconclusion]);
-  function enlargenmapandsubmitbutton() {
-    if (!isitresults && !isitconclusion && !isitpregame) {
+  useEffect(() => {
+    console.log("aspect ratio is:", aspectRatio);
+    if (aspectRatio < 0.85 && !isitmobile.current) {
+      isitmobile.current = true;
+      setMapStyle({
+        position: "fixed",
+        width: "100vw",
+        height: "calc(100vh - 100vw/4*3)",
+        bottom: "0",
+        right: "0",
+      });
+
+      if (ismarkeronmap.current) {
+        setSubmitClassName(styles.mobilesubmit);
+      } else {
+        setSubmitClassName(styles.mobileplacemarker);
+      }
+    } else if (isitmobile && aspectRatio > 0.85) {
       const mapcenter = mapRef.current?.getCenter();
       if (mapcenter) {
         setMapCenter([mapcenter.lat, mapcenter.lng]);
       }
       setMapStyle({
         position: "fixed",
-        width: "60vw",
-        height: "75vh",
+        width: "clamp(200px,20vw,20vw)",
+        height: "25vh", //clamp(120px,12vw,25vh)
+        bottom: "0",
+        right: "0",
+        marginRight: "2vw",
+        marginBottom: "5vh",
+      });
+      if (ismarkeronmap.current) {
+        setSubmitClassName(styles.submit);
+      } else {
+        setSubmitClassName(styles.placemarker);
+      }
+      isitmobile.current = false;
+    }
+  }, [aspectRatio]);
+  function enlargenmapandsubmitbutton() {
+    if (!isitresults && !isitconclusion && !isitpregame && aspectRatio > 0.85) {
+      const mapcenter = mapRef.current?.getCenter();
+      if (mapcenter) {
+        setMapCenter([mapcenter.lat, mapcenter.lng]);
+      }
+      setMapStyle({
+        position: "fixed",
+        width: "clamp(70vh,50vw,50vw)",
+        height: "clamp(60vh,35vw,70vh)",
         bottom: "0",
         right: "0",
         marginRight: "2vw",
@@ -484,7 +559,7 @@ const Map = ({
     }
   }
   function shrinksubmitandmap() {
-    if (!isitresults && !isitconclusion && !isitpregame) {
+    if (!isitresults && !isitconclusion && !isitpregame && aspectRatio > 0.85) {
       timeforshrink = setTimeout(() => {
         const mapcenter = mapRef.current?.getCenter();
         if (mapcenter) {
@@ -492,8 +567,8 @@ const Map = ({
         }
         setMapStyle({
           position: "fixed",
-          width: "20vw",
-          height: "25vh",
+          width: "clamp(200px,20vw,20vw)",
+          height: "25vh", //clamp(120px,12vw,25vh)
           bottom: "0",
           right: "0",
           marginRight: "2vw",
@@ -527,7 +602,9 @@ const Map = ({
         <div className={styles.timerdiv}>
           <p className={styles.timer}>
             00:
-            {30 - passedtime.current < 10
+            {passedtime.current < 0
+              ? "00"
+              : 30 - passedtime.current < 10
               ? "0" + (30 - passedtime.current)
               : 30 - passedtime.current}
           </p>

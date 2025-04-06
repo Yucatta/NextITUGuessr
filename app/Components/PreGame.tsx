@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
-import styles from "./Style.module.css";
+import styles from "./conclusionpregame.module.css";
 import Papa from "papaparse";
 
 interface Props {
@@ -10,11 +10,12 @@ interface Props {
 }
 
 const PreGame = ({ isitpregame, onstartclick }: Props) => {
-  // const [leaderboard, setleaderboard] = useState<string[][]>();
   const participants = useRef([["a", "a"]]);
   const [sortedParticipants, setSortedParticipants] = useState<string[][]>([]);
   const currentparticipant = useRef<HTMLInputElement>(null);
   const [isblinkmodeon, setisblinkmodeon] = useState(false);
+  const [updater, setupdater] = useState(1);
+  const aspectRatio = window.innerWidth / window.innerHeight;
 
   function addparticipant() {
     let goodornah = true;
@@ -28,14 +29,12 @@ const PreGame = ({ isitpregame, onstartclick }: Props) => {
       currentparticipant.current.value.trim().length > 1 &&
       goodornah
     ) {
-      // console.log(currentparticipant.current.value);
       onstartclick(isblinkmodeon);
     }
   }
 
   useEffect(() => {
     if (participants.current.length > 0) {
-      // Sort participants by score (assuming higher score is better)
       const sorted = [...participants.current].sort(
         (a, b) => Number(b[1]) - Number(a[1])
       );
@@ -59,14 +58,22 @@ const PreGame = ({ isitpregame, onstartclick }: Props) => {
         console.log(a);
       }
     };
-
+    let a = 1;
     fetchData();
+    setInterval(() => {
+      a++;
+      setupdater(a);
+    }, 50);
   }, []);
+  useEffect(() => {
+    console.log(aspectRatio);
+  }, [aspectRatio]);
   return (
     <>
       <div className={isitpregame ? "" : styles.none}>
-        <p className={styles.inputinfo}></p>
+        {/* <p className={styles.inputinfo}></p> */}
         <input
+          // className={aspectRatio <= 0.85 ? styles.none : styles.inputname}
           className={styles.inputname}
           ref={currentparticipant}
           placeholder="  Enter Your Name"
@@ -84,25 +91,53 @@ const PreGame = ({ isitpregame, onstartclick }: Props) => {
             ITUAI <br></br>ITUGuessr
           </span>
         </div>
-        <div className={styles.participantsListContainer}>
-          <ol className={styles.participantsList}>
-            {sortedParticipants.map((participant, index) => (
-              <li key={participant[0] || index}>
-                {" "}
-                {/* Use participant[0] if it's unique, fallback to index */}
-                <span className={styles.listparticipant}>
-                  {index + 1}.{participant[0]}
-                </span>
-                <span className={styles.listscore}>:{participant[1]}</span>
-              </li>
-            ))}
-          </ol>
-        </div>
-        <div className={styles.leaderboardinfo}>
-          <strong>
-            <span className={styles.leaderboardinfopart}> Participant</span>
-            <span className={styles.leaderboardinfoscor}>Score</span>
-          </strong>
+        <div>
+          <div className={styles.participantsListContainer}>
+            <ol
+              className={
+                aspectRatio <= 0.85
+                  ? styles.mobileparticipantlist
+                  : styles.participantsList
+              }
+            >
+              {sortedParticipants.map((participant, index) => (
+                <li key={participant[0] || index}>
+                  {" "}
+                  {/* Use participant[0] if it's unique, fallback to index */}
+                  <span
+                    className={
+                      aspectRatio <= 0.85
+                        ? styles.mobilelistparticipant
+                        : styles.listparticipant
+                    }
+                  >
+                    {index + 1}.{participant[0]}
+                  </span>
+                  <span
+                    className={
+                      aspectRatio <= 0.85
+                        ? styles.mobilelistscore
+                        : styles.listscore
+                    }
+                  >
+                    :{participant[1]}
+                  </span>
+                </li>
+              ))}
+            </ol>
+          </div>
+          <div
+            className={
+              aspectRatio <= 0.85
+                ? styles.mobileleaderboardinfo
+                : styles.leaderboardinfo
+            }
+          >
+            <strong>
+              <span className={styles.leaderboardinfopart}> Participant</span>
+              <span className={styles.leaderboardinfoscor}>Score</span>
+            </strong>
+          </div>
         </div>
         <div>
           <button

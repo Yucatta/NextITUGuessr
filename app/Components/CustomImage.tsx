@@ -26,10 +26,7 @@ const CustomImage = ({
       isitblinked.current = false;
     }
     if (!isitconclusion && !isitpregame && !isitresults) {
-      // console.log("ingame and do not know if blinked", isitblinked.current);
-
       if (!isitblinked.current && isitblinkmode) {
-        // console.log("ingame and not blinked", isitblinked.current);
         blink();
       }
       setimagevisibility(styles.image);
@@ -39,7 +36,6 @@ const CustomImage = ({
     console.log(isitblinked.current);
   }, [isitconclusion, isitresults, isitpregame]);
   useEffect(() => {
-    // console.log("blink mode is", isitblinkmode);
     if (!isitresults && !isitpregame) {
       setisitloaded(true);
     }
@@ -93,7 +89,8 @@ const CustomImage = ({
         /> */}
         <img
           id="currentimage"
-          src={`https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/${rndnum}.jpg`}
+          // src={`https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/${rndnum}.jpg`}
+          src={`compressed-images/${rndnum}.jpg`}
           className={imagevisibility}
           style={isitloaded ? { display: "block" } : { display: "none" }}
           onLoad={onLoad}
