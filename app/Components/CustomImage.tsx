@@ -31,7 +31,6 @@ const CustomImage = ({
     }
     if (!isitconclusion && !isitpregame && !isitresults) {
       if (isitloaded && !isitblinked.current && isitblinkmode) {
-        console.log("i know where this is");
         blink();
       }
       setimagevisibility(styles.image);
@@ -56,9 +55,7 @@ const CustomImage = ({
   function onLoad() {
     if (!isitresults && isitblinkmode && !isitresults && !isitpregame) {
       blink();
-      console.log("onload blink activation");
     }
-    console.log("it is loaded");
     setisitloaded(true);
   }
   function handleImageError() {
@@ -108,17 +105,41 @@ const CustomImage = ({
           onClick={() => {
             setmobilefullscreen(!mobilefullscreen);
           }}
-          className={mobilefullscreen ? styles.collapse : styles.noe}
+          className={mobilefullscreen ? styles.collapse : styles.none}
         ></button>
         <button onClick={handleExpand} className={styles.fullscreen}>
           <img src={"Icons/fullscreen.webp"} className={styles.expand}></img>
         </button>
-        <img
-          src={`https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/${rndnum}.jpg`}
+        <div
+          style={{
+            width: "calc(100vw/3*4)",
+            height: "100vw",
+            position: "fixed",
+            top: "calc(50vh - 50vw/3*4)",
+            left: "50.5%",
+            transform: "translateX(-50%) rotate(90deg)",
+            zIndex: "11",
+          }}
+          className={mobilefullscreen ? "" : styles.none}
+        >
+          <Image
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            // src={`compressed-images/${rndnum}.jpg`}
+            src={imageSrc}
+            alt="Current image"
+            style={{ objectFit: "contain" }}
+            fill
+            loading="lazy"
+            onLoad={onLoad}
+            onError={handleImageError}
+          />
+          {/* <img
+        //   src={`https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/${rndnum}.jpg`}
           // src={`compressed-images/${rndnum}.jpg`}
           loading="lazy"
           className={mobilefullscreen ? styles.fullscreenimage : styles.none}
-        ></img>
+         ></img>  */}
+        </div>
       </div>
       <div className={imagevisibility === styles.none ? imagevisibility : ""}>
         <div
