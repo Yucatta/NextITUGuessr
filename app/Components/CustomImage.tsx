@@ -82,14 +82,28 @@ const CustomImage = ({
   }
   return (
     <>
-      <div className={styles.background}></div>
+      <div
+        className={
+          isitresults
+            ? styles.mobileresultsbackground
+            : isitconclusion
+            ? styles.mobileconclusionbackground
+            : isitloaded &&
+              !isitblinked.current &&
+              !isitresults &&
+              !isitpregame &&
+              !isitconclusion
+            ? styles.background
+            : styles.mobileblinkedbackground
+        }
+      ></div>
       <div
         className={
           isitloaded &&
           !isitblinked.current &&
           !isitresults &&
-          !isitresults &&
-          !isitpregame
+          !isitpregame &&
+          !isitconclusion
             ? ""
             : styles.none
         }
@@ -104,8 +118,8 @@ const CustomImage = ({
           <img src={"Icons/fullscreen.webp"} className={styles.expand}></img>
         </button>
         <img
-          src={`https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/${rndnum}.jpg`}
-          // src={`compressed-images/${rndnum}.jpg`}
+          // src={`https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/${rndnum}.jpg`}
+          src={`compressed-images/${rndnum}.jpg`}
           loading="lazy"
           className={mobilefullscreen ? styles.fullscreenimage : styles.none}
         ></img>
@@ -126,7 +140,8 @@ const CustomImage = ({
           src={
             imageSrc
               ? `https://images.pexels.com/photos/1525041/pexels-photo-1525041.jpeg?cs=srgb&dl=pexels-francesco-ungaro-1525041.jpg&fm=jpg`
-              : `https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/${rndnum}.jpg`
+              : // `https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/${rndnum}.jpg`
+                `compressed-images/${rndnum}.jpg`
           }
           // src={`https://images.pexels.com/photos/1525041/pexels-photo-1525041.jpeg?cs=srgb&dl=pexels-francesco-ungaro-1525041.jpg&fm=jpg`}
           // src={`compressed-images/${rndnum}.jpg`}

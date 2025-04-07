@@ -11,10 +11,9 @@
   top: 50%;
   transform: translate(-50%, -50%); 
 }
-#map {
-  width: 100%;
-  height: 100%;
-  position: relative;
+.down{
+  z-index: -50;
+
 }
 .fullscreen{
   display: none;
@@ -74,7 +73,7 @@
 
 .score {
   left:0 ;
-  margin-left : clamp(7vh,65vw,80vw);
+  margin-left : clamp(30vh,65vw,80vw);
   top: 90%;
   transform: translatey( -50%);
   position: fixed;
@@ -91,7 +90,7 @@
 .scoreinfo{
   font-size: clamp(10px,1vw,1vw);
   left:0 ;
-  margin-left : clamp(7vh,63vw,80vw);
+  margin-left : clamp(30.5vh,64vw,80vw);
   top: 94%;
   transform: translatey( -50%);
   position: fixed;
@@ -100,7 +99,7 @@
 .error {
   
   right:0 ;
-  margin-right : clamp(7vh,65vw,80vw);
+  margin-right : clamp(30vh,65vw,80vw);
   top: 90%;
   transform: translatey(-50%);
   position: fixed;
@@ -117,7 +116,7 @@
 .errorinfo{
   font-size: clamp(10px,1vw,1vw);
   right:0 ;
-  margin-right : clamp(7vh,64vw,80vw);
+  margin-right : clamp(30.5vh,65vw,80vw);
   top: 94%;
   transform: translatey(-50%);
   position: fixed;
@@ -338,6 +337,42 @@
   background-repeat: no-repeat;
   background-size: cover;
   z-index: -100;
+}
+.mobileresultsbackground {
+  position: fixed;
+  bottom: 0; 
+  width: 100%;
+  height: 20vh; 
+  background-image: url(/background.jpg);
+  background-size: 100vw auto;
+  background-position: center bottom; 
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: -40;
+}
+.mobileconclusionbackground {
+  position: fixed;
+  bottom: 0; 
+  width: 100%;
+  height: 30vh; 
+  background-image: url(/background.jpg);
+  background-size: 100vw auto;
+  background-position: center bottom; 
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: -40;
+}
+.mobileblinkedbackground {
+  position: fixed;
+  top: 0; 
+  width: 100%;
+  height: calc(100vw/4*3 ); 
+  background-image: url(/background.jpg);
+  background-size: 100vw auto;
+  background-position: center bottom; 
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: -40;
 }
 
 .timer {

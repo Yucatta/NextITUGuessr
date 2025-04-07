@@ -44,6 +44,7 @@ const PreGame = ({ isitpregame, onstartclick }: Props) => {
       goodornah
     ) {
       onstartclick(isblinkmodeon);
+      currentparticipant.current.value = "";
     }
   }
 
@@ -82,7 +83,7 @@ const PreGame = ({ isitpregame, onstartclick }: Props) => {
           // className={aspectRatio <= 0.85 ? styles.none : styles.inputname}
           className={styles.inputname}
           ref={currentparticipant}
-          placeholder="  Enter Your Name"
+          placeholder=" Enter Your Name"
         />
         <button className={styles.start} onClick={addparticipant} id="start">
           {">"}
@@ -154,7 +155,10 @@ const PreGame = ({ isitpregame, onstartclick }: Props) => {
             </strong>
           </div>
         </div>
-        <div className={aspectRatio.current <= 0.85 ? styles.none : ""}>
+        <div>
+          <span className={styles.blinkmodeexplainer}>
+            Blink Mode: Shows the image briefly, then screen goes black.
+          </span>
           <button
             className={styles.blinkmodeoffcontainer}
             onClick={() => setisblinkmodeon(!isblinkmodeon)}
@@ -166,15 +170,6 @@ const PreGame = ({ isitpregame, onstartclick }: Props) => {
                   : styles.blinkmodeoffbutton
               }
             ></span>
-            <span
-              className={
-                aspectRatio.current <= 0.85
-                  ? styles.none
-                  : styles.blinkmodeexplainer
-              }
-            >
-              With Blink Mode image shows up for only 0.1 seconds
-            </span>
           </button>
         </div>
       </div>

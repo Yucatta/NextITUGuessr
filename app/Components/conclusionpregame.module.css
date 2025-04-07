@@ -10,7 +10,7 @@
   margin-right: calc(68.5vw - var(--inputnamewidth) );
   /* margin-right: 48.5vw; */
   height:5vh;   
-  font-size: 1.2vw;
+  font-size: clamp(2vh,1.5vw,2vw);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -177,21 +177,14 @@
 }
 
 .blinkmodeexplainer{
-  transition: 1s;
+  position: absolute;
+  margin-top: clamp(40vh,27vw,90vh) ;
+  left: 48%;
+  transform: translatex( -50%);
   color: lightgray;
-  display: none;
-  top: 240%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  position: fixed;
-  background-color: rgba(107, 107, 107, 0.7);
   height: 10vh;
-  width: 10vw;
-  border-radius: 2vh;
-}
-.blinkmodeoffcontainer:hover .blinkmodeexplainer{
-  display: block;
-  transition: 1s;
+  width: clamp(15vh,15vw,15vw);
+  font-size:clamp(10px,1vw,1vw) ;
 }
 .blinkmodeonbutton{
   position: fixed;
