@@ -235,14 +235,11 @@ const Map = ({
           top: "0",
         });
 
-        const resultsline = L.polyline(
-          [[imglat.current, imglng.current], position.current],
-          {
-            color: "black",
-            dashArray: "10, 10",
-            dashOffset: "10",
-          }
-        ).addTo(mapRef.current);
+        L.polyline([[imglat.current, imglng.current], position.current], {
+          color: "black",
+          dashArray: "10, 10",
+          dashOffset: "10",
+        }).addTo(mapRef.current);
 
         setSubmitClassName(styles.none);
         setinfovisibility(styles.none);
