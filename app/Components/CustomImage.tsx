@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./Style.module.css";
-// import Image from "next/image";
+import Image from "next/image";
 interface Props {
   rndnum: number | null;
   isitresults: boolean;
@@ -19,7 +19,9 @@ const CustomImage = ({
 }: Props) => {
   const [imagevisibility, setimagevisibility] = useState(styles.none);
   const [isitloaded, setisitloaded] = useState(false);
-  const [imageSrc, setImageSrc] = useState(false);
+  const [imageSrc, setImageSrc] = useState(
+    `https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/${rndnum}.jpg`
+  );
   const isitblinked = useRef(false);
   const [mobilefullscreen, setmobilefullscreen] = useState(false);
   useEffect(() => {
@@ -28,7 +30,8 @@ const CustomImage = ({
       isitblinked.current = false;
     }
     if (!isitconclusion && !isitpregame && !isitresults) {
-      if (!isitblinked.current && isitblinkmode) {
+      if (isitloaded && !isitblinked.current && isitblinkmode) {
+        console.log("i know where this is");
         blink();
       }
       setimagevisibility(styles.image);
@@ -37,23 +40,7 @@ const CustomImage = ({
     }
     // console.log(isitblinked.current);
   }, [isitconclusion, isitresults, isitpregame]);
-  useEffect(() => {
-    // if (!isitresults && !isitpregame) {
-    //   setisitloaded(true);
-    // }
-    if (!isitresults && isitblinkmode && !isitresults) {
-      let a = 0;
-      const blinkmodeinterval = setInterval(() => {
-        if (a >= 2) {
-          setimagevisibility(styles.none);
-          clearInterval(blinkmodeinterval);
-        } else {
-          // console.log("a", a);
-        }
-        a++;
-      }, 50);
-    }
-  }, [isitpregame]);
+
   function blink() {
     let a = 0;
     const blinkmodeinterval = setInterval(() => {
@@ -69,14 +56,23 @@ const CustomImage = ({
   function onLoad() {
     if (!isitresults && isitblinkmode && !isitresults && !isitpregame) {
       blink();
+      console.log("onload blink activation");
     }
+    console.log("it is loaded");
     setisitloaded(true);
   }
   function handleImageError() {
-    // console.error("Image");
-    setImageSrc(true);
-    setImageSrc(false);
+    // console.error("Image failed to load, retrying...");
+    // Retry by appending a timestamp to the URL to bypass caching
+    setImageSrc(
+      `https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/${rndnum}.jpg?retry=${Date.now()}`
+    );
   }
+  useEffect(() => {
+    setImageSrc(
+      `https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/${rndnum}.jpg`
+    );
+  }, [rndnum]);
   function handleExpand() {
     setmobilefullscreen(true);
   }
@@ -125,16 +121,33 @@ const CustomImage = ({
         ></img>
       </div>
       <div className={imagevisibility === styles.none ? imagevisibility : ""}>
-        {/* <Image
-          id="currentimage"
-          src={`https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/${rndnum}.jpg`}
-          alt="Current image"
-          layout="fill" // Use layout="fill" for responsive images
-          objectFit="contain"
-          className={imagevisibility}
-          onLoadingComplete={() => setisitloaded(true)} // Handle when the image is fully loaded
-        /> */}
-        <img
+        <div
+          style={{
+            width: "clamp(40vw, calc(99.7vh * 4 / 3), 100vw)",
+            height: "clamp(30vw, calc(99.7vh), 75vw)",
+            position: "fixed",
+            top: "0",
+            left: "50%",
+            transform: "translatex(-50%)",
+            zIndex: "-6",
+          }}
+          // className={styles.image}
+        >
+          <Image
+            id="currentimage"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            // src={`compressed-images/${rndnum}.jpg`}
+            src={imageSrc}
+            alt="Current image"
+            className={imagevisibility}
+            style={{ objectFit: "contain" }}
+            fill
+            onLoad={onLoad}
+            onError={handleImageError}
+          />
+        </div>
+
+        {/* <img
           id="currentimage"
           // src={imageSrc}
           src={
@@ -150,7 +163,7 @@ const CustomImage = ({
           style={isitloaded ? { display: "block" } : { display: "none" }}
           onLoad={onLoad}
           alt="Current image"
-        ></img>
+        ></img> */}
         <img
           src="Gray_circles_rotate.gif"
           className={isitloaded ? styles.none : styles.loadinggif}

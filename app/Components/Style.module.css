@@ -1,15 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Jost:wght@450&display=swap');
 
 .image {
-  display: flex;
   width: clamp(40vw, calc(99.7vh * 4 / 3), 100vw);
-  height: auto;
-  position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
+  height: clamp(30vw, calc(99.7vh), 75vw);
+  position: relative;
   z-index: -6;
-  top: 50%;
-  transform: translate(-50%, -50%); 
 }
 .down{
   z-index: -50;
@@ -21,7 +16,6 @@
 @media (max-aspect-ratio: 0.85) {
   .image {
     top: 0;
-    transform: translateX(-50%); 
   }
   .fullscreen{
     margin-top: calc(64vw - 5vh);
@@ -318,11 +312,11 @@
   justify-content: center;
   align-items: center;
   position: absolute; 
-  top: 50%;
+  margin-top: calc(var(--imageheight)/4);
   left: 50%;
-  transform: translate(-50%, -50%);
-  width: 25vh;
-  height: auto;
+  transform: translatex( -50%);
+  width: auto;
+  height: calc(var(--imageheight)/2);
 }
 .background {
   position: fixed;

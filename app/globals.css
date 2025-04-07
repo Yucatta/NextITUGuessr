@@ -14,6 +14,7 @@ body {
   --score:rgb(167, 94, 26);
   --error:rgb(7, 75, 147);
   --inputnamewidth: clamp(19vh,20vw,20vw) ;
+  --imageheight: clamp(30vw, calc(99.7vh), 75vw);
 
 }
 
