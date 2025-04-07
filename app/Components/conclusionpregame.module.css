@@ -20,7 +20,7 @@
   border:1px solid rgb(166, 162, 162);
 }
 .start {
-  font-size: clamp(15px,1.5vw,3vw);;
+  font-size: clamp(2vh,1.5vw,3vw);;
   --width: clamp(5vh,3vw,3vw);
   width: var(--width);
   right: 0;
@@ -146,7 +146,7 @@
   height: 6.4vh;
   margin-top: clamp(53.7vh,40vw,90vh) ;
   position: fixed;
-  font-size: clamp(24px,2vw,3vw);
+  font-size: clamp(2.7vh,2vw,3vw);
   border: 1px solid #ccc;
 }
 .blinkmodeoffcontainer{
@@ -183,8 +183,8 @@
   transform: translatex( -50%);
   color: lightgray;
   height: 10vh;
-  width: clamp(15vh,15vw,15vw);
-  font-size:clamp(10px,1vw,1vw) ;
+  width: clamp(18vh,15vw,15vw);
+  font-size:clamp(1.3vh,1vw,1vw) ;
 }
 .blinkmodeonbutton{
   position: fixed;
