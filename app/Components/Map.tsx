@@ -627,7 +627,7 @@ const Map = ({
           setMapCenter([mapcenter.lat, mapcenter.lng]);
         }
       }, 300);
-      +-clearTimeout(timeforshrink);
+      clearTimeout(timeforshrink);
     }
   }
   function shrinksubmitandmap() {
