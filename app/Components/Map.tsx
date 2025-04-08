@@ -15,7 +15,14 @@ interface Props {
   totalscore: number;
   Rounds: number;
 }
-
+const baseMapStyle = {
+  position: "fixed",
+  bottom: "0",
+  right: "0",
+  marginRight: "2vw",
+  zIndex: "5",
+  transition: "width 0.3s ease, height 0.3s ease",
+};
 const latlengthmeter = 111.32 * 1000;
 const longtiduelengthmeter = (40075 * 1000 * 0.75346369194) / 360; // 0.75346369194 is cosine of latitude
 
@@ -86,6 +93,7 @@ const Map = ({
   const line3 = useRef(20);
   const helpertemp = useRef(400);
   const [strokeDasharray, setstrokeDasharray] = useState(helpertemp.current);
+  const yellow = useRef(255);
   const isitmobile = useRef(false);
   const aspectRatio = useRef(1);
 
@@ -275,7 +283,7 @@ const Map = ({
   useEffect(() => {
     function timer() {
       secondsleft.current = setInterval(() => {
-        if (passedtime.current === 30) {
+        if (passedtime.current === 59) {
           if (secondsleft.current) {
             clearInterval(secondsleft.current);
           }
@@ -290,6 +298,8 @@ const Map = ({
       }
     }
     function timerprogress() {
+      let timerprogressforcolor = 0;
+
       timerborder.current = setInterval(() => {
         if (line1.current < 150) {
           line1.current += 0.5;
@@ -341,7 +351,12 @@ const Map = ({
       `);
           // console.log("line3", line3.current);
         }
-      }, 39);
+
+        timerprogressforcolor++;
+        if (timerprogressforcolor > 513) {
+          yellow.current = 255 - (timerprogressforcolor - 513 / 257) * 255;
+        }
+      }, 77.92);
     }
     function timerunout() {
       if (ismarkeronmap.current) {
@@ -387,16 +402,19 @@ const Map = ({
         onGuessSubmit(0, 0);
       }
     }
+
     //! this is supposed to be next but idk nextim
     if (!isitresults && !isitconclusion && !isitpregame) {
       if (aspectRatio.current > 0.85) {
         setMapStyle({
           position: "fixed",
-          width: "clamp(200px,20vw,20vw)",
-          height: "25vh", //clamp(120px,12vw,25vh)
           bottom: "0",
           right: "0",
           marginRight: "2vw",
+          zIndex: "5",
+          opacity: "0.5",
+          width: "clamp(200px,20vw,20vw)",
+          height: "25vh",
           marginBottom: "5vh",
         });
         shrinksubmitandmap();
@@ -440,7 +458,7 @@ const Map = ({
       youundidtheredotoredidtheredo.current = true;
       timer();
       timerprogress();
-      //! timers
+      //!timers
     } else if (isitconclusion && !isitpregame) {
       //!conclusion
       const mapid = document.getElementById("map");
@@ -507,14 +525,12 @@ const Map = ({
       //! pregame
       if (aspectRatio.current > 0.85) {
         setMapStyle({
-          position: "fixed",
+          ...baseMapStyle,
+          opacity: "0.5",
           width: "clamp(200px,20vw,20vw)",
-          height: "25vh", //clamp(120px,12vw,25vh)
-          bottom: "0",
-          right: "0",
-          marginRight: "2vw",
+          height: "25vh",
           marginBottom: "5vh",
-        });
+        } as React.CSSProperties);
       } else {
         setMapStyle({
           position: "fixed",
@@ -553,14 +569,12 @@ const Map = ({
     } else if (isitmobile && aspectRatio.current > 0.85) {
       const mapcenter = mapRef.current?.getCenter();
       setMapStyle({
-        position: "fixed",
+        ...baseMapStyle,
+        opacity: "0.5",
         width: "clamp(200px,20vw,20vw)",
-        height: "25vh", //clamp(120px,12vw,25vh)
-        bottom: "0",
-        right: "0",
-        marginRight: "2vw",
+        height: "25vh",
         marginBottom: "5vh",
-      });
+      } as React.CSSProperties);
       if (mapcenter) {
         setMapCenter([mapcenter.lat, mapcenter.lng]);
       }
@@ -581,25 +595,39 @@ const Map = ({
     ) {
       const mapcenter = mapRef.current?.getCenter();
 
+      // setMapStyle({
+      //   position: "fixed",
+      //   width: "clamp(70vh,50vw,50vw)",
+      //   height: "clamp(60vh,35vw,70vh)",
+      //   bottom: "0",
+      //   right: "0",
+      //   marginRight: "2vw",
+      //   marginBottom: "8vh",
+      //   zIndex: "5",
+      //   // transition: "transform 0.3s ease-in-out, box-shadow 0.2s ease",
+      //   // transform: "scale(1.05)",
+      //   // boxShadow: "0 0 12px rgba(0, 0, 0, 0.3)",
+      // });
       setMapStyle({
-        position: "fixed",
+        ...baseMapStyle,
         width: "clamp(70vh,50vw,50vw)",
         height: "clamp(60vh,35vw,70vh)",
-        bottom: "0",
-        right: "0",
-        marginRight: "2vw",
         marginBottom: "8vh",
-        zIndex: "5",
-      });
+        // transition: "transform 0.3s ease-in-out, box-shadow 0.2s ease",
+        // transform: "scale(1.05)",
+        // boxShadow: "0 0 12px rgba(0, 0, 0, 0.3)",
+      } as React.CSSProperties);
       if (ismarkeronmap.current) {
         setSubmitClassName(styles.biggersubmit);
       } else {
         setSubmitClassName(styles.biggerplacemarker);
       }
-      if (mapcenter) {
-        setMapCenter([mapcenter.lat, mapcenter.lng]);
-      }
-      clearTimeout(timeforshrink);
+      setTimeout(() => {
+        if (mapcenter) {
+          setMapCenter([mapcenter.lat, mapcenter.lng]);
+        }
+      }, 300);
+      +-clearTimeout(timeforshrink);
     }
   }
   function shrinksubmitandmap() {
@@ -611,15 +639,25 @@ const Map = ({
     ) {
       timeforshrink = setTimeout(() => {
         const mapcenter = mapRef.current?.getCenter();
+        // setMapStyle({
+        //   position: "fixed",
+        //   width: "clamp(200px,20vw,20vw)",
+        //   height: "25vh", //clamp(120px,12vw,25vh)
+        //   bottom: "0",
+        //   right: "0",
+        //   marginRight: "2vw",
+        //   marginBottom: "5vh",
+        //   // transition: "transform 0.3s ease-in-out, box-shadow 0.2s ease",
+        //   // transform: "scale(1.05)",
+        //   // boxShadow: "0 0 12px rgba(0, 0, 0, 0.3)",
+        // });
         setMapStyle({
-          position: "fixed",
+          ...baseMapStyle,
+          opacity: "0.5",
           width: "clamp(200px,20vw,20vw)",
-          height: "25vh", //clamp(120px,12vw,25vh)
-          bottom: "0",
-          right: "0",
-          marginRight: "2vw",
+          height: "25vh",
           marginBottom: "5vh",
-        });
+        } as React.CSSProperties);
 
         if (ismarkeronmap.current) {
           setSubmitClassName(styles.submit);
@@ -647,7 +685,13 @@ const Map = ({
           className={isitmobile.current ? styles.down : ""}
         ></div>
         <div>
-          <button id="button" className={submitClassName}>
+          <button
+            id="button"
+            style={{
+              transition: "width 0.3s ease, height 0.3s ease",
+            }}
+            className={submitClassName}
+          >
             PLACE MARKER ON THE MAP
           </button>
         </div>
@@ -658,9 +702,9 @@ const Map = ({
             00:
             {passedtime.current < 0
               ? "00"
-              : 30 - passedtime.current < 10
-              ? "0" + (30 - passedtime.current)
-              : 30 - passedtime.current}
+              : 60 - passedtime.current < 10
+              ? "0" + (60 - passedtime.current)
+              : 60 - passedtime.current}
           </p>
         </div>
         <svg
@@ -672,7 +716,7 @@ const Map = ({
           <path
             d={path}
             fill="none"
-            stroke="white"
+            stroke={`rgb(255 ${yellow.current} ${yellow.current})`}
             strokeWidth="5"
             strokeDasharray={`${strokeDasharray}`}
             strokeDashoffset="0"

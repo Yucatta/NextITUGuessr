@@ -81,13 +81,9 @@ const CustomImage = ({
             ? styles.mobileresultsbackground
             : isitconclusion
             ? styles.mobileconclusionbackground
-            : isitloaded &&
-              !isitblinked.current &&
-              !isitresults &&
-              !isitpregame &&
-              !isitconclusion
-            ? styles.background
-            : styles.mobileblinkedbackground
+            : isitblinked.current
+            ? styles.mobileblinkedbackground
+            : styles.background
         }
       ></div>
       <div

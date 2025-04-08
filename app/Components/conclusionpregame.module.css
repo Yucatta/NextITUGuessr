@@ -16,8 +16,12 @@
   align-items: center;
   position: absolute;
   margin-top:clamp(32vh,24vw,60vh) ;
+  border: 2px solid #b42727;
 
-  border:1px solid rgb(166, 162, 162);
+}
+.inputname:hover{
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(145, 231, 231, 0.6);
 }
 .start {
   font-size: clamp(2vh,1.5vw,3vw);;
@@ -34,8 +38,44 @@
   position: absolute; 
   margin-top:clamp(32vh,24vw,60vh) ;
   cursor: pointer;
+  border-radius: 5px;
 
 }
+/* .start {
+  background: linear-gradient(135deg, #00ffcc, #0066ff);
+  border: none;
+  color: white;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.25s ease-in-out;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+} */
+
+/* .start:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(9, 106, 9,0.6);
+ 
+}
+
+.start:active {
+  transform: scale(0.97);
+  box-shadow: 0 0 6px rgba(0, 255, 255, 0.3);
+}
+
+.icon {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.start:hover .icon {
+  transform: translateX(4px); 
+} */
 
 .logoimage {
   width: clamp(10vh,7vw,7vw);
@@ -86,17 +126,28 @@
   margin-left:0.5vw;
   font-size: 1.2vw;
 }
+.alert{
+  margin-top:clamp(10vh,7vw,38vh) ;
+  position: fixed;
+  color: #ff4d4d;
+  width: clamp(20vh,15vw,38vh);
+  left: 47%;
+  transform: translatex( -50%);
+  font-size: clamp(2vh,2vw,3vw);
+  text-shadow: beige 5px;
+
+}
 .mobileparticipantlist{
   background-color: rgb(36, 36, 36,0.8);
   width: 100vw;
-  height:100vh;
+  height:46.3vh;
   font-size: 1vh;
   position: fixed;
   list-style-type: none;
   padding: 0;
   overflow:hidden;
   overflow-y:scroll;
-  border:1px solid #ccc;
+  border:2px solid #ccc;
   margin-top: clamp(60vh,40vw,90vh) ;
   padding-bottom:6vh;
 }
@@ -117,21 +168,8 @@
   margin-left:0.5vw;
   font-size: 2vh;
 }
-.leaderboardinfopart{
-  position: fixed;
-  margin-top: 0.8vh;
-  margin-left: 1vw;
-}
-.mobileleaderboardinfopart{
-  position: fixed;
-  margin-top: 0.8vh;
-  left: clamp(20px,2vw,3vw);
-}
-.leaderboardinfoscor{
-  position: fixed;
-  right: clamp(60px,5.4vw,10vw);
-  margin-top: 0.8vh;
-}
+
+
 .leaderboardinfo{
   background-color: rgb(36, 36, 36,0.8);
   width: 30vw;
@@ -139,15 +177,33 @@
   margin-left:70vw;
   font-size: 2vw;
   border: 1px solid #ccc;
+  display: flex;
+  justify-content: center;  
+  align-items: center;    
+  text-align: center; 
 }
-.mobileleaderboardinfo{
-  background-color: rgb(36, 36, 36,0.8);
+.leaderboardinfopart{
+  font-size: clamp(2vh,2vw,3vw);
+  display: flex;
+  text-align: center; 
+
+}
+.mobileleaderboardinfo {
+  background-color: rgba(36, 36, 36, 0.8); 
   width: 100vw;
   height: 6.4vh;
-  margin-top: clamp(53.7vh,40vw,90vh) ;
+  margin-top: clamp(53.7vh, 40vw, 90vh);
   position: fixed;
-  font-size: clamp(2.7vh,2vw,3vw);
   border: 1px solid #ccc;
+  display: flex;
+  justify-content: center;  
+  align-items: center;  
+  text-align: center;      
+}
+
+.mobileleaderboardinfopart {
+  text-align: center; 
+  width: 100%;      
 }
 .blinkmodeoffcontainer{
   width: 10vh;

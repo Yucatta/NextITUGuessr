@@ -20,9 +20,13 @@ const EndGameStats = ({
   return (
     <div style={displayStyle}>
       <div>
-        <p className={styles.score}>{score}</p>
+        <p className={styles.score}>
+          <strong>{score}</strong>
+        </p>
         <span className={styles.scoreinfo}>OF 5000 POINTS</span>
-        <p className={styles.error}>{error}m</p>
+        <p className={styles.error}>
+          <strong>{error}m</strong>
+        </p>
         <span className={styles.errorinfo}>FROM LOCATION</span>
         <button className={styles.nextimg} onClick={onNextClick}>
           Next

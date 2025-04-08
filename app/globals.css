@@ -35,7 +35,12 @@ body {
   font-weight: 400;
   font-style: normal;
 }
-
+@font-face {
+  font-family: 'Orbitron';
+  src: url('/fonts/Orbitron-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
 
 
 html,

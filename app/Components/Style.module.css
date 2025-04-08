@@ -24,7 +24,7 @@
     height: 5Vh;
     display: block;
     background-color: rgba(0, 0, 0, 0.6);
-    border: 2px solid rgb(52, 52, 52, 0,5);
+    border: 1.5px solid white;
     position: fixed;
     right: 0;
     margin-right: 2vh;
@@ -127,8 +127,17 @@
   border-radius: 50vw;
   border:  2px solid rgb(1, 24, 1) ;
   cursor: pointer;
-
+  font-family: 'Orbitron', sans-serif;
 }
+/* .menu.nextimg.fullscreen.biggerplacemarker */
+/* .biggersubmit:active {
+  transform: scale(0.97);
+  box-shadow: 0 0 6px rgba(0, 255, 255, 0.3);
+}
+.biggersubmit:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(9, 106, 9,0.6);
+} */
 .report{
   position: fixed;
   top: 90%;
@@ -158,7 +167,8 @@
   position: fixed;
   --width :clamp(200px,20.1vw,20.1vw);
   width:var(--width);
-  margin-left:calc(98vw - var(--width));
+  margin-right: 2vw;
+  right: 0;
   height: 4vh;
   bottom: 0;
   margin-bottom: 0.5vh ;
@@ -167,21 +177,24 @@
   color : #e3e3e3;
   cursor: pointer;
 
+
 }
 .biggerplacemarker{
   position: fixed;
-  --width:clamp(70vh,50vw,50vw);
-  width:var(--width);;
-  margin-left:calc(98vw - var(--width));
+  width:clamp(70vh,50vw,50vw);
+  margin-right: 2vw;
+  right: 0;
   height: 7vh;
   bottom: 0;
   margin-bottom: 0.5vh ;
   font-size:2.5vh;
-  background-color: rgb(47, 47, 47,0.5);
+  background-color: rgb(47, 47, 47);
   pointer-events: auto;
   border-radius: 3.5vh;
   color : #e3e3e3;
   cursor: pointer;
+
+  
 }
 .mobileplacemarker{
   position: fixed;
@@ -196,34 +209,40 @@
   border-radius: 3.5vh;
   color : #e3e3e3;
   cursor: pointer;
+
 }
+/* transition: width 0.3s ease, height 0.3s ease, */
 
 .submit {
   position: fixed;
   width:clamp(200px,20.1vw,20.1vw);
   cursor: pointer;
   height: 4vh;
-  margin-left:77.99vw;
+  margin-right: 2vw;
+  right: 0;
   bottom: 0;
   margin-bottom: 0.5vh ;
   background-color: rgb(0, 95, 0,0.5) ;
   border-radius: 2vh;
   color : #e3e3e3;
+
+
 }
 .biggersubmit {
   position: fixed;
-  --width:clamp(70vh,50vw,50vw);
-  width:var(--width);
+  width:clamp(70vh,50vw,50vw);
   height: 7vh;
-  margin-left:calc(98vw - var(--width));
+  margin-right: 2vw;
+  right: 0;
   bottom: 0;
   margin-bottom: 0.5vh ;
   font-size:3vh;
-  background-color: rgb(0, 95, 0,0.5) ;
+  background-color: rgb(0, 95, 0) ;
   pointer-events: auto;
   border-radius: 3.5vh;
   color : #e3e3e3;
   cursor: pointer;
+
 }
 .mobilesubmit {
   position: fixed;
@@ -241,42 +260,21 @@
 }
 
 
-.progressbar {
+.progressbarcontainer {
   position: fixed;
   top: 82%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: clamp(30vh,40vw,42vw);
-
   height: 6vh;
   background-color: #333; 
   border-radius: 3vh;
-  overflow: hidden;
 }
-
-/* WebKit (Chrome, Safari) - Empty background */
-.progressbar::-webkit-progress-bar {
-  background-color: #ddd;
-  border-radius: 15px; /* Keep background rounded */
-}
-
-/* WebKit (Chrome, Safari) - Filled bar (only left side rounded) */
-.progressbar::-webkit-progress-value {
-  background-color: #d49c04; /* Green fill */
-  border-top-left-radius: 15px;
-  border-bottom-left-radius: 15px;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  transition: width 0.4s ease-in-out;
-}
-
-/* Firefox */
-.progressbar::-moz-progress-bar {
-  background-color: #d49c04;
-  border-top-left-radius: 15px;
-  border-bottom-left-radius: 15px;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
+.progressbarprogress{
+  position: absolute;
+  height: 6vh;
+  border-top-left-radius: 3vh;
+  border-bottom-left-radius: 3vh;
 }
 .points{
   position: fixed;
@@ -299,10 +297,14 @@
   height: clamp(5vh,4vw,4vw);
   background-color: rgb(38, 165, 38);
   border-radius: 4vh;
-  font-family: "Jost", sans-serif;
   cursor: pointer;
-
   color: #e3e3e3;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(8px);
+  color: white;
+  border-radius: 12px;
+  font-family: 'Orbitron', sans-serif;
 }
 
 .loadinggif{
@@ -321,8 +323,8 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   size: cover;  
   background-image: url(/background.jpg);
   background-position: 50%;
@@ -386,6 +388,9 @@
   margin-top:10vh;
   right: 0;
   font-size: clamp(1.3vh,1vw,1vw);
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+
 
 }
 .totalscore {
@@ -414,7 +419,6 @@
   transform: translatex( -50%);;
   margin-top: 1vh;
 }
-
 .timerprogress   {
   position: fixed;
   width: clamp(14vh,10vw,200px); 

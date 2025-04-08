@@ -9,12 +9,21 @@ import styles from "./Style.module.css";
 const Conclusion = ({ totalscore, isitconclusion, onmenuclick }: Props) => {
   return (
     <div className={isitconclusion ? "" : styles.none}>
-      <progress
-        className={styles.progressbar}
-        value={totalscore}
-        max="25000"
-      ></progress>
-      <p className={styles.points}>{totalscore}</p>
+      <span className={styles.progressbarcontainer}>
+        <span
+          style={{
+            backgroundColor: `rgb(${(255 * totalscore) / 25000} ${
+              255 - (255 * totalscore) / 25000
+            } 0)`,
+            width: `calc(clamp(30vh,40vw,42vw)*${totalscore / 25000})`,
+          }}
+          className={styles.progressbarprogress}
+        ></span>
+      </span>
+
+      <p className={styles.points}>
+        <strong>{totalscore}</strong>
+      </p>
       <button onClick={onmenuclick} className={styles.menu}>
         MENU
       </button>

@@ -9,11 +9,14 @@ interface Props {
   onstartclick: (blinkmode: boolean) => void;
 }
 
-const PreGame = ({ isitpregame, onstartclick }: Props) => {
+const PreGame = ({ isitpregame, totalscore, onstartclick }: Props) => {
   const participants = useRef([["a", "a"]]);
-  const [sortedParticipants, setSortedParticipants] = useState<string[][]>([]);
+  const normalmode = useRef([["a", "a"]]);
+  const blinkmode = useRef([["a", "a"]]);
+  const [leaderboard, setleaderboard] = useState<string[][]>([]);
   const currentparticipant = useRef<HTMLInputElement>(null);
   const [isblinkmodeon, setisblinkmodeon] = useState(false);
+  const [isinputwrong, setisinputwrong] = useState(false);
   const aspectRatio = useRef(1);
 
   useEffect(() => {
@@ -44,22 +47,55 @@ const PreGame = ({ isitpregame, onstartclick }: Props) => {
       goodornah
     ) {
       onstartclick(isblinkmodeon);
-      currentparticipant.current.value = "";
+      setisinputwrong(false);
+    } else {
+      setisinputwrong(true);
     }
   }
-
   useEffect(() => {
-    if (participants.current.length > 0) {
-      const sorted = [...participants.current].sort(
-        (a, b) => Number(b[1]) - Number(a[1])
-      );
-      setSortedParticipants(sorted.slice(1, 51));
+    if (isitpregame && totalscore) {
+      let temp;
+      if (currentparticipant.current) {
+        temp = currentparticipant.current.value;
+        currentparticipant.current.value = "";
+      }
+      const participantinformations = {
+        name: temp,
+        score: totalscore,
+        blinkmode: isblinkmodeon,
+      };
+      const appendtocsv = async () => {
+        try {
+          const res = await fetch("/api/leaderboard", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(participantinformations),
+          });
+
+          const data = await res.json();
+          if (!res.ok) {
+            throw new Error(data.error || "Unknown error");
+          }
+
+          // console.log("Server Response:", data.message);
+        } catch (error) {
+          console.error("Error submitting score:", error);
+        }
+      };
+      appendtocsv();
     }
-  }, [participants.current]);
+  }, [isitpregame]);
+  useEffect(() => {
+    if (isblinkmodeon) {
+      setleaderboard(blinkmode.current.slice(1, 51));
+    } else {
+      setleaderboard(normalmode.current.slice(1, 51));
+    }
+  }, [participants.current, isblinkmodeon]);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/Participants.csv");
+        const response = await fetch("/test.csv");
         const csvText = await response.text();
 
         Papa.parse<string[]>(csvText, {
@@ -67,6 +103,20 @@ const PreGame = ({ isitpregame, onstartclick }: Props) => {
           skipEmptyLines: true,
           complete: (result) => {
             participants.current = result.data;
+            participants.current.forEach((element) => {
+              if (element[2] === "true") {
+                if (blinkmode.current.length === 1) {
+                  blinkmode.current[0] = [element[0], element[1]];
+                }
+                blinkmode.current.push([element[0], element[1]]);
+              } else if (element[2] === "false") {
+                if (normalmode.current.length === 1) {
+                  normalmode.current[0] = [element[0], element[1]];
+                }
+                normalmode.current.push([element[0], element[1]]);
+              }
+            });
+            // console.log(blinkmode.current, normalmode.current);
           },
         });
       } catch (a) {
@@ -83,10 +133,14 @@ const PreGame = ({ isitpregame, onstartclick }: Props) => {
           // className={aspectRatio <= 0.85 ? styles.none : styles.inputname}
           className={styles.inputname}
           ref={currentparticipant}
-          placeholder=" Enter Your Name"
+          style={{
+            border: ` ${isinputwrong ? "2px solid #b42727" : "2px solid #ccc"}`,
+          }}
+          placeholder=" 3-30 Character Name"
         />
+        {/* <span className={styles.alert}>THIS NAME IS ALREADY TAKEN</span> */}
         <button className={styles.start} onClick={addparticipant} id="start">
-          {">"}
+          <span className={styles.icon}>➤</span>
         </button>
         <div>
           <img
@@ -107,10 +161,9 @@ const PreGame = ({ isitpregame, onstartclick }: Props) => {
                   : styles.participantsList
               }
             >
-              {sortedParticipants.map((participant, index) => (
+              {leaderboard.map((participant, index) => (
                 <li key={participant[0] || index}>
                   {" "}
-                  {/* Use participant[0] if it's unique, fallback to index */}
                   <span
                     className={
                       aspectRatio.current <= 0.85
@@ -148,10 +201,10 @@ const PreGame = ({ isitpregame, onstartclick }: Props) => {
                     : styles.leaderboardinfopart
                 }
               >
-                {" "}
-                Participant
+                {isblinkmodeon
+                  ? "Blink Mode Leaderboard"
+                  : "Normal Mode Leaderboard"}
               </span>
-              <span className={styles.leaderboardinfoscor}>Score</span>
             </strong>
           </div>
         </div>
