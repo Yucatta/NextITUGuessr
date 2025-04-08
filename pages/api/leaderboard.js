@@ -40,10 +40,8 @@ export default async function handler(req, res) {
           break;
         }
       }
-      let isthereheader;
 
       if(participants[0][1] ==="Score"){
-        isthereheader = true;
       }
       const csvWriter = createObjectCsvWriter({
         path: "C:/Users/Ahmet/Downloads/KMS/RAnd/itu-guessr/public/test.csv",
