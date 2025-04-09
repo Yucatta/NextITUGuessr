@@ -1,11 +1,6 @@
-import { createObjectCsvWriter } from 'csv-writer';
 import Papa from "papaparse";
-import fs from "fs";
-import { S3Client, GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
-import csvParser from "csv-parser";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { createObjectCsvStringifier } from "csv-writer";
-import stream from "stream";
-import { promisify } from "util";
 const BUCKET_NAME = process.env.CLOUDFLARE_R2_BUCKET_NAME;
 const ACCESS_KEY = process.env.CLOUDFLARE_R2_ACCESS_KEY_ID;
 const SECRET_KEY = process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY;
