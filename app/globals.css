@@ -1,14 +1,13 @@
 *{
   font-family: "Jost",Arial, Helvetica, sans-serif;
   border:none;
-
+  color : #e3e3e3;
 }
 body {
   background-color: #1a1a1a;
   margin: 0;
   padding: 0;
   display: flex;
-  color : #e3e3e3;
   font-family: "Jost",Arial, Helvetica, sans-serif;
   --points:rgb(159, 167, 49);
   --score:rgb(167, 94, 26);

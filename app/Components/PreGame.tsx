@@ -95,7 +95,9 @@ const PreGame = ({ isitpregame, totalscore, onstartclick }: Props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/test.csv");
+        const response = await fetch(
+          "https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/test.csv"
+        );
         const csvText = await response.text();
 
         Papa.parse<string[]>(csvText, {

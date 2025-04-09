@@ -1,23 +1,44 @@
 import { createObjectCsvWriter } from 'csv-writer';
 import Papa from "papaparse";
 import fs from "fs";
+import { S3Client, GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
+import csvParser from "csv-parser";
+import { createObjectCsvStringifier } from "csv-writer";
+import stream from "stream";
+import { promisify } from "util";
+const BUCKET_NAME = process.env.CLOUDFLARE_R2_BUCKET_NAME;
+const ACCESS_KEY = process.env.CLOUDFLARE_R2_ACCESS_KEY_ID;
+const SECRET_KEY = process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY;
+const ENDPOINT = process.env.CLOUDFLARE_R2_ENDPOINT;
+const s3Client = new S3Client({
+  region: "auto",
+  endpoint: ENDPOINT, 
+  credentials: {
+      accessKeyId: ACCESS_KEY,  
+      secretAccessKey: SECRET_KEY,  
+  },
+});
+const bucketName = BUCKET_NAME
 let participants = [];
 export default async function handler(req, res) {
   try {
     const fetchData = async () => {
       try {
-        const csvText = fs.readFileSync("C:/Users/Ahmet/Downloads/KMS/RAnd/itu-guessr/public/test.csv", "utf-8");
-
+        const response = await fetch("https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/test.csv");
+          
+          const csvText = await response.text();
+          // console.log(csvText); 
         Papa.parse(csvText, {
           header: false,
           skipEmptyLines: true,
           complete: (result) => {
             participants = result.data;
             participants.forEach((element) => {
-              element[1] = Number(element[1]); // Convert score to a number
+              element[1] = Number(element[1]);
             });
           },
         });
+        // console.log(participants)
       } catch (error) {
         console.error("Error reading CSV file:", error);
       }
@@ -32,7 +53,7 @@ export default async function handler(req, res) {
     }
 
 
-    if (req.method === "POST") {
+      if (req.method === "POST") {
       const { name, score, blinkmode } = req.body;
       for (let i = 0; i <= participants.length; i++) {
         if (i === participants.length || participants[i][1] < score) {
@@ -40,23 +61,30 @@ export default async function handler(req, res) {
           break;
         }
       }
-
-      const csvWriter = createObjectCsvWriter({
-        path: "C:/Users/Ahmet/Downloads/KMS/RAnd/itu-guessr/public/test.csv",
-        header: [
-              { id: "name", title: "Name" },
-              { id: "score", title: "Score" },
-              { id: "blinkmode", title: "Blink Mode" },
-            ],
-      });
-
       const formattedParticipants = participants.map(([name, score, blinkmode]) => ({
         name,
         score: Number(score),
         blinkmode: blinkmode === "true",
       }));
       formattedParticipants.shift()
-      await csvWriter.writeRecords(formattedParticipants);
+      // console.log(formattedParticipants)
+      const csvStringifier = createObjectCsvStringifier({
+        header: [
+            { id: "name", title: "Name" },
+            { id: "score", title: "Score" },
+            { id: "blinkmode", title: "Blink Mode" },
+        ],
+    });
+      const csvContent = csvStringifier.getHeaderString() + csvStringifier.stringifyRecords(formattedParticipants);
+      // console.log(csvContent)
+      const putObjectCommand = new PutObjectCommand({
+        Bucket: bucketName,
+        Key: "test.csv",
+        Body: csvContent,
+        ContentType: "text/csv",
+    });
+    // this.is.nat.defined()
+    await s3Client.send(putObjectCommand);
 
       res.status(200).json({ message: "Data successfully written to CSV" });
     } else {
