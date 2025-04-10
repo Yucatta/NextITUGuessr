@@ -1,4 +1,3 @@
-import Papa from "papaparse";
 import csvParser from "csv-parser";
 import { S3Client,GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { createObjectCsvStringifier } from "csv-writer";
