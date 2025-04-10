@@ -18,6 +18,8 @@
 /out/
 /Legacy
 /public/compressed-images
+/public/Icons/test.csv
+/public/test.csv
 # production
 /build
 

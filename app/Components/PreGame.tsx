@@ -2,8 +2,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import styles from "./conclusionpregame.module.css";
 import Papa from "papaparse";
-import { existsSync } from "fs";
-import { exit } from "process";
 
 interface Props {
   isitpregame: boolean;
