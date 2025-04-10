@@ -2,6 +2,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import styles from "./conclusionpregame.module.css";
 import Papa from "papaparse";
+import { existsSync } from "fs";
+import { exit } from "process";
 
 interface Props {
   isitpregame: boolean;
@@ -10,14 +12,15 @@ interface Props {
 }
 
 const PreGame = ({ isitpregame, totalscore, onstartclick }: Props) => {
-  const participants = useRef([["a", "a"]]);
-  const normalmode = useRef([["a", "a"]]);
-  const blinkmode = useRef([["a", "a"]]);
+  const participants = useRef<string[][]>([]);
+  const normalmode = useRef<string[][]>([]);
+  const blinkmode = useRef<string[][]>([]);
   const [leaderboard, setleaderboard] = useState<string[][]>([]);
   const currentparticipant = useRef<HTMLInputElement>(null);
   const [isblinkmodeon, setisblinkmodeon] = useState(false);
   const [isinputwrong, setisinputwrong] = useState(false);
   const aspectRatio = useRef(1);
+  const [updateleaderboard, setupdateleaderboard] = useState(1);
 
   useEffect(() => {
     const updateAspectRatio = () => {
@@ -43,7 +46,8 @@ const PreGame = ({ isitpregame, totalscore, onstartclick }: Props) => {
     });
     if (
       currentparticipant.current &&
-      currentparticipant.current.value.trim().length > 1 &&
+      currentparticipant.current.value.length < 31 &&
+      currentparticipant.current.value.trim().length > 2 &&
       goodornah
     ) {
       onstartclick(isblinkmodeon);
@@ -52,6 +56,7 @@ const PreGame = ({ isitpregame, totalscore, onstartclick }: Props) => {
       setisinputwrong(true);
     }
   }
+
   useEffect(() => {
     if (isitpregame && totalscore) {
       let temp;
@@ -84,44 +89,87 @@ const PreGame = ({ isitpregame, totalscore, onstartclick }: Props) => {
       };
       appendtocsv();
     }
+    function handleenter(e: KeyboardEvent) {
+      if (e.code === "Enter") {
+        addparticipant();
+      }
+    }
+    window.addEventListener("keydown", handleenter);
+    if (leaderboard.length) {
+      setTimeout(() => {
+        setleaderboard(normalmode.current.slice(0, 50));
+      }, 50);
+    }
   }, [isitpregame]);
   useEffect(() => {
-    if (isblinkmodeon) {
-      setleaderboard(blinkmode.current.slice(1, 51));
-    } else {
-      setleaderboard(normalmode.current.slice(1, 51));
+    if (participants.current[0]) {
+      if (isblinkmodeon) {
+        setleaderboard(blinkmode.current.slice(0, 50));
+      } else {
+        setleaderboard(normalmode.current.slice(0, 50));
+      }
     }
-  }, [participants.current, isblinkmodeon]);
+    // console.log(leaderboard.length);
+  }, [isblinkmodeon, updateleaderboard]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          "https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/test.csv"
-        );
-        const csvText = await response.text();
+        const getcsvfile = async () => {
+          try {
+            const response = await fetch(
+              "https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/test.csv"
+            );
+            const csvText = await response.text();
+            return csvText;
+          } catch (error) {
+            console.error(error);
+            return 0;
+          }
+        };
 
-        Papa.parse<string[]>(csvText, {
-          header: false,
-          skipEmptyLines: true,
-          complete: (result) => {
-            participants.current = result.data;
-            participants.current.forEach((element) => {
-              if (element[2] === "true") {
-                if (blinkmode.current.length === 1) {
-                  blinkmode.current[0] = [element[0], element[1]];
+        const csvText = await getcsvfile();
+        // console.log(csvText);
+        if (!csvText) {
+          setTimeout(() => {
+            // fetchData();
+          }, 150);
+          return;
+        }
+        if (csvText) {
+          Papa.parse<string[]>(csvText, {
+            header: false,
+            skipEmptyLines: true,
+            complete: (result) => {
+              participants.current = result.data;
+              // console.log(participants.current);
+              participants.current.forEach((element) => {
+                if (element[2] === "true") {
+                  // if (blinkmode.current.length === 1) {
+                  //   console.log(blinkmode.current);
+                  //   blinkmode.current[0] = [element[0], element[1]];
+                  // }
+                  blinkmode.current.push([element[0], element[1]]);
+                } else if (element[2] === "false") {
+                  // if (normalmode.current.length === 1) {
+                  //   normalmode.current[0] = [element[0], element[1]];
+                  // }
+                  normalmode.current.push([element[0], element[1]]);
                 }
-                blinkmode.current.push([element[0], element[1]]);
-              } else if (element[2] === "false") {
-                if (normalmode.current.length === 1) {
-                  normalmode.current[0] = [element[0], element[1]];
-                }
-                normalmode.current.push([element[0], element[1]]);
-              }
-            });
-            // console.log(blinkmode.current, normalmode.current);
-          },
-        });
+              });
+              setupdateleaderboard(2);
+              // setleaderboard(normalmode.current);
+              // {
+              //   isblinkmodeon
+              //     ? setleaderboard(blinkmode.current)
+              //     : setleaderboard(normalmode.current);
+              // }
+            },
+          });
+        }
       } catch (a) {
+        fetchData();
+        console.log("retrying to fetch data");
         console.log(a);
       }
     };
@@ -138,7 +186,7 @@ const PreGame = ({ isitpregame, totalscore, onstartclick }: Props) => {
           style={{
             border: ` ${isinputwrong ? "2px solid #b42727" : "2px solid #ccc"}`,
           }}
-          placeholder=" 3-30 Character Name"
+          placeholder="Your Username"
         />
         {/* <span className={styles.alert}>THIS NAME IS ALREADY TAKEN</span> */}
         <button className={styles.start} onClick={addparticipant} id="start">

@@ -439,6 +439,7 @@ const Map = ({
 
       isitsubmitted.current = false;
       ismarkeronmap.current = false;
+      yellow.current = 255;
       const buttonElement = document.getElementById("button");
 
       if (buttonElement && mapRef.current) {
