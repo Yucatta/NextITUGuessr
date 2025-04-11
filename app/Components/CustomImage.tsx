@@ -19,6 +19,7 @@ const CustomImage = ({
 }: Props) => {
   const [imagevisibility, setimagevisibility] = useState(styles.none);
   const [isitloaded, setisitloaded] = useState(false);
+  const imagereloadtry = useRef(0);
   const [imageSrc, setImageSrc] = useState(
     `https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/${rndnum}.jpg`
   );
@@ -61,9 +62,12 @@ const CustomImage = ({
   function handleImageError() {
     // console.error("Image failed to load, retrying...");
     // Retry by appending a timestamp to the URL to bypass caching
-    setImageSrc(
-      `https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/${rndnum}.jpg?retry=${Date.now()}`
-    );
+    if (imagereloadtry.current > 3) {
+      setImageSrc(
+        `https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/${rndnum}.jpg?retry=${Date.now()}`
+      );
+    }
+    imagereloadtry.current++;
   }
   useEffect(() => {
     setImageSrc(
@@ -126,8 +130,7 @@ const CustomImage = ({
             style={{ objectFit: "contain" }}
             fill
             loading="lazy"
-            onLoad={onLoad}
-            onError={handleImageError}
+            // onError={handleImageError}
           />
           {/* <img
         //   src={`https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/${rndnum}.jpg`}

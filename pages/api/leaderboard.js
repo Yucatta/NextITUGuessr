@@ -1,5 +1,9 @@
 import csvParser from "csv-parser";
-import { S3Client,GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
+import {
+  S3Client,
+  GetObjectCommand,
+  PutObjectCommand,
+} from "@aws-sdk/client-s3";
 import { createObjectCsvStringifier } from "csv-writer";
 import stream from "stream";
 import { promisify } from "util";
@@ -9,14 +13,14 @@ const SECRET_KEY = process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY;
 const ENDPOINT = process.env.CLOUDFLARE_R2_ENDPOINT;
 const s3Client = new S3Client({
   region: "auto",
-  endpoint: ENDPOINT, 
+  endpoint: ENDPOINT,
   credentials: {
-      accessKeyId: ACCESS_KEY,  
-      secretAccessKey: SECRET_KEY,  
+    accessKeyId: ACCESS_KEY,
+    secretAccessKey: SECRET_KEY,
   },
 });
-const bucketName = BUCKET_NAME
-const fileName = "test.csv"
+const bucketName = BUCKET_NAME;
+const fileName = "test.csv";
 let csvData = [];
 
 export default async function handler(req, res) {
@@ -34,34 +38,31 @@ export default async function handler(req, res) {
         //   }
         // }
 
-
         const getObjectCommand = new GetObjectCommand({
           Bucket: bucketName,
           Key: fileName,
-      });
-      const response = await s3Client.send(getObjectCommand);
-      const streamToString = promisify(stream.pipeline);
-      // console.log(response.Body.pipe(csvParser()))
-      await streamToString(
+        });
+        const response = await s3Client.send(getObjectCommand);
+        const streamToString = promisify(stream.pipeline);
+        // console.log(response.Body.pipe(csvParser()))
+        await streamToString(
           response.Body.pipe(csvParser()),
           new stream.Writable({
-              objectMode: true,
-              write(chunk, encoding, callback) {
-                  csvData.push(chunk);
-                  callback();
-                  if(response === "a"){
-                    console.log(encoding)
-                  }
-              },
+            objectMode: true,
+            write(chunk, encoding, callback) {
+              csvData.push(chunk);
+              callback();
+              if (response === "a") {
+                console.log(encoding);
+              }
+            },
           })
-      );
+        );
 
-      // console.log(csvData)
-      csvData.forEach(element => {
-        element.Score = Number(element.Score)
-      });
-
-
+        // console.log(csvData)
+        csvData.forEach((element) => {
+          element.Score = Number(element.Score);
+        });
 
         // const response = await fetch("https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/test.csv");
         //     const csvText = await response.text();
@@ -88,49 +89,53 @@ export default async function handler(req, res) {
     //   return;
     // }
 
-
-      if (req.method === "POST") {
+    if (req.method === "POST") {
       const { name, score, blinkmode } = req.body;
       // console.log(csvData.slice(50,103))
 
       for (let i = 0; i <= csvData.length; i++) {
         if (i === csvData.length || csvData[i].Score < score) {
-          csvData.splice(i, 0,{ Name: name, Score: score, 'Blink Mode': `${blinkmode}`});
+          csvData.splice(i, 0, {
+            Name: name,
+            Score: score,
+            "Blink Mode": `${blinkmode}`,
+          });
           break;
         }
       }
 
       // console.log(csvData)
 
-    //   const formattedParticipants = participants.map(([name, score, blinkmode]) => ({
-    //     name,
-    //     score: Number(score),
-    //     blinkmode: blinkmode === "true",
-    //   }));
-    //   formattedParticipants.shift()
+      //   const formattedParticipants = participants.map(([name, score, blinkmode]) => ({
+      //     name,
+      //     score: Number(score),
+      //     blinkmode: blinkmode === "true",
+      //   }));
+      //   formattedParticipants.shift()
       // console.log(formattedParticipants)
-
 
       const csvStringifier = createObjectCsvStringifier({
         header: [
-            { id: "Name", title: "Name" },
-            { id: "Score", title: "Score" },
-            { id: "Blink Mode", title: "Blink Mode" },
+          { id: "Name", title: "Name" },
+          { id: "Score", title: "Score" },
+          { id: "Blink Mode", title: "Blink Mode" },
         ],
-    });
+      });
 
-    // console.log(csvStringifier.stringifyRecords(csvData))
-      const csvContent = csvStringifier.getHeaderString() + csvStringifier.stringifyRecords(csvData);
+      // console.log(csvStringifier.stringifyRecords(csvData))
+      const csvContent =
+        csvStringifier.getHeaderString() +
+        csvStringifier.stringifyRecords(csvData);
       // console.log(csvContent)
       const putObjectCommand = new PutObjectCommand({
         Bucket: bucketName,
         Key: "test.csv",
         Body: csvContent,
         ContentType: "text/csv",
-    });
-    // this.is.nat.defined()
-    console.log(csvContent)
-    await s3Client.send(putObjectCommand);
+      });
+      // this.is.nat.defined()
+      console.log(csvContent);
+      await s3Client.send(putObjectCommand);
 
       res.status(200).json({ message: "Data successfully written to CSV" });
     } else {

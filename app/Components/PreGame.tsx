@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
 import styles from "./conclusionpregame.module.css";
-import Papa from "papaparse";
 
 interface Props {
   isitpregame: boolean;
@@ -21,12 +20,33 @@ const PreGame = ({ isitpregame, totalscore, onstartclick }: Props) => {
   const [updateleaderboard, setupdateleaderboard] = useState(1);
 
   useEffect(() => {
+    const fetchcsv = async () => {
+      try {
+        const res = await fetch("/api/getcsvfile", {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        });
+
+        const data = await res.json();
+        participants.current = data.csvData;
+        participants.current.forEach((element) => {
+          if (element[2] === "true") {
+            blinkmode.current.push([element[0], element[1]]);
+          } else if (element[2] === "false") {
+            normalmode.current.push([element[0], element[1]]);
+          }
+        });
+        setupdateleaderboard(2);
+      } catch (error) {
+        console.error("Error submitting score:", error);
+      }
+    };
+    fetchcsv();
     const updateAspectRatio = () => {
       if (typeof window !== "undefined") {
         aspectRatio.current = window.innerWidth / window.innerHeight;
       }
     };
-
     updateAspectRatio();
     window.addEventListener("resize", updateAspectRatio);
 
@@ -80,7 +100,7 @@ const PreGame = ({ isitpregame, totalscore, onstartclick }: Props) => {
             throw new Error(data.error || "Unknown error");
           }
 
-          // console.log("Server Response:", data.message);
+          console.log("Server Response:", data.message);
         } catch (error) {
           console.error("Error submitting score:", error);
         }
@@ -107,72 +127,8 @@ const PreGame = ({ isitpregame, totalscore, onstartclick }: Props) => {
         setleaderboard(normalmode.current.slice(0, 50));
       }
     }
-    // console.log(leaderboard.length);
   }, [isblinkmodeon, updateleaderboard]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const getcsvfile = async () => {
-          try {
-            const response = await fetch(
-              "https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/test.csv"
-            );
-            const csvText = await response.text();
-            return csvText;
-          } catch (error) {
-            console.error(error);
-            return 0;
-          }
-        };
-
-        const csvText = await getcsvfile();
-        // console.log(csvText);
-        if (!csvText) {
-          setTimeout(() => {
-            // fetchData();
-          }, 150);
-          return;
-        }
-        if (csvText) {
-          Papa.parse<string[]>(csvText, {
-            header: false,
-            skipEmptyLines: true,
-            complete: (result) => {
-              participants.current = result.data;
-              // console.log(participants.current);
-              participants.current.forEach((element) => {
-                if (element[2] === "true") {
-                  // if (blinkmode.current.length === 1) {
-                  //   console.log(blinkmode.current);
-                  //   blinkmode.current[0] = [element[0], element[1]];
-                  // }
-                  blinkmode.current.push([element[0], element[1]]);
-                } else if (element[2] === "false") {
-                  // if (normalmode.current.length === 1) {
-                  //   normalmode.current[0] = [element[0], element[1]];
-                  // }
-                  normalmode.current.push([element[0], element[1]]);
-                }
-              });
-              setupdateleaderboard(2);
-              // setleaderboard(normalmode.current);
-              // {
-              //   isblinkmodeon
-              //     ? setleaderboard(blinkmode.current)
-              //     : setleaderboard(normalmode.current);
-              // }
-            },
-          });
-        }
-      } catch (a) {
-        fetchData();
-        console.log("retrying to fetch data");
-        console.log(a);
-      }
-    };
-    fetchData();
-  }, []);
   return (
     <>
       <div className={isitpregame ? "" : styles.none}>
