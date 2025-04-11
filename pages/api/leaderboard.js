@@ -27,17 +27,6 @@ export default async function handler(req, res) {
   try {
     const fetchData = async () => {
       try {
-        // const getcsvfile = async () => {
-        //   try{
-
-        //     const response = await fetch("https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/test.csv");
-        //     const csvText = await response.text();
-        //     return csvText
-        //   }catch(){
-
-        //   }
-        // }
-
         const getObjectCommand = new GetObjectCommand({
           Bucket: bucketName,
           Key: fileName,
@@ -59,35 +48,15 @@ export default async function handler(req, res) {
           })
         );
 
-        // console.log(csvData)
         csvData.forEach((element) => {
           element.Score = Number(element.Score);
         });
-
-        // const response = await fetch("https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/test.csv");
-        //     const csvText = await response.text();
-        // Papa.parse(csvText, {
-        //   header: false,
-        //   skipEmptyLines: true,
-        //   complete: (result) => {
-        //     participants = result.data;
-        //     participants.forEach((element) => {
-        //       element[1] = Number(element[1]);
-        //     });
-        //   },
-        // });
       } catch (error) {
         console.error("Error reading CSV file:", error);
       }
     };
 
     await fetchData();
-
-    // if (!Array.isArray(participants) || participants.length === 0) {
-    //   console.error("Participants array is not properly initialized:", participants);
-    //   res.status(500).json({ error: "Participants data is invalid or empty" });
-    //   return;
-    // }
 
     if (req.method === "POST") {
       const { name, score, blinkmode } = req.body;
@@ -104,16 +73,6 @@ export default async function handler(req, res) {
         }
       }
 
-      // console.log(csvData)
-
-      //   const formattedParticipants = participants.map(([name, score, blinkmode]) => ({
-      //     name,
-      //     score: Number(score),
-      //     blinkmode: blinkmode === "true",
-      //   }));
-      //   formattedParticipants.shift()
-      // console.log(formattedParticipants)
-
       const csvStringifier = createObjectCsvStringifier({
         header: [
           { id: "Name", title: "Name" },
@@ -122,21 +81,18 @@ export default async function handler(req, res) {
         ],
       });
 
-      // console.log(csvStringifier.stringifyRecords(csvData))
       const csvContent =
         csvStringifier.getHeaderString() +
         csvStringifier.stringifyRecords(csvData);
-      // console.log(csvContent)
       const putObjectCommand = new PutObjectCommand({
         Bucket: bucketName,
         Key: "test.csv",
         Body: csvContent,
         ContentType: "text/csv",
       });
-      // this.is.nat.defined()
       console.log(csvContent);
       await s3Client.send(putObjectCommand);
-
+      csvData = [];
       res.status(200).json({ message: "Data successfully written to CSV" });
     } else {
       res.status(405).json({ error: "Method not allowed" });

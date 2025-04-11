@@ -100,7 +100,7 @@ const PreGame = ({ isitpregame, totalscore, onstartclick }: Props) => {
             throw new Error(data.error || "Unknown error");
           }
 
-          console.log("Server Response:", data.message);
+          // console.log("Server Response:", data.message);
         } catch (error) {
           console.error("Error submitting score:", error);
         }
@@ -109,6 +109,30 @@ const PreGame = ({ isitpregame, totalscore, onstartclick }: Props) => {
     }
     function handleenter(e: KeyboardEvent) {
       if (e.code === "Enter") {
+        // const participantinformations = {
+        //   name: "anothertoaaaatallylegit",
+        //   score: 25000,
+        //   blinkmode: isblinkmodeon,
+        // };
+        // const appendtocsv = async () => {
+        //   try {
+        //     const res = await fetch("/api/leaderboard", {
+        //       method: "POST",
+        //       headers: { "Content-Type": "application/json" },
+        //       body: JSON.stringify(participantinformations),
+        //     });
+
+        //     const data = await res.json();
+        //     if (!res.ok) {
+        //       throw new Error(data.error || "Unknown error");
+        //     }
+
+        //     console.log("Server Response:", data.message);
+        //   } catch (error) {
+        //     console.error("Error submitting score:", error);
+        //   }
+        // };
+        // appendtocsv();
         addparticipant();
       }
     }
@@ -122,7 +146,12 @@ const PreGame = ({ isitpregame, totalscore, onstartclick }: Props) => {
   useEffect(() => {
     if (participants.current[0]) {
       if (isblinkmodeon) {
-        setleaderboard(blinkmode.current.slice(0, 50));
+        setleaderboard(
+          blinkmode.current.slice(
+            0,
+            blinkmode.current.length >= 50 ? 50 : blinkmode.current.length
+          )
+        );
       } else {
         setleaderboard(normalmode.current.slice(0, 50));
       }
