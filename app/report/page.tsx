@@ -17,13 +17,13 @@ const baseMapStyle = {
 let timeforshrink: NodeJS.Timeout;
 
 const Report = () => {
-  const isitsubmitted = useRef(false);
-  const position = useRef<[number, number]>([0, 0]);
-  const guessRef = useRef<L.Marker | null>(null);
+  // const isitsubmitted = useRef(false);
+  // const position = useRef<[number, number]>([0, 0]);
+  // const guessRef = useRef<L.Marker | null>(null);
   const mapRef = useRef<L.Map | null>(null);
-  const [mapCenter, setMapCenter] = useState<[number, number]>([
-    41.10474805585872, 29.022884681711798,
-  ]);
+  // const [mapCenter, setMapCenter] = useState<[number, number]>([
+  //   41.10474805585872, 29.022884681711798,
+  // ]);
   const ismarkeronmap = useRef<boolean>(false);
   const [mapStyle, setMapStyle] = useState<React.CSSProperties>({
     position: "fixed",
@@ -35,29 +35,32 @@ const Report = () => {
     marginBottom: "5vh",
   });
   const [submitClassName, setSubmitClassName] = useState(styles.placemarker);
-  const [updater, setupdater] = useState(0);
+  // const [updater, setupdater] = useState(0);
   const isitmobile = useRef(false);
   const aspectRatio = useRef(1);
   const searchParams = useSearchParams();
+  // const [imagedata, setimagedata] = useState({});
 
-  const rndnum = atob(searchParams.get("x"));
-  const imglat = atob(searchParams.get("y"));
-  const imglng = atob(searchParams.get("z"));
+  // const rndnum = atob(searchParams.get("x"));
+  // const imglat = atob(searchParams.get("y"));
+  // const imglng = atob(searchParams.get("z"));
 
-  useEffect(() => {
-    console.log("Query params:", { rndnum, imglat, imglng });
-  }, [rndnum, imglat, imglng]);
+  // useEffect(() => {
+  //   if(searchParams){
+  //     setimagedata({ rndnum : +atob(searchParams.get("x")),})
+  //   }
+  // }, []);
 
   useEffect(() => {
     const initializeMap = async () => {
       if (typeof window !== "undefined" && mapRef.current === null) {
         const L = (await import("leaflet")).default;
 
-        const beemarker = L.icon({
-          iconUrl: "/Icons/Bee-Marker.png",
-          iconSize: [20, 30],
-          iconAnchor: [10, 30],
-        });
+        // const beemarker = L.icon({
+        //   iconUrl: "/Icons/Bee-Marker.png",
+        //   iconSize: [20, 30],
+        //   iconAnchor: [10, 30],
+        // });
 
         const map = L.map("map", {
           center: [41.10474805585872, 29.022884681711798],
@@ -104,7 +107,7 @@ const Report = () => {
         setSubmitClassName(styles.mobileplacemarker);
       }
       if (mapcenter) {
-        setMapCenter([mapcenter.lat, mapcenter.lng]);
+        // setMapCenter([mapcenter.lat, mapcenter.lng]);
       }
     } else if (isitmobile && aspectRatio.current > 0.85) {
       const mapcenter = mapRef.current?.getCenter();
@@ -116,7 +119,7 @@ const Report = () => {
         marginBottom: "5vh",
       } as React.CSSProperties);
       if (mapcenter) {
-        setMapCenter([mapcenter.lat, mapcenter.lng]);
+        // setMapCenter([mapcenter.lat, mapcenter.lng]);
       }
       if (ismarkeronmap.current) {
         setSubmitClassName(styles.submit);
@@ -142,7 +145,7 @@ const Report = () => {
       }
       setTimeout(() => {
         if (mapcenter) {
-          setMapCenter([mapcenter.lat, mapcenter.lng]);
+          // setMapCenter([mapcenter.lat, mapcenter.lng]);
         }
       }, 300);
       clearTimeout(timeforshrink);
@@ -166,7 +169,7 @@ const Report = () => {
           setSubmitClassName(styles.placemarker);
         }
         if (mapcenter) {
-          setMapCenter([mapcenter.lat, mapcenter.lng]);
+          // setMapCenter([mapcenter.lat, mapcenter.lng]);
         }
       }, 700);
     }
@@ -187,7 +190,7 @@ const Report = () => {
       setSubmitClassName(styles.placemarker);
     }
     if (mapcenter) {
-      setMapCenter([mapcenter.lat, mapcenter.lng]);
+      // setMapCenter([mapcenter.lat, mapcenter.lng]);
     }
   }
 

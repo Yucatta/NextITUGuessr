@@ -1,12 +1,11 @@
 "use client";
 import dynamic from "next/dynamic";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import EndGameStats from "./Components/EndGameStats";
 import CustomImage from "./Components/CustomImage";
 import Papa from "papaparse";
 import Conclusion from "./Components/Conclusion";
 import Pregame from "./Components/PreGame";
-import { useRouter } from "next/navigation";
 const DynamicMap = dynamic(() => import("@/app/Components/Map"), {
   ssr: false,
 });
@@ -29,7 +28,7 @@ function Home() {
     Array<[string, number, number, number]>
   >([]);
   const totalscore = useRef(0);
-  const router = useRouter();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
