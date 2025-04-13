@@ -26,12 +26,6 @@ const baseMapStyle = {
 const latlengthmeter = 111.32 * 1000;
 const longtiduelengthmeter = (40075 * 1000 * 0.75346369194) / 360; // 0.75346369194 is cosine of latitude
 
-// const sizeofitü = Math.floor(
-//   Math.sqrt(
-//     (0.00944033377 * latlengthmeter) ** 2 +
-//       (0.01506450233 ** longtiduelengthmeter) ** 2
-//   )
-// );
 let score = 0;
 const beemarker = L.icon({
   iconUrl: "/Icons/Bee-Marker.png",
@@ -333,23 +327,18 @@ const Map = ({
       L ${line2.current} 40 
       A 20 20 0 0 0 150 0 
       L ${line1.current} 0`);
-          // console.log("line1", line1.current);
         } else if (helpertemp.current > 257) {
-          // console.log("dashoffset1", helpertemp.current);
         } else if (line2.current > 20) {
           setpath(`M 85 0 
       L ${line3.current} 0 
       A 20 20 0 1 0 20 40 
       L ${line2.current} 40
       `);
-          // console.log("line2", line2.current);
         } else if (helpertemp.current > 65) {
-          // console.log("dashoffset2", helpertemp.current);
         } else {
           setpath(`M 85 0 
       L ${line3.current} 0 
       `);
-          // console.log("line3", line3.current);
         }
 
         timerprogressforcolor++;
@@ -360,7 +349,6 @@ const Map = ({
     }
     function timerunout() {
       if (ismarkeronmap.current) {
-        // console.log(ismarkeronmap.current);
         const event = new KeyboardEvent("keydown", {
           key: " ",
           code: "Space",
@@ -450,12 +438,6 @@ const Map = ({
           }
         });
       }
-      // if (isitmobile.current) {
-      //   setMapCenter([41.10474805585872, 29.022884681711798]);
-      // } else {
-      //   setMapCenter([41.102091223239034, 42.03671081449951]);
-      // }
-
       youundidtheredotoredidtheredo.current = true;
       timer();
       timerprogress();
@@ -547,7 +529,6 @@ const Map = ({
     }
   }, [isitresults, isitpregame, isitconclusion]);
   useEffect(() => {
-    // console.log("aspect ratio is:", aspectRatio);
     if (aspectRatio.current < 0.85 && !isitmobile.current) {
       const mapcenter = mapRef.current?.getCenter();
       isitmobile.current = true;
@@ -595,28 +576,11 @@ const Map = ({
       aspectRatio.current > 0.85
     ) {
       const mapcenter = mapRef.current?.getCenter();
-
-      // setMapStyle({
-      //   position: "fixed",
-      //   width: "clamp(70vh,50vw,50vw)",
-      //   height: "clamp(60vh,35vw,70vh)",
-      //   bottom: "0",
-      //   right: "0",
-      //   marginRight: "2vw",
-      //   marginBottom: "8vh",
-      //   zIndex: "5",
-      //   // transition: "transform 0.3s ease-in-out, box-shadow 0.2s ease",
-      //   // transform: "scale(1.05)",
-      //   // boxShadow: "0 0 12px rgba(0, 0, 0, 0.3)",
-      // });
       setMapStyle({
         ...baseMapStyle,
         width: "clamp(70vh,50vw,50vw)",
         height: "clamp(60vh,35vw,70vh)",
         marginBottom: "8vh",
-        // transition: "transform 0.3s ease-in-out, box-shadow 0.2s ease",
-        // transform: "scale(1.05)",
-        // boxShadow: "0 0 12px rgba(0, 0, 0, 0.3)",
       } as React.CSSProperties);
       if (ismarkeronmap.current) {
         setSubmitClassName(styles.biggersubmit);
@@ -640,18 +604,6 @@ const Map = ({
     ) {
       timeforshrink = setTimeout(() => {
         const mapcenter = mapRef.current?.getCenter();
-        // setMapStyle({
-        //   position: "fixed",
-        //   width: "clamp(200px,20vw,20vw)",
-        //   height: "25vh", //clamp(120px,12vw,25vh)
-        //   bottom: "0",
-        //   right: "0",
-        //   marginRight: "2vw",
-        //   marginBottom: "5vh",
-        //   // transition: "transform 0.3s ease-in-out, box-shadow 0.2s ease",
-        //   // transform: "scale(1.05)",
-        //   // boxShadow: "0 0 12px rgba(0, 0, 0, 0.3)",
-        // });
         setMapStyle({
           ...baseMapStyle,
           opacity: "0.5",
@@ -671,10 +623,38 @@ const Map = ({
       }, 700);
     }
   }
+  function shrinkinstantly() {
+    const mapcenter = mapRef.current?.getCenter();
+    setMapStyle({
+      ...baseMapStyle,
+      opacity: "0.5",
+      width: "clamp(200px,20vw,20vw)",
+      height: "25vh",
+      marginBottom: "5vh",
+    } as React.CSSProperties);
+
+    if (ismarkeronmap.current) {
+      setSubmitClassName(styles.submit);
+    } else {
+      setSubmitClassName(styles.placemarker);
+    }
+    if (mapcenter) {
+      setMapCenter([mapcenter.lat, mapcenter.lng]);
+    }
+  }
 
   return (
-    <>
-      {" "}
+    <div>
+      <button
+        onClick={shrinkinstantly}
+        className={
+          infovisibility === styles.none
+            ? infovisibility
+            : aspectRatio.current > 0.85
+            ? styles.outsideofmap
+            : styles.none
+        }
+      ></button>
       <div
         onMouseOver={enlargenmapandsubmitbutton}
         onMouseOut={shrinksubmitandmap}
@@ -690,6 +670,7 @@ const Map = ({
             id="button"
             style={{
               transition: "width 0.3s ease, height 0.3s ease",
+              zIndex: "5",
             }}
             className={submitClassName}
           >
@@ -730,7 +711,7 @@ const Map = ({
           <p className={styles.totalscoreinfo}>Score</p>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

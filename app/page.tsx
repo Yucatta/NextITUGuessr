@@ -6,6 +6,7 @@ import CustomImage from "./Components/CustomImage";
 import Papa from "papaparse";
 import Conclusion from "./Components/Conclusion";
 import Pregame from "./Components/PreGame";
+import { useRouter } from "next/navigation";
 const DynamicMap = dynamic(() => import("@/app/Components/Map"), {
   ssr: false,
 });
@@ -13,15 +14,7 @@ const DynamicMap = dynamic(() => import("@/app/Components/Map"), {
 function rnd(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-
-const transformArrayOfArrays = (
-  data: string[][]
-): [string, number, number, number][] => {
-  return data.map(
-    (row) =>
-      [row[0], ...row.slice(1).map(Number)] as [string, number, number, number]
-  );
-};
+const whenhellfreezees = 0;
 
 function Home() {
   const [score, setScore] = useState(0);
@@ -36,7 +29,7 @@ function Home() {
     Array<[string, number, number, number]>
   >([]);
   const totalscore = useRef(0);
-  const whenhellfreezees = 0;
+  const router = useRouter();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -47,7 +40,15 @@ function Home() {
           header: false,
           skipEmptyLines: true,
           complete: (result) => {
-            setLatLong(transformArrayOfArrays(result.data));
+            result.data.shift();
+            setLatLong(
+              result.data.map((element: string[]) => [
+                element[0],
+                +element[1],
+                +element[2],
+                +element[3],
+              ])
+            );
           },
         });
       } catch (error) {
@@ -91,6 +92,11 @@ function Home() {
     totalscore.current = 0;
   }
   function handleReport() {
+    const query = `?x=${btoa(`${rndnum.current}`)}&y=${btoa(
+      `${latlong[rndnum.current][2]}`
+    )}&z=${btoa(`${latlong[rndnum.current][3]}`)}`;
+    window.open(`/report${query}`, "_blank");
+    // window.open("/report", "_blank");
     // console.log("a");
   }
 

@@ -29,6 +29,7 @@ const CustomImage = ({
     if (isitresults) {
       setisitloaded(false);
       isitblinked.current = false;
+      imagereloadtry.current = 0;
     }
     if (!isitconclusion && !isitpregame && !isitresults) {
       if (isitloaded && !isitblinked.current && isitblinkmode) {
@@ -60,8 +61,6 @@ const CustomImage = ({
     setisitloaded(true);
   }
   function handleImageError() {
-    // console.error("Image failed to load, retrying...");
-    // Retry by appending a timestamp to the URL to bypass caching
     if (imagereloadtry.current > 3) {
       setImageSrc(
         `https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/${rndnum}.jpg?retry=${Date.now()}`

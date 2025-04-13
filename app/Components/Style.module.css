@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Jost:wght@450&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Jost:wght@450&display=swap");
 
 .image {
   width: clamp(40vw, calc(99.7vh * 4 / 3), 100vw);
@@ -6,21 +6,21 @@
   position: relative;
   z-index: -6;
 }
-.down{
+.down {
   z-index: -50;
 }
-.fullscreen{
+.fullscreen {
   display: none;
 }
 @media (max-aspect-ratio: 0.85) {
   .image {
     top: 0;
   }
-  .fullscreen{
+  .fullscreen {
     margin-top: calc(64vw - 5vh);
     width: 5vh;
     border-radius: 5vh;
-    height: 5Vh;
+    height: 5vh;
     display: block;
     background-color: rgba(0, 0, 0, 0.6);
     border: 1.5px solid white;
@@ -30,11 +30,11 @@
   }
 }
 .none {
-  display:none;
+  display: none;
 }
 .expand {
   width: auto;
-  height: 2.8vh;  
+  height: 2.8vh;
   filter: invert(100%);
 }
 
@@ -51,67 +51,57 @@
   background-color: rgba(0, 0, 0, 0.8);
 }
 .fullscreenimage {
-  width: calc(100vw/3*4);
+  width: calc(100vw / 3 * 4);
   height: 100vw;
   position: fixed;
-  top: calc(50vh - 50vw/3*4);
+  top: calc(50vh - 50vw / 3 * 4);
   left: -16.5%;
   transform: translateX(-50%);
   transform: rotate(90deg);
   z-index: 11;
 }
-  
 
 .score {
-  left:0 ;
-  margin-left : clamp(30vh,65vw,80vw);
+  left: 0;
+  margin-left: clamp(30vh, 65vw, 80vw);
   top: 90%;
-  transform: translatey( -50%);
+  transform: translatey(-50%);
   position: fixed;
-  font-size: clamp(4vh,3vw,3vw);
-  color:white;
-  text-shadow: 
-  0 0 .5vh var(--score),
-   0 0 0.5vh var(--score), 
-   0 0 1.5vh var(--score),
-    0 0 1vh var(--score),
-     0 0 2vh var(--score);
-  filter:brightness(1.7);
+  font-size: clamp(4vh, 3vw, 3vw);
+  color: white;
+  text-shadow: 0 0 0.5vh var(--score), 0 0 0.5vh var(--score),
+    0 0 1.5vh var(--score), 0 0 1vh var(--score), 0 0 2vh var(--score);
+  filter: brightness(1.7);
 }
-.scoreinfo{
-  font-size: clamp(1.3vh,1vw,1vw);
-  left:0 ;
-  margin-left : clamp(30.5vh,64vw,80vw);
+.scoreinfo {
+  font-size: clamp(1.3vh, 1vw, 1vw);
+  left: 0;
+  margin-left: clamp(30.5vh, 64vw, 80vw);
   top: 94%;
-  transform: translatey( -50%);
+  transform: translatey(-50%);
   position: fixed;
-  color:hsl(0, 0%, 45%)
+  color: hsl(0, 0%, 45%);
 }
 .error {
-  
-  right:0 ;
-  margin-right : clamp(30vh,65vw,80vw);
+  right: 0;
+  margin-right: clamp(30vh, 65vw, 80vw);
   top: 90%;
   transform: translatey(-50%);
   position: fixed;
-  font-size: clamp(4vh,3vw,3vw);
-  color:white;
-  text-shadow: 
-  0 0 .5vh var(--error),
-   0 0 0.5vh var(--error), 
-   0 0 1.5vh var(--error),
-    0 0 1vh var(--error),
-     0 0 2vh var(--error);
-  filter:brightness(1.7);
+  font-size: clamp(4vh, 3vw, 3vw);
+  color: white;
+  text-shadow: 0 0 0.5vh var(--error), 0 0 0.5vh var(--error),
+    0 0 1.5vh var(--error), 0 0 1vh var(--error), 0 0 2vh var(--error);
+  filter: brightness(1.7);
 }
-.errorinfo{
-  font-size: clamp(1.3vh,1vw,1vw);
-  right:0 ;
-  margin-right : clamp(30.5vh,65vw,80vw);
+.errorinfo {
+  font-size: clamp(1.3vh, 1vw, 1vw);
+  right: 0;
+  margin-right: clamp(30.5vh, 65vw, 80vw);
   top: 94%;
   transform: translatey(-50%);
   position: fixed;
-  color:hsl(0, 0%, 45%)
+  color: hsl(0, 0%, 45%);
 }
 
 .nextimg {
@@ -119,181 +109,191 @@
   top: 90%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: clamp(2.7vh,2vw,2vw);
-  width: clamp(11vh,10vw,12vw);
-  height: clamp(5vh,4vw,4vw);
+  font-size: clamp(2.7vh, 2vw, 2vw);
+  width: clamp(11vh, 10vw, 12vw);
+  height: clamp(5vh, 4vw, 4vw);
   background-color: rgb(1, 45, 1);
   border-radius: 50vw;
-  border:  2px solid rgb(1, 24, 1) ;
+  border: 2px solid rgb(1, 24, 1);
   cursor: pointer;
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
 }
-/* .menu.nextimg.fullscreen.biggerplacemarker */
-/* .biggersubmit:active {
-  transform: scale(0.97);
-  box-shadow: 0 0 6px rgba(0, 255, 255, 0.3);
+.nextimg:hover,
+.menu:hover {
+  transform: translate(-50%, -50%) scale(1.05);
 }
-.biggersubmit:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 15px rgba(9, 106, 9,0.6);
-} */
-.report{
+.nextimg:active,
+.menu:active {
+  transform: translate(-50%, -50%) scale(0.97);
+}
+.outsideofmap {
   position: fixed;
-  top: 90%;
-  transform: translatey(-50%);
-  left: 0;
-  margin-left: clamp(1vh,1vw,1vw);
-  width: 5vh;
-  height: 5vh;
+  width: 100vw;
+  height: 100vh;
+  z-index: 5;
+  opacity: 0;
+}
+.report {
+  position: fixed;
+  bottom: 0;
+  margin-bottom: 4.5vh;
+  margin-left: clamp(1vh, 1vw, 1vw);
+  width: 4.5vh;
+  height: 4.5vh;
   border-radius: 2.5vh;
-  background-color: rgb(23, 23, 23);
-  border: 2px solid rgb(52, 52, 52)  ;
+  background-color: rgb(0, 0, 0);
+  border: 2px solid rgb(52, 52, 52);
   cursor: pointer;
 }
-.ReportImg{
+.report:hover,
+.biggerplacemarker:hover,
+.biggersubmit:hover,
+.biggerplacemarker:hover,
+.mobileplacemarker:hover,
+.mobilesubmit:hover {
+  transform: scale(1.05);
+}
+
+.report:active,
+.biggerplacemarker:active,
+.biggersubmit:active,
+.biggerplacemarker:active,
+.mobileplacemarker:active,
+.mobilesubmit:active {
+  transform: scale(0.97);
+}
+.ReportImg {
   width: auto;
   top: 50%;
   transform: translatey(15%);
-  height: 2.8vh;  
+  height: 2.8vh;
   filter: invert(100%);
-
 }
-
-
-  
 
 .placemarker {
   position: fixed;
-  --width :clamp(200px,20.1vw,20.1vw);
-  width:var(--width);
+  --width: clamp(200px, 20.1vw, 20.1vw);
+  width: var(--width);
   margin-right: 2vw;
   right: 0;
   height: 4vh;
   bottom: 0;
-  margin-bottom: 0.5vh ;
-  background-color: rgb(47, 47, 47,0.5);
+  margin-bottom: 0.5vh;
+  background-color: rgb(47, 47, 47, 0.5);
   border-radius: 2vh;
-  color : #e3e3e3;
+  color: #e3e3e3;
   cursor: pointer;
-
-
 }
-.biggerplacemarker{
+.biggerplacemarker {
   position: fixed;
-  width:clamp(70vh,50vw,50vw);
+  width: clamp(70vh, 50vw, 50vw);
   margin-right: 2vw;
   right: 0;
   height: 7vh;
   bottom: 0;
-  margin-bottom: 0.5vh ;
-  font-size:2.5vh;
+  margin-bottom: 0.5vh;
+  font-size: 2.5vh;
   background-color: rgb(47, 47, 47);
   pointer-events: auto;
   border-radius: 3.5vh;
-  color : #e3e3e3;
+  color: #e3e3e3;
   cursor: pointer;
-
-  
 }
-.mobileplacemarker{
+.mobileplacemarker {
   position: fixed;
-  width:90vw;
+  width: 90vw;
   height: 7vh;
   top: 94%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size:2.5vh;
-  background-color: rgb(47, 47, 47,0.5);
+  font-size: 2.5vh;
+  background-color: rgb(47, 47, 47, 0.5);
   pointer-events: auto;
   border-radius: 3.5vh;
-  color : #e3e3e3;
+  color: #e3e3e3;
   cursor: pointer;
-
 }
 /* transition: width 0.3s ease, height 0.3s ease, */
 
 .submit {
   position: fixed;
-  width:clamp(200px,20.1vw,20.1vw);
+  width: clamp(200px, 20.1vw, 20.1vw);
   cursor: pointer;
   height: 4vh;
   margin-right: 2vw;
   right: 0;
   bottom: 0;
-  margin-bottom: 0.5vh ;
-  background-color: rgb(0, 95, 0,0.5) ;
+  margin-bottom: 0.5vh;
+  background-color: rgb(0, 95, 0, 0.5);
   border-radius: 2vh;
-  color : #e3e3e3;
-
-
+  color: #e3e3e3;
 }
 .biggersubmit {
   position: fixed;
-  width:clamp(70vh,50vw,50vw);
+  width: clamp(70vh, 50vw, 50vw);
   height: 7vh;
   margin-right: 2vw;
   right: 0;
   bottom: 0;
-  margin-bottom: 0.5vh ;
-  font-size:3vh;
-  background-color: rgb(0, 95, 0) ;
+  margin-bottom: 0.5vh;
+  font-size: 3vh;
+  background-color: rgb(0, 95, 0);
   pointer-events: auto;
   border-radius: 3.5vh;
-  color : #e3e3e3;
+  color: #e3e3e3;
   cursor: pointer;
-
 }
 .mobilesubmit {
   position: fixed;
-  width:90vw;
+  width: 90vw;
   height: 7vh;
   top: 94%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size:3vh;
-  background-color: rgb(0, 95, 0,0.5) ;
+  font-size: 3vh;
+  background-color: rgb(0, 95, 0, 0.5);
   pointer-events: auto;
   border-radius: 3.5vh;
-  color : #e3e3e3;
+  color: #e3e3e3;
   cursor: pointer;
 }
-
 
 .progressbarcontainer {
   position: fixed;
   top: 82%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: clamp(30vh,40vw,42vw);
+  width: clamp(30vh, 40vw, 42vw);
   height: 6vh;
-  background-color: #333; 
+  background-color: #333;
   border-radius: 3vh;
 }
-.progressbarprogress{
+.progressbarprogress {
   position: absolute;
   height: 6vh;
   border-top-left-radius: 3vh;
   border-bottom-left-radius: 3vh;
 }
-.points{
+.points {
   position: fixed;
   top: 75%;
   left: 50%;
   transform: translate(-50%, -50%);
   font: 50vw;
   font-size: 5vh;
-  color:white;
-  text-shadow: 0 0 .5vh var(--points), 0 0 .5vh var(--points), 0 0 .5vh var(--points), 0 0 .5vh var(--points), 0 0 1vh var(--points);
-  filter:brightness(1);
+  color: white;
+  text-shadow: 0 0 0.5vh var(--points), 0 0 0.5vh var(--points),
+    0 0 0.5vh var(--points), 0 0 0.5vh var(--points), 0 0 1vh var(--points);
+  filter: brightness(1);
 }
 .menu {
-  position:fixed;
+  position: fixed;
   top: 92%;
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 2.3vw;
-  width: clamp(11vh,10vw,12vw);
-  height: clamp(5vh,4vw,4vw);
+  width: clamp(11vh, 10vw, 12vw);
+  height: clamp(5vh, 4vw, 4vw);
   background-color: rgb(38, 165, 38);
   border-radius: 4vh;
   cursor: pointer;
@@ -303,19 +303,19 @@
   backdrop-filter: blur(8px);
   color: white;
   border-radius: 12px;
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
 }
 
-.loadinggif{
+.loadinggif {
   display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute; 
-  margin-top: calc(var(--imageheight)/4);
+  position: absolute;
+  margin-top: calc(var(--imageheight) / 4);
   left: 50%;
-  transform: translatex( -50%);
+  transform: translatex(-50%);
   width: auto;
-  height: calc(var(--imageheight)/2);
+  height: calc(var(--imageheight) / 2);
 }
 .background {
   position: fixed;
@@ -324,7 +324,7 @@
   transform: translate(-50%, -50%);
   width: 100vw;
   height: 100vh;
-  size: cover;  
+  size: cover;
   background-image: url(/background.jpg);
   background-position: 50%;
   background-repeat: no-repeat;
@@ -333,36 +333,36 @@
 }
 .mobileresultsbackground {
   position: fixed;
-  bottom: 0; 
+  bottom: 0;
   width: 100%;
-  height: 20vh; 
+  height: 20vh;
   background-image: url(/background.jpg);
   background-size: 100vw auto;
-  background-position: center bottom; 
+  background-position: center bottom;
   background-repeat: no-repeat;
   background-size: cover;
   z-index: -40;
 }
 .mobileconclusionbackground {
   position: fixed;
-  bottom: 0; 
+  bottom: 0;
   width: 100%;
-  height: 30vh; 
+  height: 30vh;
   background-image: url(/background.jpg);
   background-size: 100vw auto;
-  background-position: center bottom; 
+  background-position: center bottom;
   background-repeat: no-repeat;
   background-size: cover;
   z-index: -40;
 }
 .mobileblinkedbackground {
   position: fixed;
-  top: 0; 
+  top: 0;
   width: 100%;
-  height: calc(100vw/4*3 ); 
+  height: calc(100vw / 4 * 3);
   background-image: url(/background.jpg);
   background-size: 100vw auto;
-  background-position: center bottom; 
+  background-position: center bottom;
   background-repeat: no-repeat;
   background-size: cover;
   z-index: -40;
@@ -372,56 +372,53 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute; 
+  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: clamp(2vh,1.5vw,1.5vw);
+  font-size: clamp(2vh, 1.5vw, 1.5vw);
 }
 
-.ingamedetails { 
+.ingamedetails {
   position: fixed;
-  width: clamp(12vh,15vw,50vh);
-  height:clamp(2vw,10vh,12vw);
-  background-color:rgb(15, 15, 15 ,0.8);
-  margin-top:10vh;
+  width: clamp(12vh, 15vw, 50vh);
+  height: clamp(2vw, 10vh, 12vw);
+  background-color: rgb(15, 15, 15, 0.8);
+  margin-top: 10vh;
   right: 0;
-  font-size: clamp(1.3vh,1vw,1vw);
+  font-size: clamp(1.3vh, 1vw, 1vw);
   border: 1px solid #ccc;
   box-sizing: border-box;
-
-
 }
 .totalscore {
   left: 80%;
-  transform: translatex( -50%);
+  transform: translatex(-50%);
   bottom: 1vh;
-  position:absolute;
+  position: absolute;
 }
 
-.tournumber { 
+.tournumber {
   position: absolute;
   left: 20%;
-  transform: translatex( -50%);
+  transform: translatex(-50%);
   bottom: 1vh;
-  
 }
 .totalscoreinfo {
-  position:absolute;
+  position: absolute;
   left: 80%;
-  transform: translatex( -50%);
-  margin-top:1vh;
-}
-.tournumberinfo { 
-  position:absolute;
-  left: 20%;
-  transform: translatex( -50%);;
+  transform: translatex(-50%);
   margin-top: 1vh;
 }
-.timerprogress   {
+.tournumberinfo {
+  position: absolute;
+  left: 20%;
+  transform: translatex(-50%);
+  margin-top: 1vh;
+}
+.timerprogress {
   position: fixed;
-  width: clamp(14vh,10vw,200px); 
-  height:clamp(20vh,4vw,200px);
+  width: clamp(14vh, 10vw, 200px);
+  height: clamp(20vh, 4vw, 200px);
   z-index: -4;
   position: absolute;
   top: 7%;
@@ -429,12 +426,12 @@
   transform: translate(-50%, -50%);
 }
 
-.timerdiv   {
+.timerdiv {
   position: fixed;
-  
-  width: clamp(13vh,9.55vw,200px);
-  height:clamp(3vh,2.2vw,200px);
-  background-color:rgba(25, 25, 25, 0.7);
+
+  width: clamp(13vh, 9.55vw, 200px);
+  height: clamp(3vh, 2.2vw, 200px);
+  background-color: rgba(25, 25, 25, 0.7);
   border-radius: 2.5vh;
   top: 7%;
   left: 52%;
