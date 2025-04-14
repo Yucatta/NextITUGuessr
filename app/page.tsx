@@ -1,6 +1,6 @@
 "use client";
 import dynamic from "next/dynamic";
-import React, { useEffect, useState, useRef, useContext } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import EndGameStats from "./Components/EndGameStats";
 import CustomImage from "./Components/CustomImage";
 import Papa from "papaparse";
@@ -20,7 +20,6 @@ function Home() {
   const {
     isitresults,
     isitconclusion,
-    isitpregame,
     rndnum,
     aspectRatio,
     setisitconclusion,

@@ -38,7 +38,7 @@ const Report = () => {
   // const [updater, setupdater] = useState(0);
   const isitmobile = useRef(false);
   const aspectRatio = useRef(1);
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
   // const [imagedata, setimagedata] = useState({});
 
   // const rndnum = atob(searchParams.get("x"));
