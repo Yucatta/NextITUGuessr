@@ -50,11 +50,6 @@ const Map = ({
   const alllocations = useRef<Array<[number, number]>>([]);
   const ismarkeronmap = useRef<boolean>(false);
   function guessSubmit() {
-    const latLngArr = position.current;
-
-    alllocations.current.push([imglat.current, imglng.current]);
-    allguesses.current.push(latLngArr);
-
     const error = Math.floor(
       Math.sqrt(
         ((imglat.current - latLngArr[0]) * latlengthmeter) ** 2 +
@@ -73,28 +68,10 @@ const Map = ({
                 )) /
                 0.01947557727)
         ) + 1;
-      setMapStyle({
-        position: "fixed",
-        width: "100%",
-        height: "80vh",
-        top: "0",
-      });
 
-      L.polyline([[imglat.current, imglng.current], position.current], {
-        color: "black",
-        dashArray: "10, 10",
-        dashOffset: "10",
-      }).addTo(mapRef.current);
-
-      setSubmitClassName(styles.none);
       setinfovisibility(styles.none);
-      setMapCenter([
-        (imglat.current + latLngArr[0]) / 2,
-        (imglng.current + latLngArr[1]) / 2,
-      ]);
+
       onGuessSubmit(score, error);
-      clearInterval(secondsleft.current);
-      clearInterval(timerborder.current);
     }
   }
   useEffect(() => {
@@ -111,16 +88,6 @@ const Map = ({
       } else {
         alllocations.current.push([imglat.current, imglng.current]);
         setMapStyle({ position: "fixed", width: "100%", height: "85vh" });
-        ismarkeronmap.current = true;
-        if (mapRef.current) {
-          L.marker([imglat.current, imglng.current], {
-            icon: L.icon({
-              iconUrl: "/Icons/flag.png",
-              iconSize: [30, 30],
-              iconAnchor: [15, 15],
-            }),
-          }).addTo(mapRef.current);
-        }
 
         setSubmitClassName(styles.none);
         setMapCenter([imglat.current, imglng.current]);
@@ -166,40 +133,8 @@ const Map = ({
       //!timers
     } else if (isitconclusion && !isitpregame) {
       //!conclusion
-      const mapid = document.getElementById("map");
-      if (mapid) {
-        setMapStyle({
-          position: "fixed",
-          width: "%100",
-          height: "70vh",
-          top: "0",
-        });
-      }
-
-      setSubmitClassName(styles.none);
       setinfovisibility(styles.none);
-      if (mapRef.current) {
-      }
     } else if (isitpregame) {
-      //! pregame
-      if (aspectRatio > 0.85) {
-        setMapStyle({
-          ...baseMapStyle,
-          opacity: "0.5",
-          width: "clamp(200px,20vw,20vw)",
-          height: "25vh",
-          marginBottom: "5vh",
-        } as React.CSSProperties);
-      } else {
-        setMapStyle({
-          position: "fixed",
-          width: "100vw",
-          height: "calc(100vh - 100vw/4*3)",
-          bottom: "0",
-          right: "0",
-        });
-      }
-
       allguesses.current = [];
       alllocations.current = [];
     }

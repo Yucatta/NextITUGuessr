@@ -5,6 +5,7 @@ import { useMapInteractions } from "@/app/hooks/mapinteractions";
 import styles from "@/app/styles/MapComponent.module.css";
 import { useMapState } from "@/context/MapStateContext";
 import { useGameState } from "@/context/gamestatecontext";
+import { useMapClassChanges } from "./mapclasschanges";
 interface Props {}
 
 const beemarker = L.icon({
@@ -26,10 +27,13 @@ export function useChangeInsideOfMap() {
     setismarkeronmap,
     setMap,
   } = useMapState();
+
   const position = useRef<[number, number]>([0, 0]);
   const guessRef = useRef<L.Marker | null>(null);
   const allGuesses = useRef<Array<[number, number]>>([]);
   const allLocations = useRef<Array<[number, number]>>([]);
+  const { handleConclusionClass, handleNextClass, handleSubmitClass } =
+    useMapClassChanges();
   function handleMapClick(e: L.LeafletMouseEvent) {
     if (Map) {
       if (ismarkeronmap) {
@@ -81,6 +85,13 @@ export function useChangeInsideOfMap() {
       }).addTo(Map);
       allGuesses.current.push([0, 0]);
     }
+    L.polyline([[imglat, imglng], position.current], {
+      color: "black",
+      dashArray: "10, 10",
+      dashOffset: "10",
+    }).addTo(Map);
+
+    handleSubmitClass(imglat, imglng, position.current[0], position.current[1]);
   }
   function handleNext() {
     if (Map) {
@@ -90,6 +101,7 @@ export function useChangeInsideOfMap() {
         }
       });
     }
+    handleNextClass;
   }
   function handleConclusion() {
     if (!Map) {
@@ -135,6 +147,7 @@ export function useChangeInsideOfMap() {
       }
     }
     Map.fitBounds(bounds);
+    handleConclusionClass;
   }
   return { handleMapClick, handleNext, handleConclusion, handleSubmit };
 }
