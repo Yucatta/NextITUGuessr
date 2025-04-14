@@ -7,7 +7,7 @@ import Papa from "papaparse";
 import Conclusion from "./Components/Conclusion";
 import Pregame from "./Components/PreGame";
 import { useGameState } from "@/context/gamestatecontext";
-const DynamicMap = dynamic(() => import("@/app/Components/Map"), {
+const DynamicMap = dynamic(() => import("@/app/Components/Map/Map"), {
   ssr: false,
 });
 
@@ -88,11 +88,9 @@ function Home() {
     setError(er);
     totalscore.current += sc;
     setrndnum(rnd(0, 5204));
-    setisitresults(true);
   }
   function handlenext() {
     numberofrounds.current++;
-    setisitresults(false);
     // console.log(numberofrounds.current);
     if (numberofrounds.current === 5) {
       numberofrounds.current = 0;

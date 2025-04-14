@@ -28,6 +28,8 @@ export function useChangeInsideOfMap() {
   } = useMapState();
   const position = useRef<[number, number]>([0, 0]);
   const guessRef = useRef<L.Marker | null>(null);
+  const allGuesses = useRef<Array<[number, number]>>([]);
+  const allLocations = useRef<Array<[number, number]>>([]);
   function handleMapClick(e: L.LeafletMouseEvent) {
     if (Map) {
       if (ismarkeronmap) {
@@ -54,5 +56,85 @@ export function useChangeInsideOfMap() {
       }
     }
   }
-  return { handleMapClick };
+  function handleSubmit(imglat: number, imglng: number) {
+    if (!Map) {
+      return;
+    }
+    allLocations.current.push([imglat, imglng]);
+
+    if (ismarkeronmap) {
+      L.marker([imglat, imglng], {
+        icon: L.icon({
+          iconUrl: "/Icons/flag.png",
+          iconSize: [30, 30],
+          iconAnchor: [15, 15],
+        }),
+      }).addTo(Map);
+      allGuesses.current.push(position.current);
+    } else {
+      L.marker([imglat, imglng], {
+        icon: L.icon({
+          iconUrl: "/Icons/flag.png",
+          iconSize: [30, 30],
+          iconAnchor: [15, 15],
+        }),
+      }).addTo(Map);
+      allGuesses.current.push([0, 0]);
+    }
+  }
+  function handleNext() {
+    if (Map) {
+      Map.eachLayer(function (layer) {
+        if (!(layer instanceof L.TileLayer)) {
+          Map.removeLayer(layer);
+        }
+      });
+    }
+  }
+  function handleConclusion() {
+    if (!Map) {
+      return;
+    }
+    Map.eachLayer(function (layer) {
+      if (!(layer instanceof L.TileLayer)) {
+        Map.removeLayer(layer);
+      }
+    });
+    const bounds = L.latLngBounds(
+      allLocations.current[0],
+      allGuesses.current[0]
+    );
+    for (let i = 0; i < 5; i++) {
+      if (allGuesses.current[i][0] === 0 && allGuesses.current[i][1] === 0) {
+        L.marker(allLocations.current[i], {
+          icon: L.icon({
+            iconUrl: `Icons/${i + 1}.svg`,
+            iconSize: [30, 30],
+            iconAnchor: [15, 15],
+          }),
+        }).addTo(Map);
+      } else {
+        L.marker(allGuesses.current[i], { icon: beemarker }).addTo(Map);
+        L.marker(allLocations.current[i], {
+          icon: L.icon({
+            iconUrl: `Icons/${i + 1}.svg`,
+            iconSize: [30, 30],
+            iconAnchor: [15, 15],
+          }),
+        }).addTo(Map);
+        const conclusionline = L.polyline(
+          [allLocations.current[i], allGuesses.current[i]],
+          {
+            color: "black",
+            weight: 3,
+            dashArray: "10, 10",
+            dashOffset: "10",
+          }
+        ).addTo(Map);
+        bounds.extend(conclusionline.getBounds());
+      }
+    }
+    Map.fitBounds(bounds);
+  }
+  return { handleMapClick, handleNext, handleConclusion, handleSubmit };
 }

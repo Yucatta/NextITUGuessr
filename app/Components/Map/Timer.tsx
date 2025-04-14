@@ -24,21 +24,24 @@ const Timer = ({ Rounds, timerunout, totalscore }: Props) => {
   const yellow = useRef(255);
   const secondsleft = useRef<NodeJS.Timeout | null>(null);
   const [passedtime, setpassedtime] = useState(0);
-  const { isitpregame, isitconclusion } = useGameState();
+  const { isitpregame, isitconclusion, isitresults } = useGameState();
 
   useEffect(() => {
-    if ((isitconclusion || isitpregame) && line1.current !== 85) {
+    if (
+      (isitconclusion || isitresults || isitpregame) &&
+      line1.current !== 85
+    ) {
       setpassedtime(0);
       line1.current = 85;
       line2.current = 150;
       line3.current = 20;
       helpertemp.current = 400;
       setstrokeDasharray(helpertemp.current);
-    } else if (!isitconclusion && !isitpregame) {
+    } else if (!isitconclusion && !isitpregame && !isitresults) {
       timer();
       timerprogress();
     }
-  }, [isitpregame, isitconclusion]);
+  }, [isitconclusion, isitpregame, isitresults]);
   function timerprogress() {
     let timerprogressforcolor = 0;
 

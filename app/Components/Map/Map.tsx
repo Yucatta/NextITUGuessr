@@ -6,6 +6,7 @@ import styles from "./Style.module.css";
 import { useGameState } from "@/context/gamestatecontext";
 import MapandSubmit from "./MapandSubmit";
 import { MapStateProvider } from "@/context/MapStateContext";
+import { useChangeInsideOfMap } from "@/app/hooks/insideofmapchanges";
 import Timer from "./Timer";
 interface Props {
   latlong: [string, number, number, number][];
@@ -36,7 +37,8 @@ const Map = ({
     setisitconclusion,
     setisitresults,
   } = useGameState();
-
+  const { handleMapClick, handleConclusion, handleSubmit, handleNext } =
+    useChangeInsideOfMap();
   const [mapCenter, setMapCenter] = useState<[number, number]>([
     41.10474805585872, 29.022884681711798,
   ]);
@@ -47,61 +49,11 @@ const Map = ({
   const allguesses = useRef<Array<[number, number]>>([]);
   const alllocations = useRef<Array<[number, number]>>([]);
   const ismarkeronmap = useRef<boolean>(false);
-  useEffect(() => {
-    // const handleSpaceKey = (e: KeyboardEvent) => {
-    //   if (e.code === "Space") {
-    //     if (
-    //       !isitresults &&
-    //       ismarkeronmap.current &&
-    //       !isitpregame &&
-    //       !isitconclusion
-    //     ) {
-    //       guessSubmit();
-    //     } else if (isitresults && !isitpregame && !isitconclusion) {
-    //       onnextclick();
-    //     }
-    //   }
-    // };
-    // if (!latlong || !latlong[rndnum]) {
-    //   return;
-    // }
-
-    imglng.current = latlong[rndnum][3];
-    imglat.current = latlong[rndnum][2];
-
-    // function controlclick() {
-    //   if (ismarkeronmap.current && youundidtheredotoredidtheredo.current) {
-    //     guessSubmit();
-    //     youundidtheredotoredidtheredo.current = false;
-    //   }
-    // }
-    // window.addEventListener("keydown", handleSpaceKey);
-    // document.getElementById("button")?.addEventListener("click", controlclick);
-    return () => {
-      window.removeEventListener("keydown", handleSpaceKey);
-    };
-  }, [latlong, isitresults, isitpregame, isitconclusion]);
-
   function guessSubmit() {
     const latLngArr = position.current;
 
     alllocations.current.push([imglat.current, imglng.current]);
     allguesses.current.push(latLngArr);
-    mapRef.current?.eachLayer(function (layer) {
-      if (!(layer instanceof L.TileLayer)) {
-        mapRef.current?.removeLayer(layer);
-      }
-    });
-    if (mapRef.current) {
-      L.marker(position.current, { icon: beemarker }).addTo(mapRef.current);
-      L.marker([imglat.current, imglng.current], {
-        icon: L.icon({
-          iconUrl: "/Icons/flag.png",
-          iconSize: [30, 30],
-          iconAnchor: [15, 15],
-        }),
-      }).addTo(mapRef.current);
-    }
 
     const error = Math.floor(
       Math.sqrt(
@@ -157,12 +109,6 @@ const Map = ({
         });
         document.dispatchEvent(event);
       } else {
-        if (secondsleft.current && timerborder.current) {
-          clearInterval(secondsleft.current);
-          clearInterval(timerborder.current);
-        }
-        clearTimeout(timeforshrink);
-        allguesses.current.push([0, 0]);
         alllocations.current.push([imglat.current, imglng.current]);
         setMapStyle({ position: "fixed", width: "100%", height: "85vh" });
         ismarkeronmap.current = true;
@@ -178,12 +124,6 @@ const Map = ({
 
         setSubmitClassName(styles.none);
         setMapCenter([imglat.current, imglng.current]);
-        passedtime.current = 0;
-        line1.current = 85;
-        line2.current = 150;
-        line3.current = 20;
-        helpertemp.current = 400;
-        setstrokeDasharray(helpertemp.current);
         setinfovisibility(styles.none);
         onGuessSubmit(0, 0);
       }
@@ -223,21 +163,6 @@ const Map = ({
       }
       setinfovisibility("");
 
-      ismarkeronmap.current = false;
-      yellow.current = 255;
-      const buttonElement = document.getElementById("button");
-
-      if (buttonElement && mapRef.current) {
-        buttonElement.innerText = "PLACE MARKER ON THE MAP";
-        mapRef.current.eachLayer(function (layer) {
-          if (!(layer instanceof L.TileLayer) && mapRef.current) {
-            mapRef.current.removeLayer(layer);
-          }
-        });
-      }
-      youundidtheredotoredidtheredo.current = true;
-      timer();
-      timerprogress();
       //!timers
     } else if (isitconclusion && !isitpregame) {
       //!conclusion
@@ -254,52 +179,6 @@ const Map = ({
       setSubmitClassName(styles.none);
       setinfovisibility(styles.none);
       if (mapRef.current) {
-        mapRef.current.eachLayer(function (layer) {
-          if (!(layer instanceof L.TileLayer) && mapRef.current) {
-            mapRef.current.removeLayer(layer);
-          }
-        });
-        const bounds = L.latLngBounds(
-          alllocations.current[0],
-          allguesses.current[0]
-        );
-
-        for (let i = 0; i < 5; i++) {
-          if (
-            allguesses.current[i][0] === 0 &&
-            allguesses.current[i][1] === 0
-          ) {
-            L.marker(alllocations.current[i], {
-              icon: L.icon({
-                iconUrl: `Icons/${i + 1}.svg`,
-                iconSize: [30, 30],
-                iconAnchor: [15, 15],
-              }),
-            }).addTo(mapRef.current);
-          } else {
-            L.marker(allguesses.current[i], { icon: beemarker }).addTo(
-              mapRef.current
-            );
-            L.marker(alllocations.current[i], {
-              icon: L.icon({
-                iconUrl: `Icons/${i + 1}.svg`,
-                iconSize: [30, 30],
-                iconAnchor: [15, 15],
-              }),
-            }).addTo(mapRef.current);
-            const conclusionline = L.polyline(
-              [alllocations.current[i], allguesses.current[i]],
-              {
-                color: "black",
-                weight: 3,
-                dashArray: "10, 10",
-                dashOffset: "10",
-              }
-            ).addTo(mapRef.current);
-            bounds.extend(conclusionline.getBounds());
-          }
-        }
-        mapRef.current.fitBounds(bounds);
       }
     } else if (isitpregame) {
       //! pregame
@@ -332,9 +211,22 @@ const Map = ({
       setisitresults(true);
     }
   }
+  useEffect(() => {
+    if (isitconclusion) {
+      handleConclusion;
+    } else if (isitresults) {
+      handleSubmit(imglat.current, imglng.current);
+    } else if (isitpregame) {
+    } else {
+      handleNext;
+    }
+  }, [isitconclusion, isitpregame, isitresults]);
   return (
     <MapStateProvider>
-      <MapandSubmit></MapandSubmit>
+      <MapandSubmit
+        imglat={imglat.current}
+        imglng={imglng.current}
+      ></MapandSubmit>
       <Timer
         Rounds={Rounds}
         totalscore={totalscore}

@@ -7,7 +7,10 @@ import { useMapInteractions } from "@/app/hooks/mapinteractions";
 import { useMapState } from "@/context/MapStateContext";
 import { useGameState } from "@/context/gamestatecontext";
 import { useChangeInsideOfMap } from "@/app/hooks/insideofmapchanges";
-interface Props {}
+interface Props {
+  imglat: number;
+  imglng: number;
+}
 
 const beemarker = L.icon({
   iconUrl: "/Icons/Bee-Marker.png",
@@ -15,8 +18,9 @@ const beemarker = L.icon({
   iconAnchor: [10, 30],
 });
 
-const MapandSubmit = () => {
-  const { aspectRatio } = useGameState();
+const MapandSubmit = ({ imglat, imglng }: Props) => {
+  const { aspectRatio, isitpregame, isitconclusion, isitresults } =
+    useGameState();
   const {
     mapStyle,
     submitClassName,
@@ -28,8 +32,6 @@ const MapandSubmit = () => {
     setismarkeronmap,
     setMap,
   } = useMapState();
-  const guessRef = useRef<L.Marker | null>(null);
-  const position = useRef<[number, number]>(null);
   const {
     shrinkinstantly,
     shrinksubmitandmap,
@@ -68,11 +70,12 @@ const MapandSubmit = () => {
       }
     }
   }, [Map]);
+
   useEffect(() => {
     handleResize;
   }, [aspectRatio]);
   return (
-    <>
+    <div>
       <button
         onClick={shrinkinstantly}
         className={aspectRatio > 0.85 ? styles.outsideofmap : styles.none}
@@ -88,7 +91,7 @@ const MapandSubmit = () => {
         ></div>
         <MapButton submitClassName={submitClassName}></MapButton>
       </div>
-    </>
+    </div>
   );
 };
 
