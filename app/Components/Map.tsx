@@ -3,18 +3,15 @@ import React, { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import styles from "./Style.module.css";
-
+import { useGameState } from "@/context/gamestatecontext";
 interface Props {
-  rndnum: number;
   latlong: [string, number, number, number][];
   onGuessSubmit: (score: number, error: number) => void;
-  isitresults: boolean;
-  isitconclusion: boolean;
-  isitpregame: boolean;
   onnextclick: () => void;
   totalscore: number;
   Rounds: number;
 }
+
 const baseMapStyle = {
   position: "fixed",
   bottom: "0",
@@ -35,16 +32,14 @@ const beemarker = L.icon({
 let timeforshrink: NodeJS.Timeout;
 
 const Map = ({
-  isitresults,
-  rndnum,
   latlong,
   onGuessSubmit,
   onnextclick,
-  isitconclusion,
-  isitpregame,
   totalscore,
   Rounds,
 }: Props) => {
+  const { isitresults, isitconclusion, isitpregame, rndnum, aspectRatio } =
+    useGameState();
   const isitsubmitted = useRef(false);
   const position = useRef<[number, number]>([0, 0]);
   const guessRef = useRef<L.Marker | null>(null);
@@ -89,22 +84,21 @@ const Map = ({
   const [strokeDasharray, setstrokeDasharray] = useState(helpertemp.current);
   const yellow = useRef(255);
   const isitmobile = useRef(false);
-  const aspectRatio = useRef(1);
 
-  useEffect(() => {
-    const updateAspectRatio = () => {
-      if (typeof window !== "undefined") {
-        aspectRatio.current = window.innerWidth / window.innerHeight;
-      }
-    };
+  // useEffect(() => {
+  //   const updateAspectRatio = () => {
+  //     if (typeof window !== "undefined") {
+  //       aspectRatio.current = window.innerWidth / window.innerHeight;
+  //     }
+  //   };
 
-    updateAspectRatio();
-    window.addEventListener("resize", updateAspectRatio);
+  //   updateAspectRatio();
+  //   window.addEventListener("resize", updateAspectRatio);
 
-    return () => {
-      window.removeEventListener("resize", updateAspectRatio);
-    };
-  }, []);
+  //   return () => {
+  //     window.removeEventListener("resize", updateAspectRatio);
+  //   };
+  // }, []);
   useEffect(() => {
     if (typeof window !== "undefined" && mapRef.current === null) {
       const map = L.map("map", {
@@ -149,7 +143,7 @@ const Map = ({
             if (buttonElement) {
               buttonElement.innerText = "SUBMIT";
             }
-            if (aspectRatio.current > 0.85) {
+            if (aspectRatio > 0.85) {
               setSubmitClassName(styles.biggersubmit);
             } else {
               setSubmitClassName(styles.mobilesubmit);
@@ -393,7 +387,7 @@ const Map = ({
 
     //! this is supposed to be next but idk nextim
     if (!isitresults && !isitconclusion && !isitpregame) {
-      if (aspectRatio.current > 0.85) {
+      if (aspectRatio > 0.85) {
         setMapStyle({
           position: "fixed",
           bottom: "0",
@@ -418,7 +412,7 @@ const Map = ({
         setMapCenter([41.10474805585872, 29.022884681711798]);
       }
 
-      if (aspectRatio.current > 0.85) {
+      if (aspectRatio > 0.85) {
         setSubmitClassName(styles.placemarker);
       } else {
         setSubmitClassName(styles.mobileplacemarker);
@@ -506,7 +500,7 @@ const Map = ({
       }
     } else if (isitpregame) {
       //! pregame
-      if (aspectRatio.current > 0.85) {
+      if (aspectRatio > 0.85) {
         setMapStyle({
           ...baseMapStyle,
           opacity: "0.5",
@@ -529,7 +523,7 @@ const Map = ({
     }
   }, [isitresults, isitpregame, isitconclusion]);
   useEffect(() => {
-    if (aspectRatio.current < 0.85 && !isitmobile.current) {
+    if (aspectRatio < 0.85 && !isitmobile.current) {
       const mapcenter = mapRef.current?.getCenter();
       isitmobile.current = true;
       setMapStyle({
@@ -548,7 +542,7 @@ const Map = ({
       if (mapcenter) {
         setMapCenter([mapcenter.lat, mapcenter.lng]);
       }
-    } else if (isitmobile && aspectRatio.current > 0.85) {
+    } else if (isitmobile && aspectRatio > 0.85) {
       const mapcenter = mapRef.current?.getCenter();
       setMapStyle({
         ...baseMapStyle,
@@ -567,14 +561,9 @@ const Map = ({
       }
       isitmobile.current = false;
     }
-  }, [aspectRatio.current]);
+  }, [aspectRatio]);
   function enlargenmapandsubmitbutton() {
-    if (
-      !isitresults &&
-      !isitconclusion &&
-      !isitpregame &&
-      aspectRatio.current > 0.85
-    ) {
+    if (!isitresults && !isitconclusion && !isitpregame && aspectRatio > 0.85) {
       const mapcenter = mapRef.current?.getCenter();
       setMapStyle({
         ...baseMapStyle,
@@ -596,12 +585,7 @@ const Map = ({
     }
   }
   function shrinksubmitandmap() {
-    if (
-      !isitresults &&
-      !isitconclusion &&
-      !isitpregame &&
-      aspectRatio.current > 0.85
-    ) {
+    if (!isitresults && !isitconclusion && !isitpregame && aspectRatio > 0.85) {
       timeforshrink = setTimeout(() => {
         const mapcenter = mapRef.current?.getCenter();
         setMapStyle({
@@ -650,7 +634,7 @@ const Map = ({
         className={
           infovisibility === styles.none
             ? infovisibility
-            : aspectRatio.current > 0.85
+            : aspectRatio > 0.85
             ? styles.outsideofmap
             : styles.none
         }

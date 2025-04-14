@@ -6,6 +6,7 @@ import CustomImage from "./Components/CustomImage";
 import Papa from "papaparse";
 import Conclusion from "./Components/Conclusion";
 import Pregame from "./Components/PreGame";
+import { useGameState } from "@/context/gamestatecontext";
 const DynamicMap = dynamic(() => import("@/app/Components/Map"), {
   ssr: false,
 });
@@ -16,13 +17,21 @@ function rnd(min: number, max: number) {
 const whenhellfreezees = 0;
 
 function Home() {
+  const {
+    isitresults,
+    isitconclusion,
+    isitpregame,
+    rndnum,
+    aspectRatio,
+    setisitconclusion,
+    setisitpregame,
+    setisitresults,
+    setrndnum,
+    setaspectRatio,
+  } = useGameState();
   const [score, setScore] = useState(0);
   const [error, setError] = useState(0);
-  const [isitresults, setIsItResults] = useState(false);
-  const [isitconclusion, setisitconclusion] = useState(false);
-  const [isitpregame, setisitpregame] = useState(true);
   const [isblinkmodeon, setisblinkmodeon] = useState(false);
-  const rndnum = useRef(1);
   const numberofrounds = useRef(0);
   const [latlong, setLatLong] = useState<
     Array<[string, number, number, number]>
@@ -57,11 +66,21 @@ function Home() {
 
     fetchData();
   }, []);
+  function handleresize() {
+    if (typeof window !== "undefined") {
+      setaspectRatio(window.innerWidth / window.innerHeight);
+      console.log(aspectRatio);
+    }
+  }
+  if (typeof window !== "undefined") {
+    window.addEventListener("resize", handleresize);
+  }
+
   useEffect(() => {
-    rndnum.current = rnd(0, 5204);
+    setrndnum(rnd(0, 5204));
   }, [whenhellfreezees]);
   function handleSubmit(sc: number, er: number) {
-    if (rndnum.current === null) {
+    if (rndnum === null) {
       return;
     } else {
     }
@@ -69,12 +88,12 @@ function Home() {
     setScore(sc);
     setError(er);
     totalscore.current += sc;
-    rndnum.current = rnd(0, 5204);
-    setIsItResults(true);
+    setrndnum(rnd(0, 5204));
+    setisitresults(true);
   }
   function handlenext() {
     numberofrounds.current++;
-    setIsItResults(false);
+    setisitresults(false);
     // console.log(numberofrounds.current);
     if (numberofrounds.current === 5) {
       numberofrounds.current = 0;
@@ -91,9 +110,9 @@ function Home() {
     totalscore.current = 0;
   }
   function handleReport() {
-    const query = `?x=${btoa(`${rndnum.current}`)}&y=${btoa(
-      `${latlong[rndnum.current][2]}`
-    )}&z=${btoa(`${latlong[rndnum.current][3]}`)}`;
+    const query = `?x=${btoa(`${rndnum}`)}&y=${btoa(
+      `${latlong[rndnum][2]}`
+    )}&z=${btoa(`${latlong[rndnum][3]}`)}`;
     window.open(`/report${query}`, "_blank");
     // window.open("/report", "_blank");
     // console.log("a");
@@ -101,22 +120,12 @@ function Home() {
 
   return (
     <div>
-      <CustomImage
-        rndnum={rndnum.current}
-        isitresults={isitresults}
-        isitconclusion={isitconclusion}
-        isitpregame={isitpregame}
-        isitblinkmode={isblinkmodeon}
-      />
+      <CustomImage isitblinkmode={isblinkmodeon} />
       <DynamicMap
         Rounds={numberofrounds.current}
-        isitconclusion={isitconclusion}
-        isitpregame={isitpregame}
-        rndnum={rndnum.current}
         latlong={latlong}
         onGuessSubmit={handleSubmit}
         onnextclick={handlenext}
-        isitresults={isitresults}
         totalscore={totalscore.current}
       />
       <EndGameStats
@@ -134,7 +143,6 @@ function Home() {
       <Pregame
         onstartclick={handlestart}
         totalscore={totalscore.current}
-        isitpregame={isitpregame}
       ></Pregame>
     </div>
   );

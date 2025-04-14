@@ -1,14 +1,14 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
 import styles from "./conclusionpregame.module.css";
-
+import { useGameState } from "@/context/gamestatecontext";
 interface Props {
-  isitpregame: boolean;
   totalscore: number;
   onstartclick: (blinkmode: boolean) => void;
 }
 
-const PreGame = ({ isitpregame, totalscore, onstartclick }: Props) => {
+const PreGame = ({ totalscore, onstartclick }: Props) => {
+  const { isitpregame, aspectRatio } = useGameState();
   const participants = useRef<string[][]>([]);
   const normalmode = useRef<string[][]>([]);
   const blinkmode = useRef<string[][]>([]);
@@ -16,7 +16,6 @@ const PreGame = ({ isitpregame, totalscore, onstartclick }: Props) => {
   const currentparticipant = useRef<HTMLInputElement>(null);
   const [isblinkmodeon, setisblinkmodeon] = useState(false);
   const [isinputwrong, setisinputwrong] = useState(false);
-  const aspectRatio = useRef(1);
   const [updateleaderboard, setupdateleaderboard] = useState(1);
 
   useEffect(() => {
@@ -42,17 +41,6 @@ const PreGame = ({ isitpregame, totalscore, onstartclick }: Props) => {
       }
     };
     fetchcsv();
-    const updateAspectRatio = () => {
-      if (typeof window !== "undefined") {
-        aspectRatio.current = window.innerWidth / window.innerHeight;
-      }
-    };
-    updateAspectRatio();
-    window.addEventListener("resize", updateAspectRatio);
-
-    return () => {
-      window.removeEventListener("resize", updateAspectRatio);
-    };
   }, []);
 
   function addparticipant() {
@@ -189,7 +177,7 @@ const PreGame = ({ isitpregame, totalscore, onstartclick }: Props) => {
           <div className={styles.participantsListContainer}>
             <ol
               className={
-                aspectRatio.current <= 0.85
+                aspectRatio <= 0.85
                   ? styles.mobileparticipantlist
                   : styles.participantsList
               }
@@ -199,7 +187,7 @@ const PreGame = ({ isitpregame, totalscore, onstartclick }: Props) => {
                   {" "}
                   <span
                     className={
-                      aspectRatio.current <= 0.85
+                      aspectRatio <= 0.85
                         ? styles.mobilelistparticipant
                         : styles.listparticipant
                     }
@@ -208,7 +196,7 @@ const PreGame = ({ isitpregame, totalscore, onstartclick }: Props) => {
                   </span>
                   <span
                     className={
-                      aspectRatio.current <= 0.85
+                      aspectRatio <= 0.85
                         ? styles.mobilelistscore
                         : styles.listscore
                     }
@@ -221,7 +209,7 @@ const PreGame = ({ isitpregame, totalscore, onstartclick }: Props) => {
           </div>
           <div
             className={
-              aspectRatio.current <= 0.85
+              aspectRatio <= 0.85
                 ? styles.mobileleaderboardinfo
                 : styles.leaderboardinfo
             }
@@ -229,7 +217,7 @@ const PreGame = ({ isitpregame, totalscore, onstartclick }: Props) => {
             <strong>
               <span
                 className={
-                  aspectRatio.current <= 0.85
+                  aspectRatio <= 0.85
                     ? styles.mobileleaderboardinfopart
                     : styles.leaderboardinfopart
                 }

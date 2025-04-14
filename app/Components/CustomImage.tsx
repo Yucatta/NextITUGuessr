@@ -2,21 +2,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./Style.module.css";
 import Image from "next/image";
+import { useGameState } from "@/context/gamestatecontext";
 interface Props {
-  rndnum: number | null;
-  isitresults: boolean;
-  isitconclusion: boolean;
-  isitpregame: boolean;
   isitblinkmode: boolean;
 }
 
-const CustomImage = ({
-  rndnum,
-  isitresults,
-  isitconclusion,
-  isitpregame,
-  isitblinkmode,
-}: Props) => {
+const CustomImage = ({ isitblinkmode }: Props) => {
+  const { isitresults, isitconclusion, isitpregame, rndnum } = useGameState();
   const [imagevisibility, setimagevisibility] = useState(styles.none);
   const [isitloaded, setisitloaded] = useState(false);
   const imagereloadtry = useRef(0);
@@ -25,6 +17,7 @@ const CustomImage = ({
   );
   const isitblinked = useRef(false);
   const [mobilefullscreen, setmobilefullscreen] = useState(false);
+
   useEffect(() => {
     if (isitresults) {
       setisitloaded(false);

@@ -1,11 +1,10 @@
 import React from "react";
+import styles from "./Style.module.css";
 interface Props {
   isitconclusion: boolean;
   totalscore: number;
   onmenuclick: () => void;
 }
-// className={isitconclusion ? "" : styles.none}
-import styles from "./Style.module.css";
 const Conclusion = ({ totalscore, isitconclusion, onmenuclick }: Props) => {
   return (
     <div className={isitconclusion ? "" : styles.none}>
