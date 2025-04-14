@@ -1,4 +1,5 @@
-import styles from "./Style.module.css";
+import styles from "../styles/Style.module.css";
+
 interface Props {
   isitresults: boolean;
   score: number;

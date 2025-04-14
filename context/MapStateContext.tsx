@@ -18,13 +18,7 @@ type MapStates = {
 const MapStateContext = createContext<MapStates | null>(null);
 export function MapStateProvider({ children }: { children: ReactNode }) {
   const [mapStyle, setMapStyle] = useState<React.CSSProperties>({
-    position: "fixed",
-    width: "20vw",
-    height: "25vh",
-    bottom: "0",
-    right: "0",
-    marginRight: "2vw",
-    marginBottom: "5vh",
+    opacity: "0",
   });
   const [submitClassName, setSubmitClassName] = useState(styles.placemarker);
   const [ismarkeronmap, setismarkeronmap] = useState(false);
@@ -52,6 +46,7 @@ export function MapStateProvider({ children }: { children: ReactNode }) {
 
 export function useMapState() {
   const context = useContext(MapStateContext);
+  // console.log(context);
   if (!context) {
     throw new Error("aaaaaaaaaaaa");
   }

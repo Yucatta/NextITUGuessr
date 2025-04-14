@@ -8,8 +8,7 @@ import { useMapState } from "@/context/MapStateContext";
 import { useGameState } from "@/context/gamestatecontext";
 import { useChangeInsideOfMap } from "@/app/hooks/insideofmapchanges";
 interface Props {
-  imglat: number;
-  imglng: number;
+  infovisibility: string;
 }
 
 const beemarker = L.icon({
@@ -18,7 +17,7 @@ const beemarker = L.icon({
   iconAnchor: [10, 30],
 });
 
-const MapandSubmit = ({ imglat, imglng }: Props) => {
+const MapandSubmit = ({ infovisibility }: Props) => {
   const { aspectRatio, isitpregame, isitconclusion, isitresults } =
     useGameState();
   const {
@@ -41,6 +40,10 @@ const MapandSubmit = ({ imglat, imglng }: Props) => {
   const { handleMapClick } = useChangeInsideOfMap();
   useEffect(() => {
     if (typeof window !== "undefined" && Map === null) {
+      const mapContainer = document.getElementById("map");
+      if (mapContainer && (mapContainer as any)._leaflet_id) {
+        return;
+      }
       const InitialMap = L.map("map", {
         center: [41.10474805585872, 29.022884681711798],
         zoom: 16,
@@ -63,33 +66,39 @@ const MapandSubmit = ({ imglat, imglng }: Props) => {
       );
       openstreetmap.addTo(InitialMap);
       setMap(InitialMap);
-      if (Map) {
-        InitialMap.on("click", (e) => {
-          handleMapClick(e);
-        });
-      }
+    }
+    if (Map) {
+      Map.on("click", (e) => {
+        handleMapClick(e);
+      });
     }
   }, [Map]);
-
   useEffect(() => {
-    handleResize;
+    if (!isitpregame) {
+      shrinkinstantly();
+    }
+  }, [isitpregame]);
+  useEffect(() => {
+    handleResize();
   }, [aspectRatio]);
   return (
     <div>
-      <button
-        onClick={shrinkinstantly}
-        className={aspectRatio > 0.85 ? styles.outsideofmap : styles.none}
-      ></button>
+      <div className={infovisibility}>
+        <button
+          onClick={shrinkinstantly}
+          className={aspectRatio > 0.85 ? styles.outsideofmap : styles.none}
+        ></button>
+      </div>
+
       <div
         onMouseOver={enlargenmapandsubmitbutton}
         onMouseOut={shrinksubmitandmap}
       >
-        <div
-          id="map"
-          style={mapStyle}
-          className={isitmobile ? styles.down : ""}
-        ></div>
-        <MapButton submitClassName={submitClassName}></MapButton>
+        <div id="map" style={mapStyle}></div>
+        <MapButton
+          ismarkeronmap={ismarkeronmap}
+          submitClassName={infovisibility ? infovisibility : submitClassName}
+        ></MapButton>
       </div>
     </div>
   );

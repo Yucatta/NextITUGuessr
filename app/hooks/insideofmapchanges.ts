@@ -32,31 +32,31 @@ export function useChangeInsideOfMap() {
   const guessRef = useRef<L.Marker | null>(null);
   const allGuesses = useRef<Array<[number, number]>>([]);
   const allLocations = useRef<Array<[number, number]>>([]);
+  const tempForMarker = useRef(false);
   const { handleConclusionClass, handleNextClass, handleSubmitClass } =
     useMapClassChanges();
   function handleMapClick(e: L.LeafletMouseEvent) {
-    if (Map) {
-      if (ismarkeronmap) {
-        if (guessRef.current) {
-          guessRef.current.setLatLng(e.latlng);
-          position.current = [e.latlng.lat, e.latlng.lng];
-        }
-      } else {
-        guessRef.current = L.marker(e.latlng, {
-          icon: beemarker,
-          draggable: true,
-        }).addTo(Map);
+    if (!Map) {
+      return;
+    }
+    // console.log(ismarkeronmap);
+    if (tempForMarker.current) {
+      if (guessRef.current) {
+        guessRef.current.setLatLng(e.latlng);
         position.current = [e.latlng.lat, e.latlng.lng];
-        setismarkeronmap(true);
-        const buttonElement = document.getElementById("button");
-        if (buttonElement) {
-          buttonElement.innerText = "SUBMIT";
-        }
-        if (aspectRatio > 0.85) {
-          setSubmitClassName(styles.biggersubmit);
-        } else {
-          setSubmitClassName(styles.mobilesubmit);
-        }
+      }
+    } else {
+      guessRef.current = L.marker(e.latlng, {
+        icon: beemarker,
+        draggable: true,
+      }).addTo(Map);
+      position.current = [e.latlng.lat, e.latlng.lng];
+      setismarkeronmap(true);
+      tempForMarker.current = true;
+      if (aspectRatio > 0.85) {
+        setSubmitClassName(styles.biggersubmit);
+      } else {
+        setSubmitClassName(styles.mobilesubmit);
       }
     }
   }
@@ -65,7 +65,7 @@ export function useChangeInsideOfMap() {
       return;
     }
     allLocations.current.push([imglat, imglng]);
-
+    tempForMarker.current = false;
     if (ismarkeronmap) {
       L.marker([imglat, imglng], {
         icon: L.icon({
@@ -94,14 +94,18 @@ export function useChangeInsideOfMap() {
     handleSubmitClass(imglat, imglng, position.current[0], position.current[1]);
   }
   function handleNext() {
-    if (Map) {
-      Map.eachLayer(function (layer) {
-        if (!(layer instanceof L.TileLayer)) {
-          Map.removeLayer(layer);
-        }
-      });
+    handleNextClass();
+    console.log(Map);
+    if (!Map) {
+      console.log("aaa");
+
+      return;
     }
-    handleNextClass;
+    Map.eachLayer(function (layer) {
+      if (!(layer instanceof L.TileLayer)) {
+        Map.removeLayer(layer);
+      }
+    });
   }
   function handleConclusion() {
     if (!Map) {
@@ -147,7 +151,9 @@ export function useChangeInsideOfMap() {
       }
     }
     Map.fitBounds(bounds);
-    handleConclusionClass;
+    allGuesses.current = [];
+    allLocations.current = [];
+    handleConclusionClass();
   }
   return { handleMapClick, handleNext, handleConclusion, handleSubmit };
 }

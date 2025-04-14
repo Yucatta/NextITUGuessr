@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
-import styles from "./conclusionpregame.module.css";
+import styles from "../styles/conclusionpregame.module.css";
 import { useGameState } from "@/context/gamestatecontext";
 interface Props {
   totalscore: number;

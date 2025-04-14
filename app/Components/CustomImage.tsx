@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import styles from "./Style.module.css";
+import styles from "../styles/Style.module.css";
 import Image from "next/image";
 import { useGameState } from "@/context/gamestatecontext";
 interface Props {

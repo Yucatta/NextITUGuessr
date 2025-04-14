@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useGameState } from "@/context/gamestatecontext";
-import styles from "./Style.module.css";
+import styles from "@/app/styles/MapComponent.module.css";
+import { useMapInteractions } from "./mapinteractions";
 import { useMapState } from "@/context/MapStateContext";
 interface MapProps {}
 const baseMapStyle = {
@@ -11,7 +12,6 @@ const baseMapStyle = {
   zIndex: "5",
   transition: "width 0.3s ease, height 0.3s ease",
 };
-let timeforshrink: NodeJS.Timeout;
 
 export function useMapClassChanges() {
   const { aspectRatio } = useGameState();
@@ -28,8 +28,19 @@ export function useMapClassChanges() {
     setMap,
   } = useMapState();
   const [mapCenter, setMapCenter] = useState<[number, number]>();
+  const { shrinkinstantly } = useMapInteractions();
 
-  function handleNextClass() {}
+  function handleNextClass() {
+    setMapStyle({
+      ...baseMapStyle,
+      opacity: "0.5",
+      width: "clamp(200px,20vw,20vw)",
+      height: "25vh",
+      marginBottom: "5vh",
+    } as React.CSSProperties);
+    console.log(mapStyle);
+    setSubmitClassName(styles.placemarker);
+  }
   function handleSubmitClass(
     imglat: number,
     imglng: number,
@@ -42,6 +53,8 @@ export function useMapClassChanges() {
       height: "80vh",
       top: "0",
     });
+    setMapStyle({ position: "fixed", width: "100%", height: "85vh" });
+
     setSubmitClassName(styles.none);
     setMapCenter([(imglat + guesslat) / 2, (imglng + guesslng) / 2]);
   }

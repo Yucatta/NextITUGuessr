@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useGameState } from "@/context/gamestatecontext";
-import styles from "./Style.module.css";
+import styles from "@/app/styles/MapComponent.module.css";
+
 import { useMapState } from "@/context/MapStateContext";
 interface MapProps {}
 const baseMapStyle = {

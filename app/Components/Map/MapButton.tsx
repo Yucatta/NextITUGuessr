@@ -2,8 +2,9 @@ import React from "react";
 
 interface Props {
   submitClassName: string;
+  ismarkeronmap: boolean;
 }
-const MapButton = ({ submitClassName }: Props) => {
+const MapButton = ({ submitClassName, ismarkeronmap }: Props) => {
   return (
     <div>
       <button
@@ -14,7 +15,7 @@ const MapButton = ({ submitClassName }: Props) => {
         }}
         className={submitClassName}
       >
-        PLACE MARKER ON THE MAP
+        {ismarkeronmap ? "SUBMIT" : "PLACE MARKER ON THE MAP"}
       </button>
     </div>
   );

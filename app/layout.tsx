@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Jost } from "next/font/google";
 import "./globals.css";
 import { GameStateProvider } from "@/context/gamestatecontext";
+import { MapStateProvider } from "@/context/MapStateContext";
 
 const jost = Jost({
   subsets: ["latin"],
@@ -28,7 +29,9 @@ export default function RootLayout({
         />
       </head>
       <body className={jost.variable}>
-        <GameStateProvider>{children}</GameStateProvider>
+        <GameStateProvider>
+          <MapStateProvider>{children}</MapStateProvider>
+        </GameStateProvider>
       </body>
     </html>
   );

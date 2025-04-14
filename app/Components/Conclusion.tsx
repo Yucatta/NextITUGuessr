@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./Style.module.css";
+import styles from "../styles/Style.module.css";
 interface Props {
   isitconclusion: boolean;
   totalscore: number;

@@ -1,12 +1,13 @@
 import { useState, useRef, useEffect } from "react";
-import styles from "./Style.module.css";
+import styles from "@/app/styles/MapComponent.module.css";
 import { useGameState } from "@/context/gamestatecontext";
 interface Props {
   Rounds: number;
   totalscore: number;
+  infovisibility: string;
   timerunout: () => void;
 }
-const Timer = ({ Rounds, timerunout, totalscore }: Props) => {
+const Timer = ({ Rounds, infovisibility, timerunout, totalscore }: Props) => {
   const [path, setpath] = useState(`
         M 85 0
         L 20 0
@@ -23,7 +24,7 @@ const Timer = ({ Rounds, timerunout, totalscore }: Props) => {
   const [strokeDasharray, setstrokeDasharray] = useState(helpertemp.current);
   const yellow = useRef(255);
   const secondsleft = useRef<NodeJS.Timeout | null>(null);
-  const [passedtime, setpassedtime] = useState(0);
+  const passedtime = useRef(0);
   const { isitpregame, isitconclusion, isitresults } = useGameState();
 
   useEffect(() => {
@@ -31,7 +32,7 @@ const Timer = ({ Rounds, timerunout, totalscore }: Props) => {
       (isitconclusion || isitresults || isitpregame) &&
       line1.current !== 85
     ) {
-      setpassedtime(0);
+      passedtime.current = 0;
       line1.current = 85;
       line2.current = 150;
       line3.current = 20;
@@ -100,30 +101,26 @@ const Timer = ({ Rounds, timerunout, totalscore }: Props) => {
   }
   function timer() {
     secondsleft.current = setInterval(() => {
-      if (passedtime === 59) {
+      if (passedtime.current === 59) {
         if (secondsleft.current) {
           clearInterval(secondsleft.current);
         }
         timerunout();
       }
-
-      setpassedtime(passedtime + 1);
+      passedtime.current++;
     }, 1000);
-    if (passedtime > 500) {
-      console.log();
-    }
   }
 
   return (
-    <div>
+    <div className={infovisibility}>
       <div className={styles.timerdiv}>
         <p className={styles.timer}>
           00:
-          {passedtime < 0
+          {passedtime.current < 0
             ? "00"
-            : 60 - passedtime < 10
-            ? "0" + (60 - passedtime)
-            : 60 - passedtime}
+            : 60 - passedtime.current < 10
+            ? "0" + (60 - passedtime.current)
+            : 60 - passedtime.current}
         </p>
       </div>
       <svg

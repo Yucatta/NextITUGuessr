@@ -12,6 +12,9 @@
   color: #e3e3e3;
   cursor: pointer;
 }
+.none {
+  display: none;
+}
 .biggerplacemarker {
   position: fixed;
   width: clamp(70vh, 50vw, 50vw);
