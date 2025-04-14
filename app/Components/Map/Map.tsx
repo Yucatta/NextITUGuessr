@@ -4,6 +4,8 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import styles from "./Style.module.css";
 import { useGameState } from "@/context/gamestatecontext";
+import MapandSubmit from "./MapandSubmit";
+import { MapStateProvider } from "@/context/MapStateContext";
 interface Props {
   latlong: [string, number, number, number][];
   onGuessSubmit: (score: number, error: number) => void;
@@ -12,24 +14,10 @@ interface Props {
   Rounds: number;
 }
 
-const baseMapStyle = {
-  position: "fixed",
-  bottom: "0",
-  right: "0",
-  marginRight: "2vw",
-  zIndex: "5",
-  transition: "width 0.3s ease, height 0.3s ease",
-};
 const latlengthmeter = 111.32 * 1000;
 const longtiduelengthmeter = (40075 * 1000 * 0.75346369194) / 360; // 0.75346369194 is cosine of latitude
 
 let score = 0;
-const beemarker = L.icon({
-  iconUrl: "/Icons/Bee-Marker.png",
-  iconSize: [20, 30],
-  iconAnchor: [10, 30],
-});
-let timeforshrink: NodeJS.Timeout;
 
 const Map = ({
   latlong,
@@ -40,10 +28,7 @@ const Map = ({
 }: Props) => {
   const { isitresults, isitconclusion, isitpregame, rndnum, aspectRatio } =
     useGameState();
-  const isitsubmitted = useRef(false);
   const position = useRef<[number, number]>([0, 0]);
-  const guessRef = useRef<L.Marker | null>(null);
-  const mapRef = useRef<L.Map | null>(null);
   const [mapCenter, setMapCenter] = useState<[number, number]>([
     41.10474805585872, 29.022884681711798,
   ]);
@@ -57,16 +42,7 @@ const Map = ({
   const secondsleft = useRef<NodeJS.Timeout | null>(null);
   const passedtime = useRef(0);
   // const [passedtime,setpassedtime] = useState(0);
-  const [mapStyle, setMapStyle] = useState<React.CSSProperties>({
-    position: "fixed",
-    width: "20vw",
-    height: "25vh",
-    bottom: "0",
-    right: "0",
-    marginRight: "2vw",
-    marginBottom: "5vh",
-  });
-  const [submitClassName, setSubmitClassName] = useState(styles.placemarker);
+
   const [updater, setupdater] = useState(0);
   const [path, setpath] = useState(`
     M 85 0 
@@ -84,82 +60,6 @@ const Map = ({
   const [strokeDasharray, setstrokeDasharray] = useState(helpertemp.current);
   const yellow = useRef(255);
   const isitmobile = useRef(false);
-
-  // useEffect(() => {
-  //   const updateAspectRatio = () => {
-  //     if (typeof window !== "undefined") {
-  //       aspectRatio.current = window.innerWidth / window.innerHeight;
-  //     }
-  //   };
-
-  //   updateAspectRatio();
-  //   window.addEventListener("resize", updateAspectRatio);
-
-  //   return () => {
-  //     window.removeEventListener("resize", updateAspectRatio);
-  //   };
-  // }, []);
-  useEffect(() => {
-    if (typeof window !== "undefined" && mapRef.current === null) {
-      const map = L.map("map", {
-        center: mapCenter,
-        zoom: 16,
-        maxBounds: [
-          [41.08807268468239, 29.00938475141975],
-          [41.12383548170815, 29.043887364827734],
-        ],
-        maxBoundsViscosity: 1.0,
-        minZoom: 15,
-      });
-      mapRef.current = map;
-
-      const openstreetmap = L.tileLayer(
-        "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-        {
-          attribution:
-            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-          maxZoom: 20,
-        }
-      );
-
-      openstreetmap.addTo(map);
-
-      map.on("click", (e) => {
-        if (!isitsubmitted.current) {
-          if (ismarkeronmap.current) {
-            if (guessRef.current) {
-              guessRef.current.setLatLng(e.latlng);
-              position.current = [e.latlng.lat, e.latlng.lng];
-            }
-          } else {
-            guessRef.current = L.marker(e.latlng, {
-              icon: beemarker,
-              draggable: true,
-            }).addTo(map);
-            position.current = [e.latlng.lat, e.latlng.lng];
-            ismarkeronmap.current = true;
-            const buttonElement = document.getElementById("button");
-
-            if (buttonElement) {
-              buttonElement.innerText = "SUBMIT";
-            }
-            if (aspectRatio > 0.85) {
-              setSubmitClassName(styles.biggersubmit);
-            } else {
-              setSubmitClassName(styles.mobilesubmit);
-            }
-          }
-        }
-      });
-    }
-  }, []);
-
-  useEffect(() => {
-    if (mapRef.current) {
-      mapRef.current.panTo(mapCenter);
-      mapRef.current.invalidateSize();
-    }
-  }, [mapCenter]);
 
   useEffect(() => {
     const handleSpaceKey = (e: KeyboardEvent) => {
@@ -562,140 +462,46 @@ const Map = ({
       isitmobile.current = false;
     }
   }, [aspectRatio]);
-  function enlargenmapandsubmitbutton() {
-    if (!isitresults && !isitconclusion && !isitpregame && aspectRatio > 0.85) {
-      const mapcenter = mapRef.current?.getCenter();
-      setMapStyle({
-        ...baseMapStyle,
-        width: "clamp(70vh,50vw,50vw)",
-        height: "clamp(60vh,35vw,70vh)",
-        marginBottom: "8vh",
-      } as React.CSSProperties);
-      if (ismarkeronmap.current) {
-        setSubmitClassName(styles.biggersubmit);
-      } else {
-        setSubmitClassName(styles.biggerplacemarker);
-      }
-      setTimeout(() => {
-        if (mapcenter) {
-          setMapCenter([mapcenter.lat, mapcenter.lng]);
-        }
-      }, 300);
-      clearTimeout(timeforshrink);
-    }
-  }
-  function shrinksubmitandmap() {
-    if (!isitresults && !isitconclusion && !isitpregame && aspectRatio > 0.85) {
-      timeforshrink = setTimeout(() => {
-        const mapcenter = mapRef.current?.getCenter();
-        setMapStyle({
-          ...baseMapStyle,
-          opacity: "0.5",
-          width: "clamp(200px,20vw,20vw)",
-          height: "25vh",
-          marginBottom: "5vh",
-        } as React.CSSProperties);
-
-        if (ismarkeronmap.current) {
-          setSubmitClassName(styles.submit);
-        } else {
-          setSubmitClassName(styles.placemarker);
-        }
-        if (mapcenter) {
-          setMapCenter([mapcenter.lat, mapcenter.lng]);
-        }
-      }, 700);
-    }
-  }
-  function shrinkinstantly() {
-    const mapcenter = mapRef.current?.getCenter();
-    setMapStyle({
-      ...baseMapStyle,
-      opacity: "0.5",
-      width: "clamp(200px,20vw,20vw)",
-      height: "25vh",
-      marginBottom: "5vh",
-    } as React.CSSProperties);
-
-    if (ismarkeronmap.current) {
-      setSubmitClassName(styles.submit);
-    } else {
-      setSubmitClassName(styles.placemarker);
-    }
-    if (mapcenter) {
-      setMapCenter([mapcenter.lat, mapcenter.lng]);
-    }
-  }
 
   return (
-    <div>
-      <button
-        onClick={shrinkinstantly}
-        className={
-          infovisibility === styles.none
-            ? infovisibility
-            : aspectRatio > 0.85
-            ? styles.outsideofmap
-            : styles.none
-        }
-      ></button>
-      <div
-        onMouseOver={enlargenmapandsubmitbutton}
-        onMouseOut={shrinksubmitandmap}
-        className={!isitpregame ? "" : styles.none}
-      >
-        <div
-          id="map"
-          style={mapStyle}
-          className={isitmobile.current ? styles.down : ""}
-        ></div>
-        <div>
-          <button
-            id="button"
-            style={{
-              transition: "width 0.3s ease, height 0.3s ease",
-              zIndex: "5",
-            }}
-            className={submitClassName}
+    <MapStateProvider>
+      <div>
+        <MapandSubmit isitmobile={isitmobile.current}></MapandSubmit>
+        <div className={infovisibility}>
+          <div className={styles.timerdiv}>
+            <p className={styles.timer}>
+              00:
+              {passedtime.current < 0
+                ? "00"
+                : 60 - passedtime.current < 10
+                ? "0" + (60 - passedtime.current)
+                : 60 - passedtime.current}
+            </p>
+          </div>
+          <svg
+            width="175"
+            height="50"
+            viewBox="-5 -5 180 50"
+            className={styles.timerprogress}
           >
-            PLACE MARKER ON THE MAP
-          </button>
+            <path
+              d={path}
+              fill="none"
+              stroke={`rgb(255 ${yellow.current} ${yellow.current})`}
+              strokeWidth="5"
+              strokeDasharray={`${strokeDasharray}`}
+              strokeDashoffset="0"
+            />
+          </svg>
+          <div className={styles.ingamedetails}>
+            <p className={styles.tournumber}>{Rounds}/5</p>
+            <p className={styles.tournumberinfo}>Rounds</p>
+            <p className={styles.totalscore}>{totalscore}</p>
+            <p className={styles.totalscoreinfo}>Score</p>
+          </div>
         </div>
       </div>
-      <div className={infovisibility}>
-        <div className={styles.timerdiv}>
-          <p className={styles.timer}>
-            00:
-            {passedtime.current < 0
-              ? "00"
-              : 60 - passedtime.current < 10
-              ? "0" + (60 - passedtime.current)
-              : 60 - passedtime.current}
-          </p>
-        </div>
-        <svg
-          width="175"
-          height="50"
-          viewBox="-5 -5 180 50"
-          className={styles.timerprogress}
-        >
-          <path
-            d={path}
-            fill="none"
-            stroke={`rgb(255 ${yellow.current} ${yellow.current})`}
-            strokeWidth="5"
-            strokeDasharray={`${strokeDasharray}`}
-            strokeDashoffset="0"
-          />
-        </svg>
-        <div className={styles.ingamedetails}>
-          <p className={styles.tournumber}>{Rounds}/5</p>
-          <p className={styles.tournumberinfo}>Rounds</p>
-          <p className={styles.totalscore}>{totalscore}</p>
-          <p className={styles.totalscoreinfo}>Score</p>
-        </div>
-      </div>
-    </div>
+    </MapStateProvider>
   );
 };
 

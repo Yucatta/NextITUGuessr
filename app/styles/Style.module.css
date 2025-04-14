@@ -145,21 +145,11 @@
   border: 2px solid rgb(52, 52, 52);
   cursor: pointer;
 }
-.report:hover,
-.biggerplacemarker:hover,
-.biggersubmit:hover,
-.biggerplacemarker:hover,
-.mobileplacemarker:hover,
-.mobilesubmit:hover {
+.report:hover {
   transform: scale(1.05);
 }
 
-.report:active,
-.biggerplacemarker:active,
-.biggersubmit:active,
-.biggerplacemarker:active,
-.mobileplacemarker:active,
-.mobilesubmit:active {
+.report:active {
   transform: scale(0.97);
 }
 .ReportImg {
@@ -168,94 +158,6 @@
   transform: translatey(15%);
   height: 2.8vh;
   filter: invert(100%);
-}
-
-.placemarker {
-  position: fixed;
-  --width: clamp(200px, 20.1vw, 20.1vw);
-  width: var(--width);
-  margin-right: 2vw;
-  right: 0;
-  height: 4vh;
-  bottom: 0;
-  margin-bottom: 0.5vh;
-  background-color: rgb(47, 47, 47, 0.5);
-  border-radius: 2vh;
-  color: #e3e3e3;
-  cursor: pointer;
-}
-.biggerplacemarker {
-  position: fixed;
-  width: clamp(70vh, 50vw, 50vw);
-  margin-right: 2vw;
-  right: 0;
-  height: 7vh;
-  bottom: 0;
-  margin-bottom: 0.5vh;
-  font-size: 2.5vh;
-  background-color: rgb(47, 47, 47);
-  pointer-events: auto;
-  border-radius: 3.5vh;
-  color: #e3e3e3;
-  cursor: pointer;
-}
-.mobileplacemarker {
-  position: fixed;
-  width: 90vw;
-  height: 7vh;
-  top: 94%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 2.5vh;
-  background-color: rgb(47, 47, 47, 0.5);
-  pointer-events: auto;
-  border-radius: 3.5vh;
-  color: #e3e3e3;
-  cursor: pointer;
-}
-/* transition: width 0.3s ease, height 0.3s ease, */
-
-.submit {
-  position: fixed;
-  width: clamp(200px, 20.1vw, 20.1vw);
-  cursor: pointer;
-  height: 4vh;
-  margin-right: 2vw;
-  right: 0;
-  bottom: 0;
-  margin-bottom: 0.5vh;
-  background-color: rgb(0, 95, 0, 0.5);
-  border-radius: 2vh;
-  color: #e3e3e3;
-}
-.biggersubmit {
-  position: fixed;
-  width: clamp(70vh, 50vw, 50vw);
-  height: 7vh;
-  margin-right: 2vw;
-  right: 0;
-  bottom: 0;
-  margin-bottom: 0.5vh;
-  font-size: 3vh;
-  background-color: rgb(0, 95, 0);
-  pointer-events: auto;
-  border-radius: 3.5vh;
-  color: #e3e3e3;
-  cursor: pointer;
-}
-.mobilesubmit {
-  position: fixed;
-  width: 90vw;
-  height: 7vh;
-  top: 94%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 3vh;
-  background-color: rgb(0, 95, 0, 0.5);
-  pointer-events: auto;
-  border-radius: 3.5vh;
-  color: #e3e3e3;
-  cursor: pointer;
 }
 
 .progressbarcontainer {

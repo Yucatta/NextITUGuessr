@@ -1,0 +1,55 @@
+"use client";
+import React, { createContext, useContext, useState, ReactNode } from "react";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+import styles from "../app/styles/MapComponent.module.css";
+type MapStates = {
+  Map: L.Map | null | undefined;
+  ismarkeronmap: boolean;
+  mapStyle: React.CSSProperties;
+  submitClassName: string;
+  setMapStyle: React.Dispatch<React.SetStateAction<React.CSSProperties>>;
+  setSubmitClassName: React.Dispatch<React.SetStateAction<string>>;
+  setMap: React.Dispatch<React.SetStateAction<L.Map | null | undefined>>;
+  setismarkeronmap: React.Dispatch<React.SetStateAction<boolean>>;
+};
+const MapStateContext = createContext<MapStates | null>(null);
+export function MapStateProvider({ children }: { children: ReactNode }) {
+  const [mapStyle, setMapStyle] = useState<React.CSSProperties>({
+    position: "fixed",
+    width: "20vw",
+    height: "25vh",
+    bottom: "0",
+    right: "0",
+    marginRight: "2vw",
+    marginBottom: "5vh",
+  });
+  const [submitClassName, setSubmitClassName] = useState(styles.placemarker);
+  const [ismarkeronmap, setismarkeronmap] = useState(false);
+  const [Map, setMap] = useState<L.Map | null>();
+
+  return (
+    <MapStateContext.Provider
+      value={{
+        mapStyle,
+        submitClassName,
+        ismarkeronmap,
+        Map,
+        setMapStyle,
+        setSubmitClassName,
+        setismarkeronmap,
+        setMap,
+      }}
+    >
+      {children}
+    </MapStateContext.Provider>
+  );
+}
+
+export function useMapState() {
+  const context = useContext(MapStateContext);
+  if (!context) {
+    throw new Error("aaaaaaaaaaaa");
+  }
+  return context;
+}

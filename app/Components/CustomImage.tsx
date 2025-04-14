@@ -116,7 +116,6 @@ const CustomImage = ({ isitblinkmode }: Props) => {
         >
           <Image
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            // src={`compressed-images/${rndnum}.jpg`}
             src={imageSrc}
             alt="Current image"
             style={{ objectFit: "contain" }}
@@ -124,12 +123,6 @@ const CustomImage = ({ isitblinkmode }: Props) => {
             loading="lazy"
             // onError={handleImageError}
           />
-          {/* <img
-        //   src={`https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/${rndnum}.jpg`}
-          // src={`compressed-images/${rndnum}.jpg`}
-          loading="lazy"
-          className={mobilefullscreen ? styles.fullscreenimage : styles.none}
-         ></img>  */}
         </div>
       </div>
       <div className={imagevisibility === styles.none ? imagevisibility : ""}>
@@ -143,12 +136,10 @@ const CustomImage = ({ isitblinkmode }: Props) => {
             transform: "translatex(-50%)",
             zIndex: "-6",
           }}
-          // className={styles.image}
         >
           <Image
             id="currentimage"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            // src={`compressed-images/${rndnum}.jpg`}
             src={imageSrc}
             alt="Current image"
             className={imagevisibility}
@@ -158,24 +149,6 @@ const CustomImage = ({ isitblinkmode }: Props) => {
             onError={handleImageError}
           />
         </div>
-
-        {/* <img
-          id="currentimage"
-          // src={imageSrc}
-          src={
-            imageSrc
-              ? `https://images.pexels.com/photos/1525041/pexels-photo-1525041.jpeg?cs=srgb&dl=pexels-francesco-ungaro-1525041.jpg&fm=jpg`
-              : `https://pub-59d21c2a645a499d865c0405a00dce02.r2.dev/${rndnum}.jpg`
-            // `compressed-images/${rndnum}.jpg`
-          }
-          // src={`https://images.pexels.com/photos/1525041/pexels-photo-1525041.jpeg?cs=srgb&dl=pexels-francesco-ungaro-1525041.jpg&fm=jpg`}
-          // src={`compressed-images/${rndnum}.jpg`}
-          className={imagevisibility}
-          onError={handleImageError}
-          style={isitloaded ? { display: "block" } : { display: "none" }}
-          onLoad={onLoad}
-          alt="Current image"
-        ></img> */}
         <img
           src="Gray_circles_rotate.gif"
           className={isitloaded ? styles.none : styles.loadinggif}

@@ -4,7 +4,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import styles from "./report.module.css";
 import { useSearchParams } from "next/navigation";
-
+import MapandSubmit from "../Components/Map/MapandSubmit";
 const baseMapStyle = {
   position: "fixed",
   bottom: "0",
@@ -17,13 +17,13 @@ const baseMapStyle = {
 let timeforshrink: NodeJS.Timeout;
 
 const Report = () => {
-  // const isitsubmitted = useRef(false);
-  // const position = useRef<[number, number]>([0, 0]);
-  // const guessRef = useRef<L.Marker | null>(null);
+  const isitsubmitted = useRef(false);
+  const position = useRef<[number, number]>([0, 0]);
+  const guessRef = useRef<L.Marker | null>(null);
+  const [mapCenter, setMapCenter] = useState<[number, number]>([
+    41.10474805585872, 29.022884681711798,
+  ]);
   const mapRef = useRef<L.Map | null>(null);
-  // const [mapCenter, setMapCenter] = useState<[number, number]>([
-  //   41.10474805585872, 29.022884681711798,
-  // ]);
   const ismarkeronmap = useRef<boolean>(false);
   const [mapStyle, setMapStyle] = useState<React.CSSProperties>({
     position: "fixed",
@@ -35,21 +35,22 @@ const Report = () => {
     marginBottom: "5vh",
   });
   const [submitClassName, setSubmitClassName] = useState(styles.placemarker);
-  // const [updater, setupdater] = useState(0);
   const isitmobile = useRef(false);
   const aspectRatio = useRef(1);
-  // const searchParams = useSearchParams();
-  // const [imagedata, setimagedata] = useState({});
+  const [updater, setupdater] = useState(0);
+  const searchParams = useSearchParams();
+  const [imagedata, setimagedata] = useState({});
 
-  // const rndnum = atob(searchParams.get("x"));
-  // const imglat = atob(searchParams.get("y"));
-  // const imglng = atob(searchParams.get("z"));
-
-  // useEffect(() => {
-  //   if(searchParams){
-  //     setimagedata({ rndnum : +atob(searchParams.get("x")),})
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (searchParams) {
+      setimagedata({
+        rndnum: searchParams.get("x") ? +atob(searchParams.get("x")!) : 0,
+        imglat: searchParams.get("y") ? +atob(searchParams.get("y")!) : 0,
+        imglng: searchParams.get("z") ? +atob(searchParams.get("z")!) : 0,
+      });
+    }
+  }, [searchParams]);
+  console.log(imagedata);
 
   useEffect(() => {
     const initializeMap = async () => {
