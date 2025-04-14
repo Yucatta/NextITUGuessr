@@ -21,8 +21,10 @@ export function useMapInteractions() {
     submitClassName,
     ismarkeronmap,
     Map,
+    isitmobile,
     setMapStyle,
     setSubmitClassName,
+    setisitmobile,
     setismarkeronmap,
     setMap,
   } = useMapState();
@@ -98,5 +100,50 @@ export function useMapInteractions() {
       }
     }
   }
-  return { shrinkinstantly, shrinksubmitandmap, enlargenmapandsubmitbutton };
+  function handleResize() {
+    if (aspectRatio < 0.85 && Map && !isitmobile) {
+      const mapcenter = Map.getCenter();
+      setisitmobile(true);
+      setMapStyle({
+        position: "absolute",
+        width: "100vw",
+        height: "calc(100vh - 100vw/4*3)",
+        zIndex: "-50",
+        right: "0",
+      });
+
+      if (ismarkeronmap) {
+        setSubmitClassName(styles.mobilesubmit);
+      } else {
+        setSubmitClassName(styles.mobileplacemarker);
+      }
+      if (mapcenter) {
+        setMapCenter([mapcenter.lat, mapcenter.lng]);
+      }
+    } else if (isitmobile && Map && aspectRatio > 0.85) {
+      const mapcenter = Map.getCenter();
+      setMapStyle({
+        ...baseMapStyle,
+        opacity: "0.5",
+        width: "clamp(200px,20vw,20vw)",
+        height: "25vh",
+        marginBottom: "5vh",
+      } as React.CSSProperties);
+      if (mapcenter) {
+        setMapCenter([mapcenter.lat, mapcenter.lng]);
+      }
+      if (ismarkeronmap) {
+        setSubmitClassName(styles.submit);
+      } else {
+        setSubmitClassName(styles.placemarker);
+      }
+      setisitmobile(false);
+    }
+  }
+  return {
+    shrinkinstantly,
+    shrinksubmitandmap,
+    enlargenmapandsubmitbutton,
+    handleResize,
+  };
 }
