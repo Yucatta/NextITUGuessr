@@ -1,20 +1,19 @@
-*{
-  font-family: "Jost",Arial, Helvetica, sans-serif;
-  border:none;
-  color : #e3e3e3;
+* {
+  font-family: "Jost", Arial, Helvetica, sans-serif;
+  border: none;
+  color: #e3e3e3;
 }
 body {
   background-color: #1a1a1a;
   margin: 0;
   padding: 0;
   display: flex;
-  font-family: "Jost",Arial, Helvetica, sans-serif;
-  --points:rgb(159, 167, 49);
-  --score:rgb(167, 94, 26);
-  --error:rgb(7, 75, 147);
-  --inputnamewidth: clamp(19vh,20vw,20vw) ;
+  font-family: "Jost", Arial, Helvetica, sans-serif;
+  --points: rgb(159, 167, 49);
+  --score: rgb(167, 94, 26);
+  --error: rgb(7, 75, 147);
+  --inputnamewidth: clamp(19vh, 20vw, 20vw);
   --imageheight: clamp(30vw, calc(99.7vh), 75vw);
-
 }
 
 :root {
@@ -35,19 +34,17 @@ body {
   font-style: normal;
 }
 @font-face {
-  font-family: 'Orbitron';
-  src: url('/fonts/Orbitron-Regular.ttf') format('truetype');
+  font-family: "Orbitron";
+  src: url("/fonts/Orbitron-Regular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
-
 
 html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
   font-family: "Jost", Arial, sans-serif;
-
 }
 
 body {

@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import styles from "./report.module.css";
+import styles from "@/app/styles/MapComponent.module.css";
 import { useSearchParams } from "next/navigation";
 import MapandSubmit from "../Components/Map/MapandSubmit";
 const baseMapStyle = {

@@ -126,13 +126,7 @@
 .menu:active {
   transform: translate(-50%, -50%) scale(0.97);
 }
-.outsideofmap {
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  z-index: 5;
-  opacity: 0;
-}
+
 .report {
   position: fixed;
   bottom: 0;
@@ -268,75 +262,4 @@
   background-repeat: no-repeat;
   background-size: cover;
   z-index: -40;
-}
-
-.timer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: clamp(2vh, 1.5vw, 1.5vw);
-}
-
-.ingamedetails {
-  position: fixed;
-  width: clamp(12vh, 15vw, 50vh);
-  height: clamp(2vw, 10vh, 12vw);
-  background-color: rgb(15, 15, 15, 0.8);
-  margin-top: 10vh;
-  right: 0;
-  font-size: clamp(1.3vh, 1vw, 1vw);
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-}
-.totalscore {
-  left: 80%;
-  transform: translatex(-50%);
-  bottom: 1vh;
-  position: absolute;
-}
-
-.tournumber {
-  position: absolute;
-  left: 20%;
-  transform: translatex(-50%);
-  bottom: 1vh;
-}
-.totalscoreinfo {
-  position: absolute;
-  left: 80%;
-  transform: translatex(-50%);
-  margin-top: 1vh;
-}
-.tournumberinfo {
-  position: absolute;
-  left: 20%;
-  transform: translatex(-50%);
-  margin-top: 1vh;
-}
-.timerprogress {
-  position: fixed;
-  width: clamp(14vh, 10vw, 200px);
-  height: clamp(20vh, 4vw, 200px);
-  z-index: -4;
-  position: absolute;
-  top: 7%;
-  left: 52%;
-  transform: translate(-50%, -50%);
-}
-
-.timerdiv {
-  position: fixed;
-
-  width: clamp(13vh, 9.55vw, 200px);
-  height: clamp(3vh, 2.2vw, 200px);
-  background-color: rgba(25, 25, 25, 0.7);
-  border-radius: 2.5vh;
-  top: 7%;
-  left: 52%;
-  transform: translate(-50%, -50%);
-  z-index: -5;
 }

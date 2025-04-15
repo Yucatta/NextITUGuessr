@@ -15,7 +15,7 @@ const baseMapStyle = {
 let timeforshrink: NodeJS.Timeout;
 
 export function useMapInteractions() {
-  const { aspectRatio } = useGameState();
+  const { aspectRatio, isitresults, isitconclusion } = useGameState();
   const [mapCenter, setMapCenter] = useState<[number, number]>();
   const {
     mapStyle,
@@ -30,7 +30,7 @@ export function useMapInteractions() {
     setMap,
   } = useMapState();
   function enlargenmapandsubmitbutton() {
-    if (aspectRatio > 0.85 && Map) {
+    if (aspectRatio > 0.85 && Map && !isitresults && !isitconclusion) {
       const mapcenter = Map.getCenter();
       setMapStyle({
         ...baseMapStyle,
@@ -58,7 +58,7 @@ export function useMapInteractions() {
     }
   }, [mapCenter]);
   function shrinksubmitandmap() {
-    if (aspectRatio > 0.85 && Map) {
+    if (aspectRatio > 0.85 && Map && !isitresults && !isitconclusion) {
       timeforshrink = setTimeout(() => {
         const mapcenter = Map.getCenter();
         setMapStyle({
@@ -102,7 +102,13 @@ export function useMapInteractions() {
     }
   }
   function handleResize() {
-    if (aspectRatio < 0.85 && Map && !isitmobile) {
+    if (
+      aspectRatio < 0.85 &&
+      Map &&
+      !isitmobile &&
+      !isitresults &&
+      !isitconclusion
+    ) {
       const mapcenter = Map.getCenter();
       setisitmobile(true);
       setMapStyle({

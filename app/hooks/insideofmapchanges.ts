@@ -27,7 +27,7 @@ export function useChangeInsideOfMap() {
     setismarkeronmap,
     setMap,
   } = useMapState();
-
+  const MapRef = useRef<L.Map | null>(null);
   const position = useRef<[number, number]>([0, 0]);
   const guessRef = useRef<L.Marker | null>(null);
   const allGuesses = useRef<Array<[number, number]>>([]);
@@ -39,7 +39,6 @@ export function useChangeInsideOfMap() {
     if (!Map) {
       return;
     }
-    // console.log(ismarkeronmap);
     if (tempForMarker.current) {
       if (guessRef.current) {
         guessRef.current.setLatLng(e.latlng);
@@ -60,12 +59,19 @@ export function useChangeInsideOfMap() {
       }
     }
   }
+
   function handleSubmit(imglat: number, imglng: number) {
+    handleSubmitClass(imglat, imglng, position.current[0], position.current[1]);
+    // console.log(MapRef.current);
+    console.log(Map);
     if (!Map) {
+      console.log("handlesubmit");
+
       return;
     }
     allLocations.current.push([imglat, imglng]);
     tempForMarker.current = false;
+    console.log(ismarkeronmap, imglat, imglng);
     if (ismarkeronmap) {
       L.marker([imglat, imglng], {
         icon: L.icon({
@@ -73,6 +79,11 @@ export function useChangeInsideOfMap() {
           iconSize: [30, 30],
           iconAnchor: [15, 15],
         }),
+      }).addTo(Map);
+      L.polyline([[imglat, imglng], position.current], {
+        color: "black",
+        dashArray: "10, 10",
+        dashOffset: "10",
       }).addTo(Map);
       allGuesses.current.push(position.current);
     } else {
@@ -85,20 +96,12 @@ export function useChangeInsideOfMap() {
       }).addTo(Map);
       allGuesses.current.push([0, 0]);
     }
-    L.polyline([[imglat, imglng], position.current], {
-      color: "black",
-      dashArray: "10, 10",
-      dashOffset: "10",
-    }).addTo(Map);
 
-    handleSubmitClass(imglat, imglng, position.current[0], position.current[1]);
+    console.log("handlesubmit");
   }
   function handleNext() {
     handleNextClass();
-    console.log(Map);
     if (!Map) {
-      console.log("aaa");
-
       return;
     }
     Map.eachLayer(function (layer) {

@@ -29,7 +29,6 @@ export function useMapClassChanges() {
   } = useMapState();
   const [mapCenter, setMapCenter] = useState<[number, number]>();
   const { shrinkinstantly } = useMapInteractions();
-
   function handleNextClass() {
     setMapStyle({
       ...baseMapStyle,
@@ -38,9 +37,15 @@ export function useMapClassChanges() {
       height: "25vh",
       marginBottom: "5vh",
     } as React.CSSProperties);
-    console.log(mapStyle);
     setSubmitClassName(styles.placemarker);
   }
+  useEffect(() => {
+    console.log(Map, mapCenter);
+    if (Map && mapCenter) {
+      Map.panTo(mapCenter);
+      Map.invalidateSize();
+    }
+  }, [mapCenter]);
   function handleSubmitClass(
     imglat: number,
     imglng: number,
@@ -53,8 +58,7 @@ export function useMapClassChanges() {
       height: "80vh",
       top: "0",
     });
-    setMapStyle({ position: "fixed", width: "100%", height: "85vh" });
-
+    console.log(mapStyle);
     setSubmitClassName(styles.none);
     setMapCenter([(imglat + guesslat) / 2, (imglng + guesslng) / 2]);
   }

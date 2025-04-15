@@ -9,6 +9,8 @@ import { useGameState } from "@/context/gamestatecontext";
 import { useChangeInsideOfMap } from "@/app/hooks/insideofmapchanges";
 interface Props {
   infovisibility: string;
+  imglat: number;
+  imglng: number;
 }
 
 const beemarker = L.icon({
@@ -17,7 +19,7 @@ const beemarker = L.icon({
   iconAnchor: [10, 30],
 });
 
-const MapandSubmit = ({ infovisibility }: Props) => {
+const MapandSubmit = ({ infovisibility, imglat, imglng }: Props) => {
   const { aspectRatio, isitpregame, isitconclusion, isitresults } =
     useGameState();
   const {
@@ -37,7 +39,8 @@ const MapandSubmit = ({ infovisibility }: Props) => {
     enlargenmapandsubmitbutton,
     handleResize,
   } = useMapInteractions();
-  const { handleMapClick } = useChangeInsideOfMap();
+  const { handleMapClick, handleConclusion, handleSubmit, handleNext } =
+    useChangeInsideOfMap();
   useEffect(() => {
     if (typeof window !== "undefined" && Map === null) {
       const mapContainer = document.getElementById("map");
@@ -74,6 +77,23 @@ const MapandSubmit = ({ infovisibility }: Props) => {
     }
   }, [Map]);
   useEffect(() => {
+    if (isitconclusion) {
+      // setinfovisibility(styles.none);
+      handleConclusion();
+    } else if (isitresults) {
+      // setinfovisibility(styles.none);
+      if (!Map) {
+        return;
+      }
+      handleSubmit(imglat, imglng);
+    } else if (isitpregame) {
+      // setinfovisibility(styles.none);
+    } else {
+      // setinfovisibility("");
+      handleNext();
+    }
+  }, [isitconclusion, isitpregame, isitresults, Map]);
+  useEffect(() => {
     if (!isitpregame) {
       shrinkinstantly();
     }
@@ -96,7 +116,7 @@ const MapandSubmit = ({ infovisibility }: Props) => {
       >
         <div id="map" style={mapStyle}></div>
         <MapButton
-          ismarkeronmap={ismarkeronmap}
+          // handleButtonClick={hand}
           submitClassName={infovisibility ? infovisibility : submitClassName}
         ></MapButton>
       </div>

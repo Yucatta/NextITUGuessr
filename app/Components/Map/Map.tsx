@@ -8,6 +8,7 @@ import MapandSubmit from "./MapandSubmit";
 import { MapStateProvider } from "@/context/MapStateContext";
 import { useChangeInsideOfMap } from "@/app/hooks/insideofmapchanges";
 import Timer from "./Timer";
+import { useMapState } from "@/context/MapStateContext";
 interface Props {
   latlong: [string, number, number, number][];
   onGuessSubmit: (score: number, error: number) => void;
@@ -37,6 +38,17 @@ const Map = ({
     setisitconclusion,
     setisitresults,
   } = useGameState();
+  const {
+    mapStyle,
+    submitClassName,
+    ismarkeronmap,
+    Map,
+    isitmobile,
+    setMapStyle,
+    setSubmitClassName,
+    setismarkeronmap,
+    setMap,
+  } = useMapState();
   const { handleMapClick, handleConclusion, handleSubmit, handleNext } =
     useChangeInsideOfMap();
   const [mapCenter, setMapCenter] = useState<[number, number]>([
@@ -46,9 +58,6 @@ const Map = ({
   const imglat = useRef(0);
   const imglng = useRef(0);
   const youundidtheredotoredidtheredo = useRef(true);
-  const allguesses = useRef<Array<[number, number]>>([]);
-  const alllocations = useRef<Array<[number, number]>>([]);
-  const ismarkeronmap = useRef<boolean>(false);
   function guessSubmit() {
     const error = Math.floor(
       Math.sqrt(
@@ -127,24 +136,31 @@ const Map = ({
       setisitresults(true);
     }
   }
+  function handleGameStateChanges() {}
   useEffect(() => {
+    // console.log(Map);
+
     if (isitconclusion) {
       setinfovisibility(styles.none);
-      handleConclusion();
+      // handleConclusion();
     } else if (isitresults) {
       setinfovisibility(styles.none);
-
-      handleSubmit(imglat.current, imglng.current);
+      // handleSubmit(imglat.current, imglng.current);
+      // console.log("handlegamstatechanges");
     } else if (isitpregame) {
       setinfovisibility(styles.none);
     } else {
       setinfovisibility("");
-      handleNext();
+      // handleNext();
     }
-  }, [isitconclusion, isitpregame, isitresults]);
+  }, [isitconclusion, isitpregame, isitresults, Map]);
   return (
     <MapStateProvider>
-      <MapandSubmit infovisibility={infovisibility}></MapandSubmit>
+      <MapandSubmit
+        imglat={latlong[rndnum][2]}
+        imglng={latlong[rndnum][3]}
+        infovisibility={infovisibility}
+      ></MapandSubmit>
       <Timer
         infovisibility={infovisibility}
         Rounds={Rounds}
