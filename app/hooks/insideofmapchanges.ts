@@ -18,16 +18,13 @@ export function useChangeInsideOfMap() {
   const { aspectRatio } = useGameState();
   const {
     mapStyle,
-    submitClassName,
     ismarkeronmap,
     Map,
-    isitmobile,
     setMapStyle,
     setSubmitClassName,
     setismarkeronmap,
     setMap,
   } = useMapState();
-  const MapRef = useRef<L.Map | null>(null);
   const position = useRef<[number, number]>([0, 0]);
   const guessRef = useRef<L.Marker | null>(null);
   const allGuesses = useRef<Array<[number, number]>>([]);
@@ -96,8 +93,7 @@ export function useChangeInsideOfMap() {
       }).addTo(Map);
       allGuesses.current.push([0, 0]);
     }
-
-    console.log("handlesubmit");
+    position.current = [0, 0];
   }
   function handleNext() {
     handleNextClass();
@@ -123,6 +119,7 @@ export function useChangeInsideOfMap() {
       allLocations.current[0],
       allGuesses.current[0]
     );
+    console.log("why are you in conclusion");
     for (let i = 0; i < 5; i++) {
       if (allGuesses.current[i][0] === 0 && allGuesses.current[i][1] === 0) {
         L.marker(allLocations.current[i], {

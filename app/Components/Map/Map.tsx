@@ -131,6 +131,7 @@ const Map = ({
   }, [isitresults, isitpregame, isitconclusion]);
   function handleTimeRunOut() {
     if (Rounds === 5) {
+      console.log("are you triggering");
       setisitconclusion(true);
     } else {
       setisitresults(true);

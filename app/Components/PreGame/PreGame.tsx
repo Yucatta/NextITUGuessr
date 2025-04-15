@@ -2,6 +2,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import styles from "../styles/conclusionpregame.module.css";
 import { useGameState } from "@/context/gamestatecontext";
+import Leaderboard from "./Leaderboard";
+import { PreGameContextProvider } from "@/context/PreGameContext";
 interface Props {
   totalscore: number;
   onstartclick: (blinkmode: boolean) => void;
@@ -19,27 +21,6 @@ const PreGame = ({ totalscore, onstartclick }: Props) => {
   const [updateleaderboard, setupdateleaderboard] = useState(1);
 
   useEffect(() => {
-    const fetchcsv = async () => {
-      try {
-        const res = await fetch("/api/getcsvfile", {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        });
-
-        const data = await res.json();
-        participants.current = data.csvData;
-        participants.current.forEach((element) => {
-          if (element[2] === "true") {
-            blinkmode.current.push([element[0], element[1]]);
-          } else if (element[2] === "false") {
-            normalmode.current.push([element[0], element[1]]);
-          }
-        });
-        setupdateleaderboard(2);
-      } catch (error) {
-        console.error("Error submitting score:", error);
-      }
-    };
     fetchcsv();
   }, []);
 
@@ -75,52 +56,11 @@ const PreGame = ({ totalscore, onstartclick }: Props) => {
         score: totalscore,
         blinkmode: isblinkmodeon,
       };
-      const appendtocsv = async () => {
-        try {
-          const res = await fetch("/api/leaderboard", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(participantinformations),
-          });
 
-          const data = await res.json();
-          if (!res.ok) {
-            throw new Error(data.error || "Unknown error");
-          }
-
-          // console.log("Server Response:", data.message);
-        } catch (error) {
-          console.error("Error submitting score:", error);
-        }
-      };
-      appendtocsv();
+      // appendtocsv();
     }
     function handleenter(e: KeyboardEvent) {
       if (e.code === "Enter") {
-        // const participantinformations = {
-        //   name: "anothertoaaaatallylegit",
-        //   score: 25000,
-        //   blinkmode: isblinkmodeon,
-        // };
-        // const appendtocsv = async () => {
-        //   try {
-        //     const res = await fetch("/api/leaderboard", {
-        //       method: "POST",
-        //       headers: { "Content-Type": "application/json" },
-        //       body: JSON.stringify(participantinformations),
-        //     });
-
-        //     const data = await res.json();
-        //     if (!res.ok) {
-        //       throw new Error(data.error || "Unknown error");
-        //     }
-
-        //     console.log("Server Response:", data.message);
-        //   } catch (error) {
-        //     console.error("Error submitting score:", error);
-        //   }
-        // };
-        // appendtocsv();
         addparticipant();
       }
     }
@@ -147,7 +87,7 @@ const PreGame = ({ totalscore, onstartclick }: Props) => {
   }, [isblinkmodeon, updateleaderboard]);
 
   return (
-    <>
+    <PreGameContextProvider>
       <div className={isitpregame ? "" : styles.none}>
         {/* <p className={styles.inputinfo}></p> */}
         <input
@@ -173,62 +113,7 @@ const PreGame = ({ totalscore, onstartclick }: Props) => {
             ITUAI <br></br>ITUGuessr
           </span>
         </div>
-        <div>
-          <div className={styles.participantsListContainer}>
-            <ol
-              className={
-                aspectRatio <= 0.85
-                  ? styles.mobileparticipantlist
-                  : styles.participantsList
-              }
-            >
-              {leaderboard.map((participant, index) => (
-                <li key={participant[0] || index}>
-                  {" "}
-                  <span
-                    className={
-                      aspectRatio <= 0.85
-                        ? styles.mobilelistparticipant
-                        : styles.listparticipant
-                    }
-                  >
-                    {index + 1}.{participant[0]}
-                  </span>
-                  <span
-                    className={
-                      aspectRatio <= 0.85
-                        ? styles.mobilelistscore
-                        : styles.listscore
-                    }
-                  >
-                    :{participant[1]}
-                  </span>
-                </li>
-              ))}
-            </ol>
-          </div>
-          <div
-            className={
-              aspectRatio <= 0.85
-                ? styles.mobileleaderboardinfo
-                : styles.leaderboardinfo
-            }
-          >
-            <strong>
-              <span
-                className={
-                  aspectRatio <= 0.85
-                    ? styles.mobileleaderboardinfopart
-                    : styles.leaderboardinfopart
-                }
-              >
-                {isblinkmodeon
-                  ? "Blink Mode Leaderboard"
-                  : "Normal Mode Leaderboard"}
-              </span>
-            </strong>
-          </div>
-        </div>
+        <Leaderboard></Leaderboard>
         <div>
           <span className={styles.blinkmodeexplainer}>
             Blink Mode: Shows the image briefly, then screen goes black.
@@ -247,7 +132,7 @@ const PreGame = ({ totalscore, onstartclick }: Props) => {
           </button>
         </div>
       </div>
-    </>
+    </PreGameContextProvider>
   );
 };
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer, useRef } from "react";
 import { useGameState } from "@/context/gamestatecontext";
 import styles from "@/app/styles/MapComponent.module.css";
 
@@ -17,20 +17,23 @@ let timeforshrink: NodeJS.Timeout;
 export function useMapInteractions() {
   const { aspectRatio, isitresults, isitconclusion } = useGameState();
   const [mapCenter, setMapCenter] = useState<[number, number]>();
+  const graceperiod = useRef(false);
   const {
-    mapStyle,
-    submitClassName,
     ismarkeronmap,
     Map,
     isitmobile,
     setMapStyle,
     setSubmitClassName,
     setisitmobile,
-    setismarkeronmap,
-    setMap,
   } = useMapState();
   function enlargenmapandsubmitbutton() {
-    if (aspectRatio > 0.85 && Map && !isitresults && !isitconclusion) {
+    if (
+      aspectRatio > 0.85 &&
+      Map &&
+      !graceperiod.current &&
+      !isitresults &&
+      !isitconclusion
+    ) {
       const mapcenter = Map.getCenter();
       setMapStyle({
         ...baseMapStyle,
@@ -52,6 +55,14 @@ export function useMapInteractions() {
     }
   }
   useEffect(() => {
+    if (!isitresults) {
+      graceperiod.current = true;
+      setTimeout(() => {
+        graceperiod.current = false;
+      }, 25);
+    }
+  }, [isitresults]);
+  useEffect(() => {
     if (Map && mapCenter) {
       Map.panTo(mapCenter);
       Map.invalidateSize();
@@ -60,23 +71,7 @@ export function useMapInteractions() {
   function shrinksubmitandmap() {
     if (aspectRatio > 0.85 && Map && !isitresults && !isitconclusion) {
       timeforshrink = setTimeout(() => {
-        const mapcenter = Map.getCenter();
-        setMapStyle({
-          ...baseMapStyle,
-          opacity: "0.5",
-          width: "clamp(200px,20vw,20vw)",
-          height: "25vh",
-          marginBottom: "5vh",
-        } as React.CSSProperties);
-
-        if (ismarkeronmap) {
-          setSubmitClassName(styles.submit);
-        } else {
-          setSubmitClassName(styles.placemarker);
-        }
-        if (mapcenter) {
-          setMapCenter([mapcenter.lat, mapcenter.lng]);
-        }
+        shrinkinstantly();
       }, 700);
     }
   }

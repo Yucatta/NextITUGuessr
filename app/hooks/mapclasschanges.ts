@@ -40,8 +40,8 @@ export function useMapClassChanges() {
     setSubmitClassName(styles.placemarker);
   }
   useEffect(() => {
-    console.log(Map, mapCenter);
     if (Map && mapCenter) {
+      console.log(Map, mapCenter);
       Map.panTo(mapCenter);
       Map.invalidateSize();
     }
@@ -58,9 +58,14 @@ export function useMapClassChanges() {
       height: "80vh",
       top: "0",
     });
-    console.log(mapStyle);
     setSubmitClassName(styles.none);
-    setMapCenter([(imglat + guesslat) / 2, (imglng + guesslng) / 2]);
+    if (guesslat + guesslng === 0) {
+      setMapCenter([imglat, imglng]);
+      console.log("no guess");
+    } else {
+      setMapCenter([(imglat + guesslat) / 2, (imglng + guesslng) / 2]);
+      console.log("there was guess");
+    }
   }
   function handleConclusionClass() {
     setMapStyle({

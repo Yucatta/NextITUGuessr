@@ -18,6 +18,7 @@ const EndGameStats = ({
   const displayStyle: React.CSSProperties = isitresults
     ? { position: "fixed" }
     : { display: "none" };
+
   return (
     <div style={displayStyle}>
       <div>

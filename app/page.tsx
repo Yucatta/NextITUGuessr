@@ -7,6 +7,7 @@ import Papa from "papaparse";
 import Conclusion from "./Components/Conclusion";
 import Pregame from "./Components/PreGame";
 import { useGameState } from "@/context/gamestatecontext";
+import { useChangeGameState } from "./hooks/GameStateChanging";
 const DynamicMap = dynamic(() => import("@/app/Components/Map/Map"), {
   ssr: false,
 });
@@ -28,6 +29,7 @@ function Home() {
     setrndnum,
     setaspectRatio,
   } = useGameState();
+  const { handleKeyDown } = useChangeGameState();
   const [score, setScore] = useState(0);
   const [error, setError] = useState(0);
   const [isblinkmodeon, setisblinkmodeon] = useState(false);
@@ -68,11 +70,16 @@ function Home() {
   function handleresize() {
     if (typeof window !== "undefined") {
       setaspectRatio(window.innerWidth / window.innerHeight);
-      console.log(aspectRatio);
+    }
+  }
+  function controlClick(e: KeyboardEvent) {
+    if (e.code === "Space" || e.code === "Enter") {
+      handleKeyDown(numberofrounds.current);
     }
   }
   if (typeof window !== "undefined") {
     window.addEventListener("resize", handleresize);
+    window.addEventListener("keydown", controlClick);
   }
 
   useEffect(() => {
@@ -91,9 +98,13 @@ function Home() {
   }
   function handlenext() {
     numberofrounds.current++;
-    // console.log(numberofrounds.current);
+    setisitresults(false);
+    console.log(isitconclusion);
+
     if (numberofrounds.current === 5) {
       numberofrounds.current = 0;
+      console.log(isitconclusion);
+
       setisitconclusion(true);
     }
   }

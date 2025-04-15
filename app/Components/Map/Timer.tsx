@@ -37,6 +37,10 @@ const Timer = ({ Rounds, infovisibility, timerunout, totalscore }: Props) => {
       line2.current = 150;
       line3.current = 20;
       helpertemp.current = 400;
+      if (secondsleft.current && timerborder.current) {
+        clearInterval(secondsleft.current);
+        clearInterval(timerborder.current);
+      }
       setstrokeDasharray(helpertemp.current);
     } else if (!isitconclusion && !isitpregame && !isitresults) {
       timer();
@@ -101,7 +105,7 @@ const Timer = ({ Rounds, infovisibility, timerunout, totalscore }: Props) => {
   }
   function timer() {
     secondsleft.current = setInterval(() => {
-      if (passedtime.current === 2) {
+      if (passedtime.current === 59) {
         if (secondsleft.current) {
           clearInterval(secondsleft.current);
         }

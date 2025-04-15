@@ -20,8 +20,13 @@ const beemarker = L.icon({
 });
 
 const MapandSubmit = ({ infovisibility, imglat, imglng }: Props) => {
-  const { aspectRatio, isitpregame, isitconclusion, isitresults } =
-    useGameState();
+  const {
+    aspectRatio,
+    isitpregame,
+    isitconclusion,
+    isitresults,
+    setisitresults,
+  } = useGameState();
   const {
     mapStyle,
     submitClassName,
@@ -53,7 +58,7 @@ const MapandSubmit = ({ infovisibility, imglat, imglng }: Props) => {
         maxBounds: [
           [41.08807268468239, 29.00938475141975],
           [41.12383548170815, 29.043887364827734],
-        ],
+        ]
         maxBoundsViscosity: 1.0,
         minZoom: 15,
       });
@@ -93,6 +98,7 @@ const MapandSubmit = ({ infovisibility, imglat, imglng }: Props) => {
       handleNext();
     }
   }, [isitconclusion, isitpregame, isitresults, Map]);
+
   useEffect(() => {
     if (!isitpregame) {
       shrinkinstantly();
@@ -111,12 +117,16 @@ const MapandSubmit = ({ infovisibility, imglat, imglng }: Props) => {
       </div>
 
       <div
-        onMouseOver={enlargenmapandsubmitbutton}
+        onMouseOver={() => {
+          enlargenmapandsubmitbutton();
+        }}
         onMouseOut={shrinksubmitandmap}
       >
         <div id="map" style={mapStyle}></div>
         <MapButton
-          // handleButtonClick={hand}
+          handleButtonClick={() => {
+            setisitresults(true);
+          }}
           submitClassName={infovisibility ? infovisibility : submitClassName}
         ></MapButton>
       </div>
