@@ -58,8 +58,8 @@ const MapandSubmit = ({ infovisibility, imglat, imglng }: Props) => {
         maxBounds: [
           [41.08807268468239, 29.00938475141975],
           [41.12383548170815, 29.043887364827734],
-        ]
-        maxBoundsViscosity: 1.0,
+        ],
+        // maxBoundsViscosity: 1.0,
         minZoom: 15,
       });
       setMap(InitialMap);

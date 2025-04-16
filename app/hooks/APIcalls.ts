@@ -1,14 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { usePreGameContext } from "@/context/PreGameContext";
+import { usePreGameContext } from "@/context/itwas238charactersandgitcouldntreadskillissue";
+
 export function useAPIcalls() {
-  const {
-    BlinkModeLeaderboard,
-    NormalModeLeaderboard,
-    CompleteLeaderboard,
-    setBlinkModeLeaderboard,
-    setNormalModeLeaderboard,
-    setCompleteLeaderboard,
-  } = usePreGameContext();
+  const { setBlinkModeLeaderboard, setNormalModeLeaderboard } =
+    usePreGameContext();
   async function updateCsv(participantinformations: {
     name: string | undefined;
     score: number;

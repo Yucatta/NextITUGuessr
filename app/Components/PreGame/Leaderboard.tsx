@@ -1,10 +1,22 @@
-import { usePreGameContext } from "@/context/PreGameContext";
-import styles from "../styles/conclusionpregame.module.css";
+import styles from "@/app/styles/conclusionpregame.module.css";
+import { usePreGameContext } from "@/context/itwas238charactersandgitcouldntreadskillissue";
+import React, { useEffect } from "react";
+import { useGameState } from "@/context/gamestatecontext";
+import { useAPIcalls } from "@/app/hooks/APIcalls";
 
-import React from "react";
+interface Props {
+  blinkmode: boolean;
+}
 
 const Leaderboard = () => {
-  const { BlinkModeLeaderboard, NormalModeLeaderboard } = usePreGameContext();
+  const { aspectRatio } = useGameState();
+  const { BlinkModeLeaderboard, NormalModeLeaderboard, blinkmode } =
+    usePreGameContext();
+
+  const { fetchCsv, updateCsv } = useAPIcalls();
+  useEffect(() => {
+    fetchCsv();
+  }, []);
   return (
     <div>
       <div className={styles.participantsListContainer}>
@@ -15,7 +27,10 @@ const Leaderboard = () => {
               : styles.participantsList
           }
         >
-          {leaderboard.map((participant, index) => (
+          {(blinkmode
+            ? BlinkModeLeaderboard.slice(0, 50)
+            : NormalModeLeaderboard.slice(0, 50)
+          ).map((participant, index) => (
             <li key={participant[0] || index}>
               {" "}
               <span
@@ -55,9 +70,7 @@ const Leaderboard = () => {
                 : styles.leaderboardinfopart
             }
           >
-            {isblinkmodeon
-              ? "Blink Mode Leaderboard"
-              : "Normal Mode Leaderboard"}
+            {blinkmode ? "Blink Mode Leaderboard" : "Normal Mode Leaderboard"}
           </span>
         </strong>
       </div>

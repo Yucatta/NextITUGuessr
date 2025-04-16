@@ -5,7 +5,7 @@ import EndGameStats from "./Components/EndGameStats";
 import CustomImage from "./Components/CustomImage";
 import Papa from "papaparse";
 import Conclusion from "./Components/Conclusion";
-import Pregame from "./Components/PreGame";
+import PreGame from "./Components/PreGame/PreGame";
 import { useGameState } from "@/context/gamestatecontext";
 import { useChangeGameState } from "./hooks/GameStateChanging";
 const DynamicMap = dynamic(() => import("@/app/Components/Map/Map"), {
@@ -148,10 +148,10 @@ function Home() {
         totalscore={totalscore.current}
         onmenuclick={handlemenu}
       ></Conclusion>
-      <Pregame
+      <PreGame
         onstartclick={handlestart}
         totalscore={totalscore.current}
-      ></Pregame>
+      ></PreGame>
     </div>
   );
 }
