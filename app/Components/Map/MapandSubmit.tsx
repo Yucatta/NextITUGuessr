@@ -7,10 +7,12 @@ import { useMapInteractions } from "@/app/hooks/mapinteractions";
 import { useMapState } from "@/context/MapStateContext";
 import { useGameState } from "@/context/gamestatecontext";
 import { useChangeInsideOfMap } from "@/app/hooks/insideofmapchanges";
+import { useChangeGameState } from "@/app/hooks/GameStateChanging";
 interface Props {
   infovisibility: string;
   imglat: number;
   imglng: number;
+  rounds: number;
 }
 
 const beemarker = L.icon({
@@ -19,12 +21,13 @@ const beemarker = L.icon({
   iconAnchor: [10, 30],
 });
 
-const MapandSubmit = ({ infovisibility, imglat, imglng }: Props) => {
+const MapandSubmit = ({ rounds, infovisibility, imglat, imglng }: Props) => {
   const {
     aspectRatio,
     isitpregame,
     isitconclusion,
     isitresults,
+    setrndnum,
     setisitresults,
   } = useGameState();
   const {
@@ -44,8 +47,12 @@ const MapandSubmit = ({ infovisibility, imglat, imglng }: Props) => {
     enlargenmapandsubmitbutton,
     handleResize,
   } = useMapInteractions();
+  const pregameref = useRef(true);
+  const ismarkeronmapref = useRef(false);
+
   const { handleMapClick, handleConclusion, handleSubmit, handleNext } =
     useChangeInsideOfMap();
+  const { handleKeyDown } = useChangeGameState();
   useEffect(() => {
     if (typeof window !== "undefined" && Map === null) {
       const mapContainer = document.getElementById("map");
@@ -86,7 +93,7 @@ const MapandSubmit = ({ infovisibility, imglat, imglng }: Props) => {
       // setinfovisibility(styles.none);
       handleConclusion();
     } else if (isitresults) {
-      // setinfovisibility(styles.none);
+      setrndnum(Math.floor(Math.random() * 5204));
       if (!Map) {
         return;
       }
@@ -97,16 +104,44 @@ const MapandSubmit = ({ infovisibility, imglat, imglng }: Props) => {
       // setinfovisibility("");
       handleNext();
     }
+    console.log(
+      "isitconlusion",
+      isitconclusion,
+      "isitpregame",
+      isitpregame,
+      "isitresults",
+      isitresults,
+      "ismarkeronmap",
+      ismarkeronmap
+    );
   }, [isitconclusion, isitpregame, isitresults, Map]);
-
+  useEffect(() => {
+    function controlClick(e: KeyboardEvent) {
+      console.log("pregameref;", pregameref.current);
+      console.log(ismarkeronmapref.current);
+      if ((e.code === "Space" || e.code === "Enter") && !pregameref.current) {
+        console.log(ismarkeronmapref.current);
+        handleKeyDown(rounds, ismarkeronmapref.current);
+      }
+    }
+    if (typeof window !== "undefined") {
+      window.addEventListener("keydown", controlClick);
+    }
+  }, []);
   useEffect(() => {
     if (!isitpregame) {
       shrinkinstantly();
     }
+    pregameref.current = isitpregame;
+    // console.log(pregameref.current, "is changed pregameref");
   }, [isitpregame]);
   useEffect(() => {
     handleResize();
   }, [aspectRatio]);
+  useEffect(() => {
+    ismarkeronmapref.current = ismarkeronmap;
+    console.log(ismarkeronmap, "ismarkeronmap");
+  }, [ismarkeronmap]);
   return (
     <div>
       <div className={infovisibility}>

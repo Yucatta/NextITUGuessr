@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, use } from "react";
-import { usePreGameContext } from "@/context/itwas238charactersandgitcouldntreadskillissue";
+import { usePreGameContext } from "@/context/PreGameContext";
 export function useInputSubmittion() {
   const { BlinkModeLeaderboard, NormalModeLeaderboard } = usePreGameContext();
   const currentparticipant = useRef<string>(null);

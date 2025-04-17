@@ -9,6 +9,7 @@ import { MapStateProvider } from "@/context/MapStateContext";
 import { useChangeInsideOfMap } from "@/app/hooks/insideofmapchanges";
 import Timer from "./Timer";
 import { useMapState } from "@/context/MapStateContext";
+import { useChangeGameState } from "@/app/hooks/GameStateChanging";
 interface Props {
   latlong: [string, number, number, number][];
   onGuessSubmit: (score: number, error: number) => void;
@@ -49,15 +50,13 @@ const Map = ({
     setismarkeronmap,
     setMap,
   } = useMapState();
-  const { handleMapClick, handleConclusion, handleSubmit, handleNext } =
-    useChangeInsideOfMap();
-  const [mapCenter, setMapCenter] = useState<[number, number]>([
-    41.10474805585872, 29.022884681711798,
-  ]);
+  const { handleKeyDown } = useChangeGameState();
+  const pregameref = useRef(true);
+  const ismarkeronmapref = useRef(false);
   const [infovisibility, setinfovisibility] = useState(styles.none);
   const imglat = useRef(0);
   const imglng = useRef(0);
-  const youundidtheredotoredidtheredo = useRef(true);
+
   function guessSubmit() {
     const error = Math.floor(
       Math.sqrt(
@@ -82,56 +81,11 @@ const Map = ({
     }
   }
   useEffect(() => {
-    // function timerunout() {
-    //   if (ismarkeronmap.current) {
-    //     const event = new KeyboardEvent("keydown", {
-    //       key: " ",
-    //       code: "Space",
-    //       keyCode: 32,
-    //       which: 32,
-    //       bubbles: true,
-    //     });
-    //     document.dispatchEvent(event);
-    //   } else {
-    //     alllocations.current.push([imglat.current, imglng.current]);
-
-    //     setSubmitClassName(styles.none);
-    //     setMapCenter([imglat.current, imglng.current]);
-    //     onGuessSubmit(0, 0);
-    //   }
-    // }
-
-    //! this is supposed to be next but idk nextim
-    if (!isitresults && !isitconclusion && !isitpregame) {
-      if (aspectRatio > 0.85) {
-        //   setMapStyle({
-        //     position: "fixed",
-        //     bottom: "0",
-        //     right: "0",
-        //     marginRight: "2vw",
-        //     zIndex: "5",
-        //     opacity: "0.5",
-        //     width: "clamp(200px,20vw,20vw)",
-        //     height: "25vh",
-        //     marginBottom: "5vh",
-        //   });
-        //   shrinksubmitandmap();
-        //   mapRef.current?.invalidateSize(true);
-        // } else {
-        //   setMapStyle({
-        //     position: "fixed",
-        //     width: "100vw",
-        //     height: "calc(100vh - 100vw/4*3)",
-        //     bottom: "0",
-        //     right: "0",
-        //   });
-        setMapCenter([41.10474805585872, 29.022884681711798]);
-      }
-    }
-  }, [isitresults, isitpregame, isitconclusion]);
+    pregameref.current = isitpregame;
+  }, [isitpregame]);
   function handleTimeRunOut() {
     if (Rounds === 5) {
-      console.log("are you triggering");
+      console.log("are you triggering ");
       setisitconclusion(true);
     } else {
       setisitresults(true);
@@ -158,6 +112,7 @@ const Map = ({
   return (
     <MapStateProvider>
       <MapandSubmit
+        rounds={Rounds}
         imglat={latlong[rndnum][2]}
         imglng={latlong[rndnum][3]}
         infovisibility={infovisibility}

@@ -6,35 +6,38 @@ import Leaderboard from "./Leaderboard";
 import {
   PreGameContextProvider,
   usePreGameContext,
-} from "@/context/itwas238charactersandgitcouldntreadskillissue";
+} from "@/context/PreGameContext";
 import { useAPIcalls } from "@/app/hooks/APIcalls";
 import PreGameInput from "./PreGameInput";
 import BlinkModeSlider from "./blinkmodeslider";
 interface Props {
   totalscore: number;
+  round: number;
   onstartclick: (blinkmode: boolean) => void;
 }
 
-const PreGame = ({ totalscore, onstartclick }: Props) => {
+const PreGame = ({ totalscore, round, onstartclick }: Props) => {
   const { isitpregame, aspectRatio } = useGameState();
 
   return (
     <PreGameContextProvider>
-      <PreGameInput></PreGameInput>
       <div className={isitpregame ? "" : styles.none}>
-        <div>
-          <img
-            src={"/Icons/ituailogo.png"}
-            className={styles.logoimage}
-            alt="ITU AI Logo"
-          />
-          <span className={styles.logoname}>
-            ITUAI <br></br>ITUGuessr
-          </span>
+        <PreGameInput round={round}></PreGameInput>
+        <div className={isitpregame ? "" : styles.none}>
+          <div>
+            <img
+              src={"/Icons/ituailogo.png"}
+              className={styles.logoimage}
+              alt="ITU AI Logo"
+            />
+            <span className={styles.logoname}>
+              ITUAI <br></br>ITUGuessr
+            </span>
+          </div>
         </div>
+        <BlinkModeSlider></BlinkModeSlider>
+        <Leaderboard></Leaderboard>
       </div>
-      <BlinkModeSlider></BlinkModeSlider>
-      <Leaderboard></Leaderboard>
     </PreGameContextProvider>
   );
 };

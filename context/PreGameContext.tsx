@@ -4,9 +4,11 @@ type PreGameContextType = {
   BlinkModeLeaderboard: string[][];
   NormalModeLeaderboard: string[][];
   blinkmode: boolean;
+  isinputwrong: boolean;
   setBlinkModeLeaderboard: React.Dispatch<React.SetStateAction<string[][]>>;
   setNormalModeLeaderboard: React.Dispatch<React.SetStateAction<string[][]>>;
   setblinkmode: React.Dispatch<React.SetStateAction<boolean>>;
+  setisinputwrong: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const PreGameContext = createContext<PreGameContextType | null>(null);
@@ -19,6 +21,7 @@ export function PreGameContextProvider({ children }: { children: ReactNode }) {
     string[][]
   >([]);
   const [blinkmode, setblinkmode] = useState<boolean>(false);
+  const [isinputwrong, setisinputwrong] = useState(false);
 
   return (
     <PreGameContext.Provider
@@ -26,9 +29,11 @@ export function PreGameContextProvider({ children }: { children: ReactNode }) {
         BlinkModeLeaderboard,
         NormalModeLeaderboard,
         blinkmode,
+        isinputwrong,
         setBlinkModeLeaderboard,
         setNormalModeLeaderboard,
         setblinkmode,
+        setisinputwrong,
       }}
     >
       {children}
@@ -40,7 +45,9 @@ export function usePreGameContext() {
   const context = useContext(PreGameContext);
   // console.log(context);
   if (!context) {
-    throw new Error("nooooooooooooo");
+    throw new Error(
+      "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    );
   }
   return context;
 }

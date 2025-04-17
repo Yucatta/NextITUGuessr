@@ -72,14 +72,14 @@ function Home() {
       setaspectRatio(window.innerWidth / window.innerHeight);
     }
   }
-  function controlClick(e: KeyboardEvent) {
-    if (e.code === "Space" || e.code === "Enter") {
-      handleKeyDown(numberofrounds.current);
-    }
-  }
+  // function controlClick(e: KeyboardEvent) {
+  //   if (e.code === "Space" || e.code === "Enter") {
+  //     handleKeyDown(numberofrounds.current);
+  //   }
+  // }
   if (typeof window !== "undefined") {
     window.addEventListener("resize", handleresize);
-    window.addEventListener("keydown", controlClick);
+    // window.addEventListener("keydown", controlClick);
   }
 
   useEffect(() => {

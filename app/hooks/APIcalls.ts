@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { usePreGameContext } from "@/context/itwas238charactersandgitcouldntreadskillissue";
+import { usePreGameContext } from "@/context/PreGameContext";
 
 export function useAPIcalls() {
   const { setBlinkModeLeaderboard, setNormalModeLeaderboard } =

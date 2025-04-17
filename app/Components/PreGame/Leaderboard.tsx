@@ -1,5 +1,5 @@
 import styles from "@/app/styles/conclusionpregame.module.css";
-import { usePreGameContext } from "@/context/itwas238charactersandgitcouldntreadskillissue";
+import { usePreGameContext } from "@/context/PreGameContext";
 import React, { useEffect } from "react";
 import { useGameState } from "@/context/gamestatecontext";
 import { useAPIcalls } from "@/app/hooks/APIcalls";

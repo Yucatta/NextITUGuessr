@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "@/app/styles/conclusionpregame.module.css";
-import { usePreGameContext } from "@/context/itwas238charactersandgitcouldntreadskillissue";
+import { usePreGameContext } from "@/context/PreGameContext";
 
 const BlinkModeSlider = () => {
   const { blinkmode, setblinkmode } = usePreGameContext();

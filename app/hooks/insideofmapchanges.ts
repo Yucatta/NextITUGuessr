@@ -48,6 +48,7 @@ export function useChangeInsideOfMap() {
       }).addTo(Map);
       position.current = [e.latlng.lat, e.latlng.lng];
       setismarkeronmap(true);
+      console.log(ismarkeronmap);
       tempForMarker.current = true;
       if (aspectRatio > 0.85) {
         setSubmitClassName(styles.biggersubmit);
@@ -56,7 +57,9 @@ export function useChangeInsideOfMap() {
       }
     }
   }
-
+  useEffect(() => {
+    console.log(ismarkeronmap);
+  }, [ismarkeronmap]);
   function handleSubmit(imglat: number, imglng: number) {
     handleSubmitClass(imglat, imglng, position.current[0], position.current[1]);
     // console.log(MapRef.current);
