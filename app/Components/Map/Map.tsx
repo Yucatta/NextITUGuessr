@@ -52,7 +52,6 @@ const Map = ({
   } = useMapState();
   const { handleKeyDown } = useChangeGameState();
   const pregameref = useRef(true);
-  const ismarkeronmapref = useRef(false);
   const [infovisibility, setinfovisibility] = useState(styles.none);
   const imglat = useRef(0);
   const imglng = useRef(0);

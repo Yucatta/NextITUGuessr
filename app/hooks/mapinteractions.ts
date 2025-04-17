@@ -25,6 +25,7 @@ export function useMapInteractions() {
     setMapStyle,
     setSubmitClassName,
     setisitmobile,
+    setismarkeronmap,
   } = useMapState();
   function enlargenmapandsubmitbutton() {
     if (
@@ -60,6 +61,8 @@ export function useMapInteractions() {
       setTimeout(() => {
         graceperiod.current = false;
       }, 25);
+    } else {
+      setismarkeronmap(false);
     }
   }, [isitresults]);
   useEffect(() => {

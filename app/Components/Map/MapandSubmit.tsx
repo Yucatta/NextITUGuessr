@@ -104,30 +104,31 @@ const MapandSubmit = ({ rounds, infovisibility, imglat, imglng }: Props) => {
       // setinfovisibility("");
       handleNext();
     }
-    console.log(
-      "isitconlusion",
-      isitconclusion,
-      "isitpregame",
-      isitpregame,
-      "isitresults",
-      isitresults,
-      "ismarkeronmap",
-      ismarkeronmap
-    );
+    // console.log(
+    //   "isitconlusion",
+    //   isitconclusion,
+    //   "isitpregame",
+    //   isitpregame,
+    //   "isitresults",
+    //   isitresults,
+    //   "ismarkeronmap",
+    //   ismarkeronmap
+    // );
   }, [isitconclusion, isitpregame, isitresults, Map]);
   useEffect(() => {
     function controlClick(e: KeyboardEvent) {
-      console.log("pregameref;", pregameref.current);
-      console.log(ismarkeronmapref.current);
       if ((e.code === "Space" || e.code === "Enter") && !pregameref.current) {
-        console.log(ismarkeronmapref.current);
+        console.log(ismarkeronmapref.current, "is marker on map");
         handleKeyDown(rounds, ismarkeronmapref.current);
       }
     }
-    if (typeof window !== "undefined") {
-      window.addEventListener("keydown", controlClick);
-    }
-  }, []);
+
+    window.addEventListener("keydown", controlClick);
+
+    return () => {
+      window.removeEventListener("keydown", controlClick); // ✅ clean up
+    };
+  }, [isitconclusion, isitpregame, isitresults, ismarkeronmap]);
   useEffect(() => {
     if (!isitpregame) {
       shrinkinstantly();
