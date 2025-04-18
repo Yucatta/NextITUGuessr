@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { useGameState } from "@/context/gamestatecontext";
 import styles from "@/app/styles/MapComponent.module.css";
-import { useMapInteractions } from "./mapinteractions";
+import { useMapInteractions } from "./mapsizechanges";
 import { useMapState } from "@/context/MapStateContext";
+import { useCalculations } from "./calculateerroranadscore";
 interface MapProps {}
 const baseMapStyle = {
   position: "fixed",
@@ -29,6 +30,7 @@ export function useMapClassChanges() {
   } = useMapState();
   const [mapCenter, setMapCenter] = useState<[number, number]>();
   const { shrinkinstantly } = useMapInteractions();
+  const { guessSubmit } = useCalculations();
   function handleNextClass() {
     setMapStyle({
       ...baseMapStyle,
@@ -41,7 +43,7 @@ export function useMapClassChanges() {
   }
   useEffect(() => {
     if (Map && mapCenter) {
-      console.log(Map, mapCenter);
+      // console.log(Map, mapCenter);
       Map.panTo(mapCenter);
       Map.invalidateSize();
     }
@@ -61,10 +63,11 @@ export function useMapClassChanges() {
     setSubmitClassName(styles.none);
     if (guesslat + guesslng === 0) {
       setMapCenter([imglat, imglng]);
-      console.log("no guess");
+      // console.log("no guess");
     } else {
       setMapCenter([(imglat + guesslat) / 2, (imglng + guesslng) / 2]);
-      console.log("there was guess");
+      guessSubmit(imglat, imglng, guesslat, guesslng);
+      // console.log("there was guess");
     }
   }
   function handleConclusionClass() {

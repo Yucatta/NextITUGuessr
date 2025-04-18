@@ -6,13 +6,21 @@ export function useInputSubmittion() {
 
   function addparticipant(user: string | undefined, blinkmode: boolean) {
     let goodornah = true;
+    // console.log(
+    //   BlinkModeLeaderboard,
+    //   "blinkmode",
+    //   NormalModeLeaderboard,
+    //   "normalmode"
+    // );
     let isinputwrong = false;
+    // console.log(BlinkModeLeaderboard, NormalModeLeaderboard, user);
     (blinkmode ? BlinkModeLeaderboard : NormalModeLeaderboard).forEach(
       (element) => {
         if (element[0] == user) {
+          // console.log(element[0], user);
           goodornah = false;
           isinputwrong = true;
-          return;
+          return isinputwrong;
         }
       }
     );

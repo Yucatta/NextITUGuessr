@@ -3,7 +3,7 @@ import L, { map } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import styles from "@/app/styles/MapComponent.module.css";
 import MapButton from "./MapButton";
-import { useMapInteractions } from "@/app/hooks/mapinteractions";
+import { useMapInteractions } from "@/app/hooks/mapsizechanges";
 import { useMapState } from "@/context/MapStateContext";
 import { useGameState } from "@/context/gamestatecontext";
 import { useChangeInsideOfMap } from "@/app/hooks/insideofmapchanges";
@@ -21,7 +21,7 @@ const beemarker = L.icon({
   iconAnchor: [10, 30],
 });
 
-const MapandSubmit = ({ rounds, infovisibility, imglat, imglng }: Props) => {
+const MapandSubmit = ({ infovisibility, imglat, imglng }: Props) => {
   const {
     aspectRatio,
     isitpregame,
@@ -47,7 +47,8 @@ const MapandSubmit = ({ rounds, infovisibility, imglat, imglng }: Props) => {
     enlargenmapandsubmitbutton,
     handleResize,
   } = useMapInteractions();
-  const pregameref = useRef(true);
+
+  const mapclass = useRef("");
   const ismarkeronmapref = useRef(false);
 
   const { handleMapClick, handleConclusion, handleSubmit, handleNext } =
@@ -99,50 +100,38 @@ const MapandSubmit = ({ rounds, infovisibility, imglat, imglng }: Props) => {
       }
       handleSubmit(imglat, imglng);
     } else if (isitpregame) {
-      // setinfovisibility(styles.none);
+      setMapStyle({ display: "none" });
     } else {
       // setinfovisibility("");
       handleNext();
     }
-    // console.log(
-    //   "isitconlusion",
-    //   isitconclusion,
-    //   "isitpregame",
-    //   isitpregame,
-    //   "isitresults",
-    //   isitresults,
-    //   "ismarkeronmap",
-    //   ismarkeronmap
-    // );
   }, [isitconclusion, isitpregame, isitresults, Map]);
   useEffect(() => {
     function controlClick(e: KeyboardEvent) {
-      if ((e.code === "Space" || e.code === "Enter") && !pregameref.current) {
+      if ((e.code === "Space" || e.code === "Enter") && !isitpregame) {
         console.log(ismarkeronmapref.current, "is marker on map");
-        handleKeyDown(rounds, ismarkeronmapref.current);
+        handleKeyDown(ismarkeronmap);
       }
     }
 
     window.addEventListener("keydown", controlClick);
 
     return () => {
-      window.removeEventListener("keydown", controlClick); // ✅ clean up
+      window.removeEventListener("keydown", controlClick);
     };
   }, [isitconclusion, isitpregame, isitresults, ismarkeronmap]);
   useEffect(() => {
     if (!isitpregame) {
       shrinkinstantly();
     }
-    pregameref.current = isitpregame;
-    // console.log(pregameref.current, "is changed pregameref");
   }, [isitpregame]);
   useEffect(() => {
     handleResize();
   }, [aspectRatio]);
-  useEffect(() => {
-    ismarkeronmapref.current = ismarkeronmap;
-    console.log(ismarkeronmap, "ismarkeronmap");
-  }, [ismarkeronmap]);
+  // useEffect(() => {
+  //   ismarkeronmapref.current = ismarkeronmap;
+  //   console.log(ismarkeronmap, "ismarkeronmap");
+  // }, [ismarkeronmap]);
   return (
     <div>
       <div className={infovisibility}>

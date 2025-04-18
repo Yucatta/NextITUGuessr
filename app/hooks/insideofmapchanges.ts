@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import L, { map } from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { useMapInteractions } from "@/app/hooks/mapinteractions";
+import { useMapInteractions } from "@/app/hooks/mapsizechanges";
 import styles from "@/app/styles/MapComponent.module.css";
 import { useMapState } from "@/context/MapStateContext";
 import { useGameState } from "@/context/gamestatecontext";
@@ -56,12 +56,11 @@ export function useChangeInsideOfMap() {
       }
     }
   }
-  useEffect(() => {
-    console.log(ismarkeronmap, "this is ismarkeronmap in hook");
-  }, [ismarkeronmap]);
+  // useEffect(() => {
+  //   console.log(ismarkeronmap, "this is ismarkeronmap in hook");
+  // }, [ismarkeronmap]);
   function handleSubmit(imglat: number, imglng: number) {
     handleSubmitClass(imglat, imglng, position.current[0], position.current[1]);
-    // console.log(MapRef.current);
     console.log(Map);
     if (!Map) {
       console.log("handlesubmit");

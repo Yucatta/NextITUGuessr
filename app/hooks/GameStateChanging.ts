@@ -14,17 +14,17 @@ export function useChangeGameState() {
     setisitpregame,
     setisitresults,
   } = useGameState();
-  const markeref = useRef(false);
+  const round = useRef(0);
   // const { isinputwrong, setisinputwrong } = usePreGameContext();
   // const { addparticipant } = useInputSubmittion();
-  function handleKeyDown(round: number, ismarkeronmap: boolean) {
-    console.log(markeref.current);
+  function handleKeyDown(ismarkeronmap: boolean) {
     console.log(isitresults);
     if (isitresults) {
       setisitresults(false);
-
-      if (round === 5) {
+      round.current++;
+      if (round.current === 5) {
         setisitconclusion(true);
+        round.current = 0;
       }
     } else if (isitconclusion) {
       setisitconclusion(false);

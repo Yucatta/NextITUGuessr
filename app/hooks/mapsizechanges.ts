@@ -15,7 +15,8 @@ const baseMapStyle = {
 let timeforshrink: NodeJS.Timeout;
 
 export function useMapInteractions() {
-  const { aspectRatio, isitresults, isitconclusion } = useGameState();
+  const { aspectRatio, isitresults, isitconclusion, isitpregame } =
+    useGameState();
   const [mapCenter, setMapCenter] = useState<[number, number]>();
   const graceperiod = useRef(false);
   const {
@@ -56,7 +57,7 @@ export function useMapInteractions() {
     }
   }
   useEffect(() => {
-    if (!isitresults) {
+    if (!isitresults || isitpregame) {
       graceperiod.current = true;
       setTimeout(() => {
         graceperiod.current = false;
@@ -64,7 +65,7 @@ export function useMapInteractions() {
     } else {
       setismarkeronmap(false);
     }
-  }, [isitresults]);
+  }, [isitresults, isitpregame]);
   useEffect(() => {
     if (Map && mapCenter) {
       Map.panTo(mapCenter);

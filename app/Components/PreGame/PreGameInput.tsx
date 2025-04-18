@@ -5,6 +5,7 @@ import { usePreGameContext } from "@/context/PreGameContext";
 import { useChangeGameState } from "@/app/hooks/GameStateChanging";
 import { useGameState } from "@/context/gamestatecontext";
 import { Just_Another_Hand } from "next/font/google";
+import { normalize } from "path";
 
 interface Props {
   round: number;
@@ -13,30 +14,44 @@ const PreGameInput = ({ round }: Props) => {
   const currentparticipant = useRef<HTMLInputElement>(null);
   const { isitpregame, setisitpregame } = useGameState();
   const pregameref = useRef(true);
+  const buttonref = useRef<HTMLButtonElement>(null);
   const { addparticipant } = useInputSubmittion();
-  const { blinkmode, isinputwrong, setisinputwrong } = usePreGameContext();
+  const {
+    blinkmode,
+    isinputwrong,
+    setisinputwrong,
+    BlinkModeLeaderboard,
+    NormalModeLeaderboard,
+  } = usePreGameContext();
   // const { handleKeyDown } = useChangeGameState();
   function anotaddapart() {
     let temp: boolean;
     temp = addparticipant(currentparticipant.current?.value, blinkmode);
     setisinputwrong(temp);
+    // console.log(isinputwrong, "isinputwrong");
+    // console.log(temp, "temp isinputwrong");
     if (!temp) {
       setisitpregame(false);
-      // console.log(isitpregame);
     }
   }
-  function controlClick(e: KeyboardEvent) {
-    if (e.code === "Enter" && pregameref.current) {
-      console.log(isitpregame);
-      anotaddapart();
+  // console.log(isinputwrong, "this is in the function");
+
+  useEffect(() => {
+    function controlClick(e: KeyboardEvent) {
+      if (e.code === "Enter" && pregameref.current) {
+        buttonref.current?.click();
+      }
     }
-  }
-  if (typeof window !== "undefined") {
-    window.addEventListener("keypress", controlClick);
-  }
+    if (typeof window !== "undefined") {
+      window.addEventListener("keypress", controlClick);
+    }
+    return () => {
+      window.removeEventListener("keypress", controlClick);
+    };
+  }, []);
   useEffect(() => {
     pregameref.current = isitpregame;
-  }, [isitpregame]);
+  }, [isitpregame, BlinkModeLeaderboard, NormalModeLeaderboard]);
   return (
     <>
       {/* <p className={styles.inputinfo}></p> */}
@@ -52,6 +67,7 @@ const PreGameInput = ({ round }: Props) => {
       {/* <span className={styles.alert}>THIS NAME IS ALREADY TAKEN</span> */}
       <button
         className={styles.start}
+        ref={buttonref}
         onClick={() => anotaddapart()}
         id="start"
       >
