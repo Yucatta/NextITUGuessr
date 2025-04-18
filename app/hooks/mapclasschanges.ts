@@ -30,7 +30,6 @@ export function useMapClassChanges() {
   } = useMapState();
   const [mapCenter, setMapCenter] = useState<[number, number]>();
   const { shrinkinstantly } = useMapInteractions();
-  const { guessSubmit } = useCalculations();
   function handleNextClass() {
     setMapStyle({
       ...baseMapStyle,
@@ -66,8 +65,6 @@ export function useMapClassChanges() {
       // console.log("no guess");
     } else {
       setMapCenter([(imglat + guesslat) / 2, (imglng + guesslng) / 2]);
-      guessSubmit(imglat, imglng, guesslat, guesslng);
-      // console.log("there was guess");
     }
   }
   function handleConclusionClass() {

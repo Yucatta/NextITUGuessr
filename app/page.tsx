@@ -1,7 +1,6 @@
 "use client";
 import dynamic from "next/dynamic";
 import React, { useEffect, useState, useRef } from "react";
-import EndGameStats from "./Components/EndGameStats";
 import CustomImage from "./Components/CustomImage";
 import Papa from "papaparse";
 import Conclusion from "./Components/Conclusion";
@@ -108,23 +107,6 @@ function Home() {
       setisitconclusion(true);
     }
   }
-  function handlemenu() {
-    setisitpregame(true);
-    setisitconclusion(false);
-  }
-  function handlestart(blinkmode: boolean) {
-    setisitpregame(false);
-    setisblinkmodeon(blinkmode);
-    totalscore.current = 0;
-  }
-  function handleReport() {
-    const query = `?x=${btoa(`${rndnum}`)}&y=${btoa(
-      `${latlong[rndnum][2]}`
-    )}&z=${btoa(`${latlong[rndnum][3]}`)}`;
-    window.open(`/report${query}`, "_blank");
-    // window.open("/report", "_blank");
-    // console.log("a");
-  }
 
   return (
     <div>
@@ -132,26 +114,9 @@ function Home() {
       <DynamicMap
         Rounds={numberofrounds.current}
         latlong={latlong}
-        onGuessSubmit={handleSubmit}
-        onnextclick={handlenext}
         totalscore={totalscore.current}
       />
-      <EndGameStats
-        isitresults={isitresults}
-        onNextClick={handlenext}
-        onReport={handleReport}
-        score={score}
-        error={error}
-      />
-      <Conclusion
-        isitconclusion={isitconclusion}
-        totalscore={totalscore.current}
-        onmenuclick={handlemenu}
-      ></Conclusion>
-      <PreGame
-        onstartclick={handlestart}
-        totalscore={totalscore.current}
-      ></PreGame>
+      <PreGame></PreGame>
     </div>
   );
 }

@@ -7,10 +7,8 @@ import { useGameState } from "@/context/gamestatecontext";
 import { Just_Another_Hand } from "next/font/google";
 import { normalize } from "path";
 
-interface Props {
-  round: number;
-}
-const PreGameInput = ({ round }: Props) => {
+interface Props {}
+const PreGameInput = () => {
   const currentparticipant = useRef<HTMLInputElement>(null);
   const { isitpregame, setisitpregame } = useGameState();
   const pregameref = useRef(true);

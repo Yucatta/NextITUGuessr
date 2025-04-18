@@ -6,6 +6,7 @@ import styles from "@/app/styles/MapComponent.module.css";
 import { useMapState } from "@/context/MapStateContext";
 import { useGameState } from "@/context/gamestatecontext";
 import { useMapClassChanges } from "./mapclasschanges";
+import { useCalculations } from "./calculateerroranadscore";
 interface Props {}
 
 const beemarker = L.icon({
@@ -30,6 +31,7 @@ export function useChangeInsideOfMap() {
   const allGuesses = useRef<Array<[number, number]>>([]);
   const allLocations = useRef<Array<[number, number]>>([]);
   const tempForMarker = useRef(false);
+  const { guessSubmit } = useCalculations();
   const { handleConclusionClass, handleNextClass, handleSubmitClass } =
     useMapClassChanges();
   function handleMapClick(e: L.LeafletMouseEvent) {
@@ -56,9 +58,6 @@ export function useChangeInsideOfMap() {
       }
     }
   }
-  // useEffect(() => {
-  //   console.log(ismarkeronmap, "this is ismarkeronmap in hook");
-  // }, [ismarkeronmap]);
   function handleSubmit(imglat: number, imglng: number) {
     handleSubmitClass(imglat, imglng, position.current[0], position.current[1]);
     console.log(Map);
@@ -94,7 +93,14 @@ export function useChangeInsideOfMap() {
       }).addTo(Map);
       allGuesses.current.push([0, 0]);
     }
+    const temp = guessSubmit(
+      imglat,
+      imglng,
+      position.current[0],
+      position.current[1]
+    );
     position.current = [0, 0];
+    return temp;
   }
   function handleNext() {
     handleNextClass();

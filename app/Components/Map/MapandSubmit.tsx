@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import L, { map } from "leaflet";
+import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import styles from "@/app/styles/MapComponent.module.css";
 import MapButton from "./MapButton";
@@ -8,8 +8,10 @@ import { useMapState } from "@/context/MapStateContext";
 import { useGameState } from "@/context/gamestatecontext";
 import { useChangeInsideOfMap } from "@/app/hooks/insideofmapchanges";
 import { useChangeGameState } from "@/app/hooks/GameStateChanging";
+import EndGameStats from "../EndGameStats";
+import Conclusion from "../Conclusion";
+import { Tiro_Tamil } from "next/font/google";
 interface Props {
-  infovisibility: string;
   imglat: number;
   imglng: number;
   rounds: number;
@@ -21,14 +23,17 @@ const beemarker = L.icon({
   iconAnchor: [10, 30],
 });
 
-const MapandSubmit = ({ infovisibility, imglat, imglng }: Props) => {
+const MapandSubmit = ({ imglat, imglng }: Props) => {
   const {
     aspectRatio,
     isitpregame,
     isitconclusion,
+    rndnum,
     isitresults,
     setrndnum,
     setisitresults,
+    setisitpregame,
+    setisitconclusion,
   } = useGameState();
   const {
     mapStyle,
@@ -47,12 +52,12 @@ const MapandSubmit = ({ infovisibility, imglat, imglng }: Props) => {
     enlargenmapandsubmitbutton,
     handleResize,
   } = useMapInteractions();
-
-  const mapclass = useRef("");
+  const [scoreanderror, setscoreanderror] = useState([0, 0]);
+  const [infovisibility, setinfovisibility] = useState(styles.none);
   const ismarkeronmapref = useRef(false);
-
   const { handleMapClick, handleConclusion, handleSubmit, handleNext } =
     useChangeInsideOfMap();
+  const totalscore = useRef(0);
   const { handleKeyDown } = useChangeGameState();
   useEffect(() => {
     if (typeof window !== "undefined" && Map === null) {
@@ -98,8 +103,13 @@ const MapandSubmit = ({ infovisibility, imglat, imglng }: Props) => {
       if (!Map) {
         return;
       }
-      handleSubmit(imglat, imglng);
+      const temp = handleSubmit(imglat, imglng);
+      if (temp) {
+        totalscore.current += temp[0];
+        setscoreanderror(temp);
+      }
     } else if (isitpregame) {
+      totalscore.current = 0;
       setMapStyle({ display: "none" });
     } else {
       // setinfovisibility("");
@@ -109,13 +119,14 @@ const MapandSubmit = ({ infovisibility, imglat, imglng }: Props) => {
   useEffect(() => {
     function controlClick(e: KeyboardEvent) {
       if ((e.code === "Space" || e.code === "Enter") && !isitpregame) {
-        console.log(ismarkeronmapref.current, "is marker on map");
+        // console.log(ismarkeronmapref.current, "is marker on map");
         handleKeyDown(ismarkeronmap);
       }
     }
 
     window.addEventListener("keydown", controlClick);
 
+    // console.log(mapStyle);
     return () => {
       window.removeEventListener("keydown", controlClick);
     };
@@ -128,10 +139,19 @@ const MapandSubmit = ({ infovisibility, imglat, imglng }: Props) => {
   useEffect(() => {
     handleResize();
   }, [aspectRatio]);
-  // useEffect(() => {
-  //   ismarkeronmapref.current = ismarkeronmap;
-  //   console.log(ismarkeronmap, "ismarkeronmap");
-  // }, [ismarkeronmap]);
+  useEffect(() => {
+    console.log(scoreanderror);
+  }, [scoreanderror]);
+  function handleReport() {
+    const query = `?x=${btoa(`${rndnum}`)}&y=${btoa(`${imglat}`)}&z=${btoa(
+      `${imglng}`
+    )}`;
+    window.open(`/report${query}`, "_blank");
+  }
+  function handlemenu() {
+    setisitpregame(true);
+    setisitconclusion(false);
+  }
   return (
     <div>
       <div className={infovisibility}>
@@ -152,9 +172,36 @@ const MapandSubmit = ({ infovisibility, imglat, imglng }: Props) => {
           handleButtonClick={() => {
             setisitresults(true);
           }}
-          submitClassName={infovisibility ? infovisibility : submitClassName}
+          submitClassName={
+            !isitconclusion && !isitpregame && !isitresults
+              ? submitClassName
+              : styles.none
+          }
         ></MapButton>
       </div>
+      <EndGameStats
+        isitresults={isitresults}
+        onNextClick={() => {
+          setrndnum(Math.floor(Math.random() * 5204));
+          setinfovisibility(styles.none);
+          if (!Map) {
+            return;
+          }
+          const temp = handleSubmit(imglat, imglng);
+          console.log(temp);
+          if (temp) {
+            setscoreanderror(temp);
+          }
+        }}
+        onReport={handleReport}
+        score={scoreanderror[0]}
+        error={scoreanderror[1]}
+      ></EndGameStats>
+      <Conclusion
+        isitconclusion={isitconclusion}
+        totalscore={totalscore.current}
+        onmenuclick={handlemenu}
+      ></Conclusion>
     </div>
   );
 };

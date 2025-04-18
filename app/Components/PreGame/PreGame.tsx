@@ -10,19 +10,15 @@ import {
 import { useAPIcalls } from "@/app/hooks/APIcalls";
 import PreGameInput from "./PreGameInput";
 import BlinkModeSlider from "./blinkmodeslider";
-interface Props {
-  totalscore: number;
-  round: number;
-  onstartclick: (blinkmode: boolean) => void;
-}
+interface Props {}
 
-const PreGame = ({ totalscore, round, onstartclick }: Props) => {
+const PreGame = () => {
   const { isitpregame, aspectRatio } = useGameState();
 
   return (
     <PreGameContextProvider>
       <div className={isitpregame ? "" : styles.none}>
-        <PreGameInput round={round}></PreGameInput>
+        <PreGameInput></PreGameInput>
         <div className={isitpregame ? "" : styles.none}>
           <div>
             <img

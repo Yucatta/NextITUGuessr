@@ -4,10 +4,9 @@ import { useGameState } from "@/context/gamestatecontext";
 interface Props {
   Rounds: number;
   totalscore: number;
-  infovisibility: string;
   timerunout: () => void;
 }
-const Timer = ({ Rounds, infovisibility, timerunout, totalscore }: Props) => {
+const Timer = ({ Rounds, timerunout, totalscore }: Props) => {
   const [path, setpath] = useState(`
         M 85 0
         L 20 0
@@ -116,7 +115,11 @@ const Timer = ({ Rounds, infovisibility, timerunout, totalscore }: Props) => {
   }
 
   return (
-    <div className={infovisibility}>
+    <div
+      className={
+        !isitconclusion && !isitpregame && !isitresults ? "" : styles.none
+      }
+    >
       <div className={styles.timerdiv}>
         <p className={styles.timer}>
           00:

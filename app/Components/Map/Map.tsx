@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import L from "leaflet";
+import EndGameStats from "../EndGameStats";
 import "leaflet/dist/leaflet.css";
 import styles from "@/app/styles/Style.module.css";
 import { useGameState } from "@/context/gamestatecontext";
@@ -12,24 +13,13 @@ import { useMapState } from "@/context/MapStateContext";
 import { useChangeGameState } from "@/app/hooks/GameStateChanging";
 interface Props {
   latlong: [string, number, number, number][];
-  onGuessSubmit: (score: number, error: number) => void;
-  onnextclick: () => void;
   totalscore: number;
   Rounds: number;
 }
 
-const latlengthmeter = 111.32 * 1000;
-const longtiduelengthmeter = (40075 * 1000 * 0.75346369194) / 360; // 0.75346369194 is cosine of latitude
-
 let score = 0;
 
-const Map = ({
-  latlong,
-  onGuessSubmit,
-  onnextclick,
-  totalscore,
-  Rounds,
-}: Props) => {
+const Map = ({ latlong, totalscore, Rounds }: Props) => {
   const {
     isitresults,
     isitconclusion,
@@ -38,6 +28,7 @@ const Map = ({
     aspectRatio,
     setisitconclusion,
     setisitresults,
+    setrndnum,
   } = useGameState();
   const {
     mapStyle,
@@ -50,35 +41,14 @@ const Map = ({
     setismarkeronmap,
     setMap,
   } = useMapState();
-  const { handleKeyDown } = useChangeGameState();
+  const { handleMapClick, handleConclusion, handleSubmit, handleNext } =
+    useChangeInsideOfMap();
+
+  // const { handleKeyDown } = useChangeGameState();
   const pregameref = useRef(true);
-  const [infovisibility, setinfovisibility] = useState(styles.none);
   const imglat = useRef(0);
   const imglng = useRef(0);
 
-  function guessSubmit() {
-    const error = Math.floor(
-      Math.sqrt(
-        ((imglat.current - latLngArr[0]) * latlengthmeter) ** 2 +
-          ((imglng.current - latLngArr[1]) * longtiduelengthmeter) ** 2
-      )
-    );
-    if (mapRef.current && secondsleft.current && timerborder.current) {
-      score =
-        Math.floor(
-          5000 *
-            Math.E **
-              ((-5 *
-                Math.sqrt(
-                  (imglat.current - latLngArr[0]) ** 2 +
-                    (imglng.current - latLngArr[1]) ** 2
-                )) /
-                0.01947557727)
-        ) + 1;
-
-      onGuessSubmit(score, error);
-    }
-  }
   useEffect(() => {
     pregameref.current = isitpregame;
   }, [isitpregame]);
@@ -90,34 +60,52 @@ const Map = ({
       setisitresults(true);
     }
   }
-  function handleGameStateChanges() {}
-  useEffect(() => {
-    // console.log(Map);
+  // useEffect(() => {
+  //   // console.log(Map);
 
-    if (isitconclusion) {
-      setinfovisibility(styles.none);
-      // handleConclusion();
-    } else if (isitresults) {
-      setinfovisibility(styles.none);
-      // handleSubmit(imglat.current, imglng.current);
-      // console.log("handlegamstatechanges");
-    } else if (isitpregame) {
-      setinfovisibility(styles.none);
-    } else {
-      setinfovisibility("");
-      // handleNext();
-    }
-  }, [isitconclusion, isitpregame, isitresults, Map]);
+  //   if (isitconclusion) {
+  //     // setinfovisibility(styles.none);
+  //     // handleConclusion();
+  //   } else if (isitresults) {
+  //     // setinfovisibility(styles.none);
+  //     // handleSubmit(imglat.current, imglng.current);
+  //     // console.log("handlegamstatechanges");
+  //   } else if (isitpregame) {
+  //     setinfovisibility(styles.none);
+  //   } else {
+  //     setinfovisibility("");
+  //     // handleNext();
+  //   }
+  // }, [isitconclusion, isitpregame, isitresults, Map]);
+  // useEffect(() => {
+  //   if (isitconclusion) {
+  //     setinfovisibility(styles.none);
+  //     handleConclusion();
+  //   } else if (isitresults) {
+  //     setrndnum(Math.floor(Math.random() * 5204));
+  //     setinfovisibility(styles.none);
+  //     console.log("a");
+  //     const temp = handleSubmit(latlong[rndnum][2], latlong[rndnum][3]);
+  //     if (temp) {
+  //       setscoreanderror(temp);
+  //     }
+  //   } else if (isitpregame) {
+  //     setMapStyle({ display: "none" });
+  //     setinfovisibility(styles.none);
+  //   } else if (!isitpregame && !isitconclusion && !isitresults) {
+  //     setinfovisibility("");
+  //     handleNext();
+  //   }
+  // }, [isitconclusion, isitpregame, isitresults, Map]);
+
   return (
     <MapStateProvider>
       <MapandSubmit
         rounds={Rounds}
         imglat={latlong[rndnum][2]}
         imglng={latlong[rndnum][3]}
-        infovisibility={infovisibility}
       ></MapandSubmit>
       <Timer
-        infovisibility={infovisibility}
         Rounds={Rounds}
         totalscore={totalscore}
         timerunout={() => handleTimeRunOut()}
