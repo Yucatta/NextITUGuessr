@@ -48,8 +48,8 @@ const Map = ({ latlong }: Props) => {
           settotalscore(totalscore.current);
         }}
         rounds={Rounds.current}
-        imglat={latlong[rndnum][2]}
-        imglng={latlong[rndnum][3]}
+        imglat={latlong[rndnum][2] ? latlong[rndnum][2] : 0}
+        imglng={latlong[rndnum][3] ? latlong[rndnum][3] : 0}
         totalscore={totalscore.current}
       ></MapandSubmit>
       <Timer
