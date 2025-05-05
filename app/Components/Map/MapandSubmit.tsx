@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import styles from "@/app/styles/MapComponent.module.css";
@@ -49,12 +49,13 @@ const MapandSubmit = ({
   const { handleMapClick, handleConclusion, handleSubmit, handleNext } =
     useChangeInsideOfMap();
   const { handleKeyDown } = useChangeGameState();
+  const hasmapinitialized = useRef(false);
   useEffect(() => {
     if (typeof window !== "undefined" && Map === null) {
-      const mapContainer = document.getElementById("map");
-      if (mapContainer && (mapContainer as any)._leaflet_id) {
+      if (hasmapinitialized.current) {
         return;
       }
+
       const InitialMap = L.map("map", {
         center: [41.10474805585872, 29.022884681711798],
         zoom: 16,
@@ -62,7 +63,6 @@ const MapandSubmit = ({
           [41.08807268468239, 29.00938475141975],
           [41.12383548170815, 29.043887364827734],
         ],
-        // maxBoundsViscosity: 1.0,
         minZoom: 15,
       });
       setMap(InitialMap);
@@ -77,6 +77,7 @@ const MapandSubmit = ({
       );
       openstreetmap.addTo(InitialMap);
       setMap(InitialMap);
+      hasmapinitialized.current = true;
     }
     if (Map) {
       Map.on("click", (e) => {
@@ -132,12 +133,12 @@ const MapandSubmit = ({
     handleResize();
   }, [aspectRatio]);
   useEffect(() => {}, [scoreanderror]);
-  function handleReport() {
-    const query = `?x=${btoa(`${rndnum}`)}&y=${btoa(`${imglat}`)}&z=${btoa(
-      `${imglng}`
-    )}`;
-    window.open(`/report${query}`, "_blank");
-  }
+  // function handleReport() {
+  //   const query = `?x=${btoa(`${rndnum}`)}&y=${btoa(`${imglat}`)}&z=${btoa(
+  //     `${imglng}`
+  //   )}`;
+  //   window.open(`/report${query}`, "_blank");
+  // }
   function handlemenu() {
     setisitpregame(true);
     setisitconclusion(false);
@@ -187,7 +188,7 @@ const MapandSubmit = ({
             }
           }
         }}
-        onReport={handleReport}
+        // onReport={handleReport}
         score={scoreanderror[0]}
         error={scoreanderror[1]}
       ></EndGameStats>

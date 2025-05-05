@@ -5,7 +5,7 @@ interface Props {
   score: number;
   error: number;
   onNextClick: () => void;
-  onReport: () => void;
+  // onReport: () => void;
 }
 
 const EndGameStats = ({
@@ -13,8 +13,8 @@ const EndGameStats = ({
   score,
   onNextClick: onNextClick,
   error,
-  onReport,
-}: Props) => {
+}: // onReport,
+Props) => {
   const displayStyle: React.CSSProperties = isitresults
     ? { position: "fixed" }
     : { display: "none" };
@@ -35,9 +35,9 @@ const EndGameStats = ({
         </button>
       </div>
       <div>
-        <button className={styles.report} onClick={onReport}>
+        {/* <button className={styles.report} onClick={onReport}>
           <img src="/Icons/ReportFlag.png" className={styles.ReportImg}></img>
-        </button>
+        </button> */}
       </div>
     </div>
   );

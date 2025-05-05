@@ -22,8 +22,7 @@ const PreGameInput = () => {
   } = usePreGameContext();
   const { updateCsv } = useAPIcalls();
   function anotaddapart() {
-    let temp: boolean;
-    temp = addparticipant(currentparticipant.current?.value, blinkmode);
+    const temp = addparticipant(currentparticipant.current?.value, blinkmode);
     setisinputwrong(temp);
     if (!temp && currentparticipant.current) {
       setisitpregame(false);

@@ -3,7 +3,6 @@ export function useChangeGameState() {
   const {
     isitconclusion,
     isitresults,
-    setrndnum,
     setisitconclusion,
     setisitpregame,
     setisitresults,

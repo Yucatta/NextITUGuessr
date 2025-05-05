@@ -14,7 +14,7 @@ const BlinkModeSlider = ({ handleBlinkMode }: Props) => {
       <button
         className={styles.blinkmodeoffcontainer}
         onClick={() => {
-          handleBlinkMode;
+          handleBlinkMode();
           setblinkmode(!blinkmode);
         }}
       >

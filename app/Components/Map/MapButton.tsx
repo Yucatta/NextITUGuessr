@@ -1,6 +1,5 @@
 import React from "react";
 import { useMapState } from "@/context/MapStateContext";
-import { useMap } from "react-leaflet";
 interface Props {
   submitClassName: string;
   handleButtonClick: () => void;

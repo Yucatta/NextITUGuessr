@@ -4,7 +4,6 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import styles from "@/app/styles/MapComponent.module.css";
 import { useSearchParams } from "next/navigation";
-import MapandSubmit from "../Components/Map/MapandSubmit";
 const baseMapStyle = {
   position: "fixed",
   bottom: "0",
@@ -17,12 +16,12 @@ const baseMapStyle = {
 let timeforshrink: NodeJS.Timeout;
 
 const Report = () => {
-  const isitsubmitted = useRef(false);
-  const position = useRef<[number, number]>([0, 0]);
-  const guessRef = useRef<L.Marker | null>(null);
-  const [mapCenter, setMapCenter] = useState<[number, number]>([
-    41.10474805585872, 29.022884681711798,
-  ]);
+  // const isitsubmitted = useRef(false);
+  // const position = useRef<[number, number]>([0, 0]);
+  // const guessRef = useRef<L.Marker | null>(null);
+  // const [mapCenter, setMapCenter] = useState<[number, number]>([
+  //   41.10474805585872, 29.022884681711798,
+  // ]);
   const mapRef = useRef<L.Map | null>(null);
   const ismarkeronmap = useRef<boolean>(false);
   const [mapStyle, setMapStyle] = useState<React.CSSProperties>({
@@ -37,7 +36,7 @@ const Report = () => {
   const [submitClassName, setSubmitClassName] = useState(styles.placemarker);
   const isitmobile = useRef(false);
   const aspectRatio = useRef(1);
-  const [updater, setupdater] = useState(0);
+  // const [updater, setupdater] = useState(0);
   const searchParams = useSearchParams();
   const [imagedata, setimagedata] = useState({});
 

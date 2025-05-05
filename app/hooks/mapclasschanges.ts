@@ -1,10 +1,6 @@
 import { useState, useEffect } from "react";
-import { useGameState } from "@/context/gamestatecontext";
 import styles from "@/app/styles/MapComponent.module.css";
-import { useMapInteractions } from "./mapsizechanges";
 import { useMapState } from "@/context/MapStateContext";
-import { useCalculations } from "./calculateerroranadscore";
-interface MapProps {}
 const baseMapStyle = {
   position: "fixed",
   bottom: "0",
@@ -15,21 +11,8 @@ const baseMapStyle = {
 };
 
 export function useMapClassChanges() {
-  const { aspectRatio } = useGameState();
-  const {
-    mapStyle,
-    submitClassName,
-    ismarkeronmap,
-    Map,
-    isitmobile,
-    setMapStyle,
-    setSubmitClassName,
-    setisitmobile,
-    setismarkeronmap,
-    setMap,
-  } = useMapState();
+  const { Map, setMapStyle, setSubmitClassName } = useMapState();
   const [mapCenter, setMapCenter] = useState<[number, number]>();
-  const { shrinkinstantly } = useMapInteractions();
   function handleNextClass() {
     setMapStyle({
       ...baseMapStyle,
