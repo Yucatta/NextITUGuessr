@@ -1,9 +1,9 @@
-import { useState, useEffect, useReducer, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useGameState } from "@/context/gamestatecontext";
 import styles from "@/app/styles/MapComponent.module.css";
 
 import { useMapState } from "@/context/MapStateContext";
-interface MapProps {}
+// interface MapProps {}
 const baseMapStyle = {
   position: "fixed",
   bottom: "0",

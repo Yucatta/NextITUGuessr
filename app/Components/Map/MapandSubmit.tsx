@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import styles from "@/app/styles/MapComponent.module.css";
@@ -29,7 +29,6 @@ const MapandSubmit = ({
     aspectRatio,
     isitpregame,
     isitconclusion,
-    rndnum,
     isitresults,
     setrndnum,
     setisitresults,
