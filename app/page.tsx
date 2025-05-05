@@ -19,7 +19,7 @@ function Home() {
   const [isblinkmodeon, setisblinkmodeon] = useState(false);
   const [latlong, setLatLong] = useState<
     Array<[string, number, number, number]>
-  >([]);
+  >([["a", 0, 0, 0]]);
 
   useEffect(() => {
     const fetchData = async () => {
