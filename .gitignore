@@ -16,8 +16,9 @@
 # next.js
 /.next/
 /out/
-/Legacy
 /public/compressed-images
+
+/ignorethis
 # production
 /build
 # misc
