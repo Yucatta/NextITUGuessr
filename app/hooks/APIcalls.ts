@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from "react";
 import { usePreGameContext } from "@/context/PreGameContext";
 
 export function useAPIcalls() {
@@ -20,6 +19,8 @@ export function useAPIcalls() {
       if (!res.ok) {
         throw new Error(data.error || "Unknown error");
       }
+      console.log(data.csvfile, "this is leaderboard?");
+      // return data.csvfile;
     } catch (error) {
       console.error("Error submitting score:", error);
     }

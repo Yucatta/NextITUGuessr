@@ -1,13 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
-import L, { map } from "leaflet";
+import { useRef } from "react";
+import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { useMapInteractions } from "@/app/hooks/mapsizechanges";
 import styles from "@/app/styles/MapComponent.module.css";
 import { useMapState } from "@/context/MapStateContext";
 import { useGameState } from "@/context/gamestatecontext";
 import { useMapClassChanges } from "./mapclasschanges";
 import { useCalculations } from "./calculateerroranadscore";
-interface Props {}
 
 const beemarker = L.icon({
   iconUrl: "/Icons/Bee-Marker.png",
@@ -17,15 +15,8 @@ const beemarker = L.icon({
 
 export function useChangeInsideOfMap() {
   const { aspectRatio } = useGameState();
-  const {
-    mapStyle,
-    ismarkeronmap,
-    Map,
-    setMapStyle,
-    setSubmitClassName,
-    setismarkeronmap,
-    setMap,
-  } = useMapState();
+  const { ismarkeronmap, Map, setSubmitClassName, setismarkeronmap } =
+    useMapState();
   const position = useRef<[number, number]>([0, 0]);
   const guessRef = useRef<L.Marker | null>(null);
   const allGuesses = useRef<Array<[number, number]>>([]);
@@ -60,15 +51,11 @@ export function useChangeInsideOfMap() {
   }
   function handleSubmit(imglat: number, imglng: number) {
     handleSubmitClass(imglat, imglng, position.current[0], position.current[1]);
-    console.log(Map);
     if (!Map) {
-      console.log("handlesubmit");
-
       return;
     }
     allLocations.current.push([imglat, imglng]);
     tempForMarker.current = false;
-    console.log(ismarkeronmap, imglat, imglng);
     if (ismarkeronmap) {
       L.marker([imglat, imglng], {
         icon: L.icon({
@@ -126,7 +113,6 @@ export function useChangeInsideOfMap() {
       allLocations.current[0],
       allGuesses.current[0]
     );
-    console.log("why are you in conclusion");
     for (let i = 0; i < 5; i++) {
       if (allGuesses.current[i][0] === 0 && allGuesses.current[i][1] === 0) {
         L.marker(allLocations.current[i], {

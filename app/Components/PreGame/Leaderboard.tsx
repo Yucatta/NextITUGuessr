@@ -4,16 +4,16 @@ import React, { useEffect } from "react";
 import { useGameState } from "@/context/gamestatecontext";
 import { useAPIcalls } from "@/app/hooks/APIcalls";
 
-interface Props {
-  blinkmode: boolean;
-}
+// interface Props {
+//   blinkmode: boolean;
+// }
 
 const Leaderboard = () => {
   const { aspectRatio } = useGameState();
   const { BlinkModeLeaderboard, NormalModeLeaderboard, blinkmode } =
     usePreGameContext();
 
-  const { fetchCsv, updateCsv } = useAPIcalls();
+  const { fetchCsv } = useAPIcalls();
   useEffect(() => {
     fetchCsv();
   }, []);

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import styles from "@/app/styles/MapComponent.module.css";
@@ -10,20 +10,21 @@ import { useChangeInsideOfMap } from "@/app/hooks/insideofmapchanges";
 import { useChangeGameState } from "@/app/hooks/GameStateChanging";
 import EndGameStats from "../EndGameStats";
 import Conclusion from "../Conclusion";
-import { Tiro_Tamil } from "next/font/google";
 interface Props {
   imglat: number;
   imglng: number;
   rounds: number;
+  handletotalscore: (e: number) => void;
+  totalscore: number;
 }
 
-const beemarker = L.icon({
-  iconUrl: "/Icons/Bee-Marker.png",
-  iconSize: [20, 30],
-  iconAnchor: [10, 30],
-});
-
-const MapandSubmit = ({ imglat, imglng }: Props) => {
+const MapandSubmit = ({
+  imglat,
+  totalscore,
+  imglng,
+  rounds,
+  handletotalscore,
+}: Props) => {
   const {
     aspectRatio,
     isitpregame,
@@ -35,17 +36,8 @@ const MapandSubmit = ({ imglat, imglng }: Props) => {
     setisitpregame,
     setisitconclusion,
   } = useGameState();
-  const {
-    mapStyle,
-    submitClassName,
-    ismarkeronmap,
-    Map,
-    isitmobile,
-    setMapStyle,
-    setSubmitClassName,
-    setismarkeronmap,
-    setMap,
-  } = useMapState();
+  const { mapStyle, submitClassName, ismarkeronmap, Map, setMapStyle, setMap } =
+    useMapState();
   const {
     shrinkinstantly,
     shrinksubmitandmap,
@@ -54,10 +46,8 @@ const MapandSubmit = ({ imglat, imglng }: Props) => {
   } = useMapInteractions();
   const [scoreanderror, setscoreanderror] = useState([0, 0]);
   const [infovisibility, setinfovisibility] = useState(styles.none);
-  const ismarkeronmapref = useRef(false);
   const { handleMapClick, handleConclusion, handleSubmit, handleNext } =
     useChangeInsideOfMap();
-  const totalscore = useRef(0);
   const { handleKeyDown } = useChangeGameState();
   useEffect(() => {
     if (typeof window !== "undefined" && Map === null) {
@@ -105,28 +95,30 @@ const MapandSubmit = ({ imglat, imglng }: Props) => {
       }
       const temp = handleSubmit(imglat, imglng);
       if (temp) {
-        totalscore.current += temp[0];
-        setscoreanderror(temp);
+        handletotalscore(temp[0]);
+        if (temp[1] > 8000) {
+          setscoreanderror([0, 0]);
+          console.log("aaaa", temp);
+        } else {
+          console.log("bbbb", temp);
+          setscoreanderror(temp);
+        }
       }
     } else if (isitpregame) {
-      totalscore.current = 0;
       setMapStyle({ display: "none" });
     } else {
-      // setinfovisibility("");
       handleNext();
     }
   }, [isitconclusion, isitpregame, isitresults, Map]);
   useEffect(() => {
     function controlClick(e: KeyboardEvent) {
       if ((e.code === "Space" || e.code === "Enter") && !isitpregame) {
-        // console.log(ismarkeronmapref.current, "is marker on map");
-        handleKeyDown(ismarkeronmap);
+        handleKeyDown(ismarkeronmap, rounds);
       }
     }
 
     window.addEventListener("keydown", controlClick);
 
-    // console.log(mapStyle);
     return () => {
       window.removeEventListener("keydown", controlClick);
     };
@@ -139,9 +131,7 @@ const MapandSubmit = ({ imglat, imglng }: Props) => {
   useEffect(() => {
     handleResize();
   }, [aspectRatio]);
-  useEffect(() => {
-    console.log(scoreanderror);
-  }, [scoreanderror]);
+  useEffect(() => {}, [scoreanderror]);
   function handleReport() {
     const query = `?x=${btoa(`${rndnum}`)}&y=${btoa(`${imglat}`)}&z=${btoa(
       `${imglng}`
@@ -187,10 +177,14 @@ const MapandSubmit = ({ imglat, imglng }: Props) => {
           if (!Map) {
             return;
           }
-          const temp = handleSubmit(imglat, imglng);
-          console.log(temp);
-          if (temp) {
-            setscoreanderror(temp);
+          setisitresults(false);
+          if (rounds === 5) {
+            setisitconclusion(true);
+          } else {
+            const temp = handleSubmit(imglat, imglng);
+            if (temp) {
+              setscoreanderror(temp);
+            }
           }
         }}
         onReport={handleReport}
@@ -199,7 +193,7 @@ const MapandSubmit = ({ imglat, imglng }: Props) => {
       ></EndGameStats>
       <Conclusion
         isitconclusion={isitconclusion}
-        totalscore={totalscore.current}
+        totalscore={totalscore}
         onmenuclick={handlemenu}
       ></Conclusion>
     </div>

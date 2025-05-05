@@ -7,10 +7,12 @@ type GameContext = {
   isitconclusion: boolean;
   isitpregame: boolean;
   aspectRatio: number;
+  totalscore: number;
   setisitresults: (val: boolean) => void;
   setisitpregame: (val: boolean) => void;
   setisitconclusion: (val: boolean) => void;
   setrndnum: (val: number) => void;
+  settotalscore: (val: number) => void;
   setaspectRatio: (val: number) => void;
 };
 // const initialrndnum = Math.floor(Math.random() * 5205);
@@ -21,16 +23,18 @@ export function GameStateProvider({ children }: { children: ReactNode }) {
   const [isitpregame, setisitpregame] = useState(true);
   const [rndnum, setrndnum] = useState<number>(1);
   const [aspectRatio, setaspectRatio] = useState(1);
-
+  const [totalscore, settotalscore] = useState(0);
   return (
     <GameStateContext.Provider
       value={{
         isitresults,
+        totalscore,
         isitconclusion,
         isitpregame,
         rndnum,
         aspectRatio,
         setisitconclusion,
+        settotalscore,
         setisitpregame,
         setisitresults,
         setrndnum,

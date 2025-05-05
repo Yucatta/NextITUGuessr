@@ -93,7 +93,12 @@ export default async function handler(req, res) {
       console.log(csvContent);
       await s3Client.send(putObjectCommand);
       csvData = [];
-      res.status(200).json({ message: "Data successfully written to CSV" });
+      res
+        .status(200)
+        .json(
+          { message: "Data successfully written to CSV" },
+          { csvfile: csvData }
+        );
     } else {
       res.status(405).json({ error: "Method not allowed" });
     }

@@ -1,19 +1,17 @@
 "use client";
-import React, { useEffect, useState, useRef } from "react";
+import React from "react";
 import styles from "@/app/styles/conclusionpregame.module.css";
 import { useGameState } from "@/context/gamestatecontext";
 import Leaderboard from "./Leaderboard";
-import {
-  PreGameContextProvider,
-  usePreGameContext,
-} from "@/context/PreGameContext";
-import { useAPIcalls } from "@/app/hooks/APIcalls";
+import { PreGameContextProvider } from "@/context/PreGameContext";
 import PreGameInput from "./PreGameInput";
 import BlinkModeSlider from "./blinkmodeslider";
-interface Props {}
+interface Props {
+  handleBlinkMode: () => void;
+}
 
-const PreGame = () => {
-  const { isitpregame, aspectRatio } = useGameState();
+const PreGame = ({ handleBlinkMode }: Props) => {
+  const { isitpregame } = useGameState();
 
   return (
     <PreGameContextProvider>
@@ -31,7 +29,7 @@ const PreGame = () => {
             </span>
           </div>
         </div>
-        <BlinkModeSlider></BlinkModeSlider>
+        <BlinkModeSlider handleBlinkMode={handleBlinkMode}></BlinkModeSlider>
         <Leaderboard></Leaderboard>
       </div>
     </PreGameContextProvider>

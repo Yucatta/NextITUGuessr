@@ -10,12 +10,6 @@ const Conclusion = ({ totalscore, isitconclusion, onmenuclick }: Props) => {
     <div className={isitconclusion ? "" : styles.none}>
       <span className={styles.progressbarcontainer}>
         <span
-          // style={{
-          //   backgroundColor: `rgb(${(255 * totalscore) / 25000} ${
-          //     255 - (255 * totalscore) / 25000
-          //   } 0)`,
-          //   width: `calc(clamp(30vh,40vw,42vw)*${totalscore / 25000})`,
-          // }}
           style={{
             backgroundImage: `linear-gradient(to right, green , rgb(${
               (255 * totalscore) / 25000

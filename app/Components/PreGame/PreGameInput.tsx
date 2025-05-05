@@ -1,39 +1,50 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import styles from "@/app/styles/conclusionpregame.module.css";
 import { useInputSubmittion } from "@/app/hooks/NicknameSubmittion";
 import { usePreGameContext } from "@/context/PreGameContext";
-import { useChangeGameState } from "@/app/hooks/GameStateChanging";
 import { useGameState } from "@/context/gamestatecontext";
-import { Just_Another_Hand } from "next/font/google";
-import { normalize } from "path";
+import { useAPIcalls } from "@/app/hooks/APIcalls";
 
-interface Props {}
+// interface Props {}
 const PreGameInput = () => {
   const currentparticipant = useRef<HTMLInputElement>(null);
-  const { isitpregame, setisitpregame } = useGameState();
+  const { isitpregame, isitconclusion, totalscore, setisitpregame } =
+    useGameState();
   const pregameref = useRef(true);
   const buttonref = useRef<HTMLButtonElement>(null);
   const { addparticipant } = useInputSubmittion();
   const {
     blinkmode,
     isinputwrong,
-    setisinputwrong,
     BlinkModeLeaderboard,
     NormalModeLeaderboard,
+    setisinputwrong,
   } = usePreGameContext();
-  // const { handleKeyDown } = useChangeGameState();
+  const { updateCsv } = useAPIcalls();
   function anotaddapart() {
     let temp: boolean;
     temp = addparticipant(currentparticipant.current?.value, blinkmode);
     setisinputwrong(temp);
-    // console.log(isinputwrong, "isinputwrong");
-    // console.log(temp, "temp isinputwrong");
-    if (!temp) {
+    if (!temp && currentparticipant.current) {
       setisitpregame(false);
     }
   }
-  // console.log(isinputwrong, "this is in the function");
-
+  useEffect(() => {
+    if (
+      isitconclusion &&
+      currentparticipant.current &&
+      currentparticipant.current.value
+    ) {
+      const temp = totalscore;
+      console.log(temp);
+      updateCsv({
+        name: currentparticipant.current.value,
+        score: temp,
+        blinkmode: blinkmode,
+      });
+      currentparticipant.current.value = "";
+    }
+  }, [isitconclusion]);
   useEffect(() => {
     function controlClick(e: KeyboardEvent) {
       if (e.code === "Enter" && pregameref.current) {
@@ -52,9 +63,7 @@ const PreGameInput = () => {
   }, [isitpregame, BlinkModeLeaderboard, NormalModeLeaderboard]);
   return (
     <>
-      {/* <p className={styles.inputinfo}></p> */}
       <input
-        // className={aspectRatio <= 0.85 ? styles.none : styles.inputname}
         className={styles.inputname}
         ref={currentparticipant}
         style={{
@@ -62,7 +71,6 @@ const PreGameInput = () => {
         }}
         placeholder="Your Username"
       />
-      {/* <span className={styles.alert}>THIS NAME IS ALREADY TAKEN</span> */}
       <button
         className={styles.start}
         ref={buttonref}
